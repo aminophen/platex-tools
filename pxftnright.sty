@@ -1,0 +1,123 @@
+%
+% pxftnright.sty
+%
+
+%%%% package declaration
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{pxftnright}
+         [2016/04/30 v0.1 footnote layout package for pLaTeX]
+\def\pxftn@pkgname{pxftnright}
+
+%%%% definitions 
+\def\pxftn@error{\PackageError\pxftn@pkgname}
+\def\pxftn@warn{\PackageWarning\pxftn@pkgname}
+\def\pxftn@info{\PackageInfo\pxftn@pkgname}
+
+%%%% save \@makefntext definition from pLaTeX class
+\@ifpackageloaded{ftnright}{%
+  \pxftn@error{Package ftnright is already loaded!\MessageBreak
+              Load pxftnright earlier}\@ehc
+}{}
+\let\pxftn@makefntext\@makefntext
+
+%%%% load ftnright package
+\RequirePackage{ftnright}
+
+%%%% patches for ftnright to work fine with pLaTeX
+% - \@startcolumn is redefined (incompatible with vertical typesetting)
+% - \@makecol is redefined (bottom float after footnote)
+% - \@makefntext is redefined
+% - \footnotesep is not suitable for vertical typesetting
+
+\def\@startcolumn{%
+ \ifx\@deferlist\@empty
+   \global\@fcolmadefalse
+   \global\@colroom\@colht
+ \else
+   \ifvoid\footins\else
+     \ftn@amount\ht\footins
+     \advance\ftn@amount\dp\footins
+     \advance\ftn@amount\skip\footins
+   \fi
+   \global\advance\@colht-\ftn@amount
+   \global\@colroom\@colht
+   \@xstartcol
+   \global\advance\@colht\ftn@amount
+   \global\advance\@colroom\ftn@amount
+ \fi
+ \if@fcolmade
+  \setbox\@cclv\box\@outputbox
+  \@makecol
+ \else
+%%%%% change for pLaTeX (import from \@reinserts in plcore)
+  \ifvoid\footins\else\insert\footins{%
+    \iftbox\footins\tate\else\yoko\fi
+    \unvbox\footins}\fi
+%%%%%
+ \fi}
+
+\def\@makecol{%
+%%%%% change for pLaTeX
+  \setbox\@outputbox\box\@cclv
+%%%%%
+ \if@firstcolumn
+  \if@twocolumn \else
+    \ifvoid\footins \else
+      \@latexerr{ftnright package
+                 used in one-column mode}%
+   {The ftnright package was designed to
+    work with LaTeX's standard^^Jtwocolumn
+    option. It does *not* work with the
+    multicol package.^^JSo please specify
+    `twocolumn' in the
+    \noexpand\documentclass command.}%
+      \shipout\box\footins \fi\fi
+  \ifnum\insertpenalties>\z@
+      \@latexerr{ftnright package
+                 scrambled footnotes}%
+    {There is too much footnote material in
+     the first column  and ftnright^^Jis
+     unable to cope with this.^^JYou need
+     to reduce the amount to get a properly
+     formatted page.}%
+  \fi
+ \fi
+  \xdef\@freelist{\@freelist\@midlist}%
+  \global \let \@midlist \@empty
+  \@combinefloats
+  \ifvbox\@kludgeins
+    \@makespecialcolbox
+  \else
+%%%%% change for pLaTeX (import from \@makecol in plcore)
+     \setbox\@outputbox \vbox to\@colht {%
+       \boxmaxdepth\maxdepth
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+       \iftdir\hskip\z@\fi
+       \vskip -\dimen@
+       \@textbottom
+     \if@firstcolumn\else
+       \ifvoid\footins\else % for pLaTeX
+         \vskip \skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+     \fi
+       }%
+%%%%%
+  \fi
+  \global\maxdepth\@maxdepth
+}
+
+%%%% adjust \footnotesep for vertical typesetting
+\AtBeginDocument
+  {\global\footnotesep\ht\iftdir\tstrutbox\else\strutbox\fi}
+
+%%%% restore \@makefntext
+\let\@makefntext\pxftn@makefntext
+
+\endinput
