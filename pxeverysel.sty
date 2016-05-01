@@ -3,6 +3,7 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
+    [2016/05/02 v0.2 Patch to everysel for (u)pLaTeX]
 
 %% preparations
 \def\pxys@pkgname{pxeverysel}
@@ -10,6 +11,11 @@
 
 %% load it
 \RequirePackage{everysel}
+
+%% support for (u)pLaTeX font tracing
+\@ifpackageloaded{tracefnt}{%
+  \ifx\kanjiskip\@undefined\else\ifx\ucs\@undefined
+  \RequirePackage{ptrace}\else\RequirePackage{uptrace}\fi\fi}{}
 
 %--------------------------------------- helpers
 
