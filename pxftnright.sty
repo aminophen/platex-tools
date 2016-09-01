@@ -7,7 +7,7 @@
 %%%% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxftnright}
-         [2016/04/30 v0.1 footnote layout package for pLaTeX]
+         [2016/09/01 v0.2 footnote layout package for pLaTeX]
 \def\pxftn@pkgname{pxftnright}
 
 %%%% definitions
@@ -25,7 +25,7 @@
 %%%% load ftnright package
 \RequirePackage{ftnright}
 
-%%%% patches for ftnright to work fine with pLaTeX
+%%%% patches for ftnright to work fine with pLaTeX (2016/09/03 community ed.)
 % problems with ftnright to use with pLaTeX:
 % - \@startcolumn is redefined (incompatible with vertical typesetting)
 % - \@makecol is redefined (bottom float after footnote)
@@ -97,7 +97,7 @@
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
-       \iftdir\hskip\z@\fi
+       \iftdir\vbox{\hskip\z@}\fi
        \vskip -\dimen@
        \@textbottom
      \if@firstcolumn\else
