@@ -12,7 +12,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/09/07 v1.0 Tabular extension package for plext and array]
+  [2016/09/07 v1.0a Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
 %
@@ -78,5 +78,6 @@
 %
 \def\endarray{\crcr \egroup \egroup \@end@alignbox \gdef\@preamble{}}
 \def\endtabular{\endarray $\egroup\null}
+\expandafter \let \csname endtabular*\endcsname = \endtabular
 %
 \endinput
