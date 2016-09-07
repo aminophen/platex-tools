@@ -1,37 +1,41 @@
 %
 % pxftnright.sty
-% developed by Hironobu Yamashita (@aminophen)
-% cf. http://d.hatena.ne.jp/acetaminophen/20160430/1461987276
+% written by Hironobu Yamashita (@aminophen)
 %
-
-%%%% package declaration
+% This package is part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+% This package `pxftnright' is based on:
+%   * ftnright.sty in latex-tools (2014/10/28 v1.1f)
+%
+% Problems with ftnright to use with pLaTeX:
+%   * \@startcolumn is redefined
+%     (incompatible with vertical typesetting)
+%   * \@makecol is redefined
+%     (bottom float after footnote)
+%   * \@makefntext is redefined
+%     (incompatible with some pLaTeX classes)
+%   * \footnotesep is not suitable for vertical typesetting
+%     (rather a problem of \strutbox in pLaTeX2e kernel?)
+% so, this package provides patches.
+%
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxftnright}
-         [2016/09/01 v0.2 footnote layout package for pLaTeX]
-\def\pxftn@pkgname{pxftnright}
-
-%%%% definitions
-\def\pxftn@error{\PackageError\pxftn@pkgname}
-\def\pxftn@warn{\PackageWarning\pxftn@pkgname}
-\def\pxftn@info{\PackageInfo\pxftn@pkgname}
-
+  [2016/09/01 v0.2 footnote layout package for pLaTeX]
+%
 %%%% save \@makefntext definition from pLaTeX class
 \@ifpackageloaded{ftnright}{%
-  \pxftn@error{Package ftnright is already loaded!\MessageBreak
-              Load pxftnright earlier}\@ehc
+  \PackageError{pxftnright}{%
+    Package ftnright is already loaded!\MessageBreak
+    Load pxftnright earlier}\@ehc
 }{}
 \let\pxftn@makefntext\@makefntext
-
+%
 %%%% load ftnright package
 \RequirePackage{ftnright}
-
-%%%% patches for ftnright to work fine with pLaTeX (2016/09/03 community ed.)
-% problems with ftnright to use with pLaTeX:
-% - \@startcolumn is redefined (incompatible with vertical typesetting)
-% - \@makecol is redefined (bottom float after footnote)
-% - \@makefntext is redefined
-% - \footnotesep is not suitable for vertical typesetting
-
+%
+%%%% patches for ftnright to work fine with pLaTeX
+% This code is based on pLaTeX2e 2016/09/03 community ed.
 \def\@startcolumn{%
  \ifx\@deferlist\@empty
    \global\@fcolmadefalse
@@ -58,7 +62,7 @@
     \unvbox\footins}\fi
 %%%%%
  \fi}
-
+%
 \def\@makecol{%
 %%%%% change for pLaTeX
   \setbox\@outputbox\box\@cclv
@@ -115,12 +119,12 @@
   \fi
   \global\maxdepth\@maxdepth
 }
-
+%
 %%%% adjust \footnotesep for vertical typesetting
 \AtBeginDocument
   {\global\footnotesep\ht\iftdir\tstrutbox\else\strutbox\fi}
-
+%
 %%%% restore \@makefntext
 \let\@makefntext\pxftn@makefntext
-
+%
 \endinput

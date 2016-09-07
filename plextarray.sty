@@ -1,17 +1,21 @@
 %
-% plextarray.sty written by Hironobu Yamashita (@aminophen)
+% plextarray.sty
+% written by Hironobu Yamashita (@aminophen)
 %
-% This package is based on:
+% This package is part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+% This package `plextarray.sty' is based on:
 %   * array.sty in latex-tools (2014/10/28 v2.4c)
 %   * plext.sty in platex (2016/08/20 v1.2a)
 % and lltjext.sty from LuaTeX-ja project.
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-                [2016/09/07 v1.0 Compatibility between plext and array]
+  [2016/09/07 v1.0 Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
-
+%
 \def\@startpbox#1{\bgroup
   \box@dir\adjustbaseline %% added
   \hsize=#1\@arrayparboxrestore
@@ -19,9 +23,9 @@
       \vrule \@height \ht\@arstrutbox \@width \z@
       \everypar{}}%
    }
-
+%
 \def\@tabarray{\@ifnextchar<\p@tabarray{\p@tabarray<Z>}}
-
+%
 %% merged \@array (from array.sty) and \p@array (from plext.sty)
 \def\p@array<#1>[#2]#3{%
   %%%%% new code for box direction
@@ -71,8 +75,8 @@
   \let\@sharp##\let\protect\relax
   \let\\\@arraycr\let\tabularnewline\\
   \lineskip\z@skip\baselineskip\z@skip\@preamble}
-
+%
 \def\endarray{\crcr \egroup \egroup \@end@alignbox \gdef\@preamble{}}
 \def\endtabular{\endarray $\egroup\null}
-
+%
 \endinput
