@@ -12,7 +12,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/09/07 v1.0a Tabular extension package for plext and array]
+  [2016/09/08 v1.0b Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
 %
@@ -33,30 +33,35 @@
   \iftdir
     \if #1y\relax
       \let\box@dir\yoko
-      \@tempcnta=\strutbox
+      \@tempcnta=\z@    % \(y)strutbox
     \else\if #1z\relax
       \@rotswtrue
       \let\box@dir\tate
-      \@tempcnta=\zstrutbox
+      \@tempcnta=\tw@   % \zstrutbox
     \else
       \let\box@dir\tate
-      \@tempcnta=\tstrutbox
+      \@tempcnta=\@ne   % \tstrutbox
     \fi\fi
   \else
     \if #1t\relax
       \let\box@dir\tate
-      \@tempcnta=\tstrutbox
+      \@tempcnta=\@ne   % \tstrutbox
     \else
       \let\box@dir\yoko
-      \@tempcnta=\strutbox
+      \@tempcnta=\z@    % \(y)strutbox
     \fi
   \fi
   %%%%% new code end
-  \@tempdima \ht \@tempcnta
-  \advance \@tempdima by\extrarowheight
-  \setbox \@arstrutbox \hbox{\box@dir\vrule %% add \box@dir
-             \@height \arraystretch \@tempdima
-             \@depth \arraystretch \dp \@tempcnta
+  \setbox \@arstrutbox \hbox{\box@dir %% add \box@dir
+      % the behavior of \strutbox may be changed
+      % (box resister -> conditional macro) in the future;
+      % so, \strutbox should appear after \box@dir is applied.
+      \@tempcntb=\ifcase\@tempcnta\strutbox
+                 \or\tstrutbox\or\zstrutbox\or\@ctrerr\fi
+      \@tempdima \ht \@tempcntb
+      \advance \@tempdima by\extrarowheight
+      \vrule \@height \arraystretch \@tempdima
+             \@depth \arraystretch \dp \@tempcntb
              \@width \z@}%
   \fork@array@option<#1>[#2]%  %% merged from plext
   \begingroup
