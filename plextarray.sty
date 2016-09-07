@@ -1,0 +1,78 @@
+%
+% plextarray.sty written by Hironobu Yamashita (@aminophen)
+%
+% This package is based on:
+%   * array.sty in latex-tools (2014/10/28 v2.4c)
+%   * plext.sty in platex (2016/08/20 v1.2a)
+% and lltjext.sty from LuaTeX-ja project.
+%
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{plextarray}
+                [2016/09/07 v1.0 Compatibility between plext and array]
+\RequirePackage{plext}
+\RequirePackage{array}
+
+\def\@startpbox#1{\bgroup
+  \box@dir\adjustbaseline %% added
+  \hsize=#1\@arrayparboxrestore
+   \everypar{%
+      \vrule \@height \ht\@arstrutbox \@width \z@
+      \everypar{}}%
+   }
+
+\def\@tabarray{\@ifnextchar<\p@tabarray{\p@tabarray<Z>}}
+
+%% merged \@array (from array.sty) and \p@array (from plext.sty)
+\def\p@array<#1>[#2]#3{%
+  %%%%% new code for box direction
+  \let\box@dir\relax
+  \iftdir
+    \if #1y\relax
+      \let\box@dir\yoko
+      \@tempcnta=\strutbox
+    \else\if #1z\relax
+      \@rotswtrue
+      \let\box@dir\tate
+      \@tempcnta=\zstrutbox
+    \else
+      \let\box@dir\tate
+      \@tempcnta=\tstrutbox
+    \fi\fi
+  \else
+    \if #1t\relax
+      \let\box@dir\tate
+      \@tempcnta=\tstrutbox
+    \else
+      \let\box@dir\yoko
+      \@tempcnta=\strutbox
+    \fi
+  \fi
+  %%%%% new code end
+  \@tempdima \ht \@tempcnta
+  \advance \@tempdima by\extrarowheight
+  \setbox \@arstrutbox \hbox{\box@dir\vrule %% add \box@dir
+             \@height \arraystretch \@tempdima
+             \@depth \arraystretch \dp \@tempcnta
+             \@width \z@}%
+  \fork@array@option<#1>[#2]%  %% merged from plext
+  \begingroup
+  \@mkpream{#3}%
+  % following definition of \@preamble is from plext (\edef -> \xdef),
+  % but it's not the same as the one in array; why?
+  \xdef\@preamble{\ialign \noexpand \@halignto
+                  \bgroup \tabskip \z@skip \@arstrut \@preamble
+                          \tabskip \z@skip \cr}%
+  \endgroup
+  \@arrayleft
+  \@begin@alignbox %% defined inside \fork@array@option
+  \bgroup
+  \box@dir\adjustbaseline
+  \let\par\@empty
+  \let\@sharp##\let\protect\relax
+  \let\\\@arraycr\let\tabularnewline\\
+  \lineskip\z@skip\baselineskip\z@skip\@preamble}
+
+\def\endarray{\crcr \egroup \egroup \@end@alignbox \gdef\@preamble{}}
+\def\endtabular{\endarray $\egroup\null}
+
+\endinput
