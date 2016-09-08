@@ -1,0 +1,16 @@
+This is an archive directory for old packages which are now integrated into this
+bundle by courtesy of the original authors.
+
+## endnotesj.tar.gz (from Hirokazu Ogawa)
+
+  endnotes.sty -- pLaTeX2e package for printing endnotes in Japanese articles.
+                  The documentation and sample files are also included.
+                  (file version: 2003/02/12 v2.1)
+
+  Primary source of distribution:
+    JIS X 0212 for pTeX - http://www2.kumagaku.ac.jp/teacher/herogw/
+    (retrieved on 8 September, 2016)
+
+-----
+Many thanks to the authors!
+Hironobu Yamashita
