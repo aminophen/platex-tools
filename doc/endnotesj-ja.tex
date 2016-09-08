@@ -1,0 +1,234 @@
+%# -*- coding: utf-8 -*-
+\ifdefined\epTeXinputencoding % defined in e-pTeX (> TL2016)
+  \epTeXinputencoding utf8    % ensure utf-8 encoding for platex
+\fi
+
+%
+%  日本語論文用 後註生成マクロ for pLaTeX2e 付属ドキュメント
+%
+%  endnotesj.sty v3.0 系列は、熊本学園大学経済学部の
+%  小川弘和さんによる endnotesj.sty 2003/02/12 v2.1 に対し、
+%  許可を得て山下弘展がいくつかの修正・拡張を施したものです。
+%
+%  この文書は、原著者である小川さんの文書
+%    aboutendnotesj.sjis
+%  を山下が LaTeX ソース化し、適宜記述を追加したものです。
+%
+%  元のファイル (v2.1) は、2016 年 9 月 8 日に
+%    JIS X 0212 for pTeX
+%      http://www2.kumagaku.ac.jp/teacher/herogw/
+%  から取得しました。著作表記は、以下のとおりでした。
+%
+%  =============================================================
+%  改造者：小川弘和（熊本学園大学経済学部）
+%    mail:dokuroishi@mac.com,herogw@kumagaku.ac.jp
+%     web:http://homepage.mac.com/dokuroryokan/index.html
+%         http://www2.kumagaku.ac.jp/teacher/herogw/index.html
+%
+%  based on "endnotes.sty" written by John Lavagnino
+%                                  lav@brandeis.bitnet, 9/23/88
+%   Department of English and American Literature,
+%                                          Brandeis University
+%  =============================================================
+%
+
+\documentclass[a4paper]{jsarticle}
+\usepackage{doc}
+\usepackage{endnotesj}
+\GetFileInfo{endnotesj.sty}
+\title{\textsf{\filename} \fileversion\\
+       日本語論文用 後註生成マクロ for p\LaTeXe}
+\author{小川 弘和（熊本学園大学経済学部）\\
+        modified by 山下 弘展}
+\date{\filedate}
+\begin{document}
+
+\maketitle
+
+日本史・国文学関係論文作成に必要な、縦型の“（連数字）”形式
+註番号および、複数行にわたる註部分テキストの2行目以降を、先頭行
+テキスト開始位置に揃える表記を可能とした、後註生成マクロです。
+縦組論文での使用を前提に作成されていますが、横組論文でもその
+まま使用可能です。
+
+このバージョン(\fileversion)は、以前のバージョンとの互換性を
+保ちつつ、endnotes内部マクロを本家最新版に合わせて更新し、
+機能を拡張したものです。最新版はGitHubリポジトリ
+\begin{verbatim}
+  https://github.com/aminophen/platex-tools
+\end{verbatim}
+で管理しています。
+
+\section{パッケージ・オプション}
+
+はじめに、パッケージのオプションを説明します。
+
+\subsection{注釈印の書式}
+
+プリアンブルで
+\begin{verbatim}
+  \usepackage{endnotesj}
+\end{verbatim}
+とすることで、縦組用の“（連数字）”型注（『日本史研究』等の形式。
+本文中では、注挿入指定位置直前の文字の直上に注No.を配置する。）が
+使用可能に、
+\begin{verbatim}
+  \usepackage[yoko]{endnotesj}
+\end{verbatim}
+とすることで、横組用の“（数字）”型注（本文中では、注挿入指定
+位置直前の文字の直後上方に、ほぼ1/4倍角で注No.を配置する。）が
+使用可能に、
+\begin{verbatim}
+  \usepackage[single]{endnotesj}
+\end{verbatim}
+とすることで、横組用の“数字）”型注（『歴史学研究』等の形式。
+本文中では、注挿入指定位置直前の文字の直後上方に、ほぼ1/4倍角で
+注No.を配置する。）が使用可能になります。
+
+\subsection{otf/utfパッケージを用いた注釈印の書式}
+
+otf (utf)パッケージをインストールしてある環境であれば、注番号の
+数字に詰数字を用い、より奇麗に表示可能です。この機能を使うには
+\begin{verbatim}
+  \usepackage[otf]{endnotesj}
+\end{verbatim}
+または
+\begin{verbatim}
+  \usepackage[utf]{endnotesj}
+\end{verbatim}
+オプションを指定します（otfオプションは、v3.0で新たに追加され
+たもので、旧バージョンv2.1のutfオプションの単なるコピーです）。
+
+なお、このオプションを用いる場合otf.sty (utf.sty)、
+ajmacros.sty (utfmacro.sty)で定義されている
+\verb+\UTF+・\verb+\ajTumesuji+コマンドに動作が依存しますが、
+その際にはotf.sty、utf.styの存在するいずれか一方が自動的に読み
+込まれます（両方存在する場合には、otf.styが優先されます）ので、
+別に読み込みの宣言をする必要はありません。ただしutf.styあるいは
+otf.styで各種オプション（expertオプションなど）を用いたい場合
+には、これとは別にendnotesj.styより\emph{前}に、明示的に
+プリアンブルで宣言をする必要があります。その場合、使用宣言され
+たほうのスタイルに従い、endnotesj.styは動作します。
+
+\subsection{後注列挙部分のタイトル}
+
+ここまでの節で紹介したオプション以外が\verb+\usepackage+の
+オプションに指定された場合は、それを後注列挙部分のタイトルと
+して用います。たとえば、
+\begin{verbatim}
+  \usepackage[注]{endnotesj}
+\end{verbatim}
+オプションで、文末の後注列挙部分の先頭に「注」、
+\begin{verbatim}
+  \usepackage[註]{endnotesj}
+\end{verbatim}
+オプションで「註」と表記されます（v2.1以前は「注」と「註」のみ
+サポートしていましたが、v3.0以降は「注釈」や「後註」なども
+自由に指定できます）。オプション無指定の場合には、何も表記せぬ
+まま、注が列挙されていきます。
+
+\section{コマンド・マニュアル}
+
+コマンド自体はオリジナルであるendnotes.styよりの変更はありません。
+
+\begin{itemize}
+\item \verb+\endnote{註}+\\
+  本文中に挿入することで自動的に、\verb+{}+に挟まれたテキストを、
+  連番を付した後註として扱います。つまり、このコマンドの埋め込
+  まれた位置の本文肩に註番号を生成するとともに、後に解説する
+  \verb+\theendnotes+コマンドによって、\verb+{}+に挟まれたテキ
+  ストの冒頭に同様の番号を付したうえで、後註として列挙するわけ
+  です。
+\item \verb+\endnote[数字]{註}+\\
+  \verb+[数字]+部分に任意の数字を埋め込むことで、数字で指定した
+  数を註番号とする後註を生成します。
+  このコマンドによって生成された註は、上記\verb+\endnote{註}+に
+  よって生成される註とは別グループとして扱われるため、そちら
+  の番号に影響を与えることはありません。
+  よって表記を改良すれば補注用として利用可能ですが、現状では
+  通常の註と同スタイルのため紛らわしいので、使用は勧められません。
+\item \verb+\endnotemark[数字]+\\
+  実際には後註を生成せぬままで、本文肩に任意の註番号を生成します。
+  また、\verb+[数字]+オプションを用いた場合、以降の註番号は任意
+  の番号にスキップしたうえで生成されていくことになります。
+\item \verb+\endnotetext[数字]{註}+\\
+  番号を表立って表記せぬ後註を生成します。このコマンドの場合
+  でも、内部的には註番号はカウントされています。
+  なお[数字]オプションの機能は\verb+\endnotemark+と同様です。
+\item \verb+\theendnotes+\\
+  本文中に挿入することでその位置に、それまで\verb+\endnote+等の
+  コマンドによって生成された後註を列挙表示します。
+  なお、\verb+\setcounter{endnote}{0}+コマンドを用いると、その
+  後の註番号が再び(1)より開始されますので、本コマンドとの組合せ
+  によって、容易に章・節ごとの後註が作成できます。
+\end{itemize}
+
+\section{行数・桁数指定マクロ}
+
+endnotesj.styには、
+『\LaTeX{}スタイル・マクロ ポケットリファレンス』（技術評論社）、
+いわゆるポケリで紹介されている行数・桁数指定マクロも組み込んで
+あり、使用することが可能です。用紙サイズにあわせて自動的に字間
+配置を調整する\TeX{}には本来は、行数・桁数指定は馴染まないので
+すが、投稿規定上、行数・文字数を固定する必要がある場合に用いて
+ください。
+
+基本的な記述法は以下の通りです。
+\begin{verbatim}
+  \kcharparline{30}
+  \begin{document}
+  \linesparpage{20}
+\end{verbatim}
+
+\verb+\kcharparline{30}+が、用紙縦方向の文字数指定。
+この場合、30文字に指定しています。
+なお、このコマンドはプリアンプルで指定します。
+
+\verb+\linesparpage{20}+が、用紙横方向の文字数指定。
+ここでは、20文字に指定しています。こちらは本文で指定するか、
+\verb+\AtBeginDocument{}+に入れて使用します。
+
+\section{旧版との違い}
+
+v2.1以前とv3.0以降の唯一の違いとして、v2.1では「注」と「註」を
+同時に指定した場合には「注」が優先されましたが、v3.0以降は
+「複数指定されたうちの最後の一つ」が優先されます。同時に指定
+するという使い方は全く無意味でしたから、影響はないと思います。
+
+なお、v2よりもっと古く配布していた、横組用“数字）”型表記用
+マクロendnotesjs.styは、endnotesj.styに機能が改良統合された
+ため、廃止しました。また、以前は本文肩註番号表記の実現に際し、
+金水敏氏が作成された訓点資料表記用マクロkunten2e.styに定義され
+ている\verb+\MigiNakaTn+コマンドに依存しておりましたが、記述を
+見直すことにより、非依存となりました。
+
+その他、v2.1からv3.0での変更点は、以下のとおりです。
+\begin{itemize}
+\item パッケージのコード本体からASCII文字以外を排除。
+\item \verb+\linesparpage+の修正（行間の数ではなく行数で割って
+  いたため、行数が合わないことがあった。また、\verb+\topskip+の
+  分を差し引いていなかったため、正しい行間隔になっていなかった。）
+\item 後註内部マクロをより新しいendnotes.styベースに更新（現時点
+  でのendnotes.sty最新版は
+    Date of this version: 15 January 2003.
+  と表示されている。）
+\item  パッケージのオプションを拡張（auto-tateyokoオプションを
+  使うと、組方向（縦・横）に応じて適切な注の印が出るようにした。
+  また、「注」「註」以外のタイトル形式を可能にした。）
+\item もし本家パッケージ(endnotes.sty)が存在する場合で、
+  endnotesj.styが読みこまれた時点で未読み込みならば、
+  読みこみ済み扱いするようにした（そうしないと、後で意図せず
+  読み込まれて、日本語対応コードが上書きされるかもしれない。）
+\end{itemize}
+
+\section{実際のスタイル見本（日本語版）}
+
+旧版(v2.1)まではパッケージをISO-2022-JPエンコーディング(JIS)で
+記述し、そのコードの説明を日本語で含んでいましたが、v3.0からは
+すべてのコードをASCII文字で書き直しました。
+コードの説明もすべて英訳しましたので、代わりに日本語による
+スタイル見本をここに置いておきます。
+
+…作業中…
+
+\end{document}

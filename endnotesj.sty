@@ -1,0 +1,354 @@
+%
+% Package ``endnotesj.sty'' for endnotes in Japanese articles,
+% written by Hirokazu OGAWA and Hironobu YAMASHITA
+%
+% This package is part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+% Authors:
+%  * Hirokazu OGAWA (Kumamoto Gakuen University)
+%      Mail: herogw at kumagaku.ac.jp
+%       Web: http://www2.kumagaku.ac.jp/teacher/herogw/index.html
+%  * Hironobu YAMASHITA
+%      Mail: h.y.acetaminophen at gmail.com
+%      Github: @aminophen
+%
+% This work is based on ``endnotes.sty'' (15 January 2003)
+% written by John Lavagnino.
+%
+% ****************************************
+% *           ENDNOTE MACROS             *
+% ****************************************
+%
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{endnotesj}
+  [2016/09/09 v2.9a endnotesj (H. Ogawa and H. Yamashita]
+%
+%% Ensure that endnotes.sty is NOT loaded after this package
+\@ifpackageloaded{endnotes}{}{%
+  \IfFileExists{endnotes.sty}{%
+    \expandafter\def\csname ver@endnotes.sty\endcsname{}}{}}
+%
+%% Initialize \notesname
+\def\notesname{} % should be empty by default (endnotesj.sty original)
+%
+%% Package options
+\newif\if@kakko \@kakkofalse
+\DeclareOption{single}{\@kakkotrue}
+\newif\if@yoko \@yokofalse
+\DeclareOption{yoko}{\@yokotrue}
+\newif\if@utf \@utffalse
+\DeclareOption{utf}{\@utftrue}
+\DeclareOption{otf}{\@utftrue}
+%
+%% Use conditional definitions for switching marks depending on
+%% vertical/horizontal Japanese writing direction
+\newif\if@autotateyoko \@autotateyokofalse
+\DeclareOption{auto-tateyoko}{\@autotateyokotrue}
+%
+%% Other options are used as \notesname
+\DeclareOption*{\edef\notesname{\CurrentOption}}
+\ProcessOptions
+%
+%% If otf/utf options are specified, load either of otf.sty/utf.sty
+\if@utf
+  \@ifpackageloaded{utf}{}{\@ifpackageloaded{otf}{}{%
+    \IfFileExists{otf.sty}{\AtEndOfPackage{\RequirePackage{otf}}}{%
+    \IfFileExists{utf.sty}{\AtEndOfPackage{\RequirePackage{utf}}}{%
+    \PackageError{endnotesj}{Neither otf.sty nor utf.sty found}\@ehc}
+  }}}
+\fi
+%
+%%%%% Import from endnotes.sty
+%
+\@definecounter{endnote}
+\def\theendnote{\arabic{endnote}}
+%
+%%%%% End
+%
+%
+%% Customized endnote marks inside the main text for Japanese documents
+%
+% (1) Common style for vertical writing with twin full-width brackets
+%     like "Journal of Japanese history" (Nihonshi kenkyu)
+%     the default style
+\def\endnj@tate@makeenmark{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.2zw}{\hbox{\yoko\@theenmark}}\hspace{0.2zw}\char\jis"214B\relax}}
+%
+% (2) Common style for horizontal writing with twin full-width brackets
+%     enabled by \usepackage[yoko]{endnotesj}
+\def\endnj@yoko@makeenmark{\raisebox{.5zh}{\tiny (\hspace{0.2zw}{\hbox{\@theenmark}})}}
+%
+% (3) Style for horizontal writing with single full-width brackets
+%     like"Journal of historical studies" (Rekishigaku kenkyu)
+%     enabled by \usepackage[single]{endnotesj}
+\def\endnj@single@makeenmark{\raisebox{.5zh}{\tiny {\hbox{\@theenmark}})}}
+%
+% (1')-(3') More beautiful definitions using otf/utf package
+\def\endnj@tate@utf@makeenmark{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax{\hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
+\def\endnj@yoko@utf@makeenmark{\raisebox{.5zh}{\tiny \char\jis"214A\relax{\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
+\def\endnj@single@utf@makeenmark{\raisebox{.5zh}{\tiny {\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
+%
+%% Now, redefine \@makeenmark using above definitions
+\if@utf
+  \let\@makeenmark\endnj@tate@utf@makeenmark
+  \if@yoko
+    \let\@makeenmark\endnj@yoko@utf@makeenmark
+  \fi
+  \if@kakko
+    \let\@makeenmark\endnj@single@utf@makeenmark
+  \fi
+\else
+  \let\@makeenmark\endnj@tate@makeenmark
+  \if@yoko
+    \let\@makeenmark\endnj@yoko@makeenmark
+  \fi
+  \if@kakko
+    \let\@makeenmark\endnj@single@makeenmark
+  \fi
+\fi
+%
+%% End
+%
+%
+%%%%% Import from endnotes.sty
+%
+\def\makeenmark{\@makeenmark} % Added in endnotes.sty (JL 12 January 2003)
+\def\theenmark{\@theenmark} % Added in endnotes.sty (JL 12 January 2003)
+%
+\newdimen\endnotesep
+%
+\def\endnote{\@ifnextchar[\@xendnote{\stepcounter{endnote}%
+     \protected@xdef\@theenmark{\theendnote}%
+     \@endnotemark\@endnotetext}}
+%
+\def\@xendnote[#1]{%
+   \begingroup
+     \c@endnote=#1\relax
+     \unrestored@protected@xdef\@theenmark{\theendnote}%
+   \endgroup
+   \@endnotemark\@endnotetext}
+%
+\let\@doanenote=0
+\let\@endanenote=0
+%
+\newwrite\@enotes
+\newif\if@enotesopen \global\@enotesopenfalse
+%
+\def\@openenotes{\immediate\openout\@enotes=\jobname.ent\relax
+      \global\@enotesopentrue}
+%
+\long\def\@endnotetext#1{%
+     \if@enotesopen \else \@openenotes \fi
+     \immediate\write\@enotes{\@doanenote{\@theenmark}}%
+     \begingroup
+        \def\next{#1}%
+        \newlinechar='40
+        \immediate\write\@enotes{\meaning\next}%
+     \endgroup
+     \immediate\write\@enotes{\@endanenote}}
+%
+\long\def\addtoendnotes#1{%
+     \if@enotesopen \else \@openenotes \fi
+     \begingroup
+        \newlinechar='40
+        \let\protect\string
+        \immediate\write\@enotes{#1}%
+     \endgroup}
+%
+\def\endnotemark{%
+   \@ifnextchar[\@xendnotemark
+     {\stepcounter{endnote}%
+      \protected@xdef\@theenmark{\theendnote}%
+      \@endnotemark}}
+%
+\def\@xendnotemark[#1]{%
+   \begingroup
+      \c@endnote #1\relax
+      \unrestored@protected@xdef\@theenmark{\theendnote}%
+   \endgroup
+   \@endnotemark}
+%
+\def\@endnotemark{%
+  \leavevmode
+  \ifhmode\edef\@x@sf{\the\spacefactor}\nobreak\fi
+  \makeenmark
+  \ifhmode\spacefactor\@x@sf\fi
+  \relax}
+%
+\def\endnotetext{%
+     \@ifnextchar [\@xendnotenext
+       {\protected@xdef\@theenmark{\theendnote}%
+    \@endnotetext}}
+%
+\def\@xendnotenext[#1]{%
+  \begingroup
+     \c@endnote=#1\relax
+     \unrestored@protected@xdef\@theenmark{\theendnote}%
+  \endgroup
+  \@endnotetext}
+%
+\def\enoteheading{\section*{\notesname
+  \@mkboth{\MakeUppercase{\notesname}}{\MakeUppercase{\notesname}}}%
+  \mbox{}\par\vskip-\baselineskip}
+%
+%%%%% End
+%
+%
+%% Settings of endnote formatting at the end of Japanese documents
+%% (The numbering styles and indentation are considered.)
+%
+% (1) Common style for vertical writing with twin brackets
+%     like "Journal of Japanese history" (Nihonshi kenkyu)
+%     the default style
+\def\endnj@tate@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\raisebox{.07zh}{(}\hspace{0.2zw}\hbox{\yoko\@theenmark}\hspace{0.2zw}\raisebox{.07zh}{)}}#1}
+%
+% (2) Common style for horizontal writing with twin full-width brackets
+%     enabled by \usepackage[yoko]{endnotesj}
+\def\endnj@yoko@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{(\hspace{0.2zw}\hbox{\@theenmark}\hspace{0.2zw})}#1}
+%
+% (3) Style for horizontal writing with single full-width brackets
+%     like"Journal of historical studies" (Rekishigaku kenkyu)
+%     enabled by \usepackage[single]{endnotesj}
+\def\endnj@single@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\hbox{\@theenmark})}#1}
+%
+% (1')-(3') More beautiful definitions using otf/utf package
+\def\endnj@tate@utf@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\UTF{FE35}\hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}\UTF{FE36}}#1}
+\def\endnj@yoko@utf@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\char\jis"214A\relax\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}\char\jis"214B\relax}#1}
+\def\endnj@single@utf@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}\char\jis"214B\relax}#1} 
+%
+%% Now, redefine \enoteformat using above definitions
+\if@utf
+  \let\enoteformat\endnj@tate@utf@enoteformat
+  \if@yoko
+    \let\enoteformat\endnj@yoko@utf@enoteformat
+  \fi
+  \if@kakko
+    \let\enoteformat\endnj@single@utf@enoteformat
+  \fi
+\else
+  \let\enoteformat\endnj@tate@enoteformat
+  \if@yoko
+    \let\enoteformat\endnj@yoko@enoteformat
+  \fi
+  \if@kakko
+    \let\enoteformat\endnj@single@enoteformat
+  \fi
+\fi
+%
+%% End
+%
+%
+\def\enotesize{\small} % endnotesj.sty original
+%
+%%%%% Import from endnotes.sty
+%
+\def\theendnotes{\immediate\closeout\@enotes \global\@enotesopenfalse
+  \begingroup
+    \makeatletter
+    %
+    % The machinery with \@ResetGT and > here ensures that
+    % \@doanenote works properly even if > is an active character
+    % at the point where \theendnotes is invoked. > needs to have
+    % catcode 12 when the arguments of \@doanenote are scanned, so
+    % that the > in the string "macro:->" is matched.  The actual
+    % footnote text is not an argument to \@doanenote, but just
+    % follows it in the .ent file; so \@ResetGT can reset the
+    % category code for > that should be used when processing
+    % that text.  That resetting takes place within a
+    % \begingroup-\endgroup block set up by \@doanenote and
+    % \@endanenote, so the catcode for > is back to 12 for the
+    % next note.
+    %
+    \edef\@tempa{`\string >}%
+    \ifnum\catcode\@tempa=12%
+      \let\@ResetGT\relax
+    \else
+      \edef\@ResetGT{\noexpand\catcode\@tempa=\the\catcode\@tempa}%
+      \@makeother\>%
+    \fi
+    \def\@doanenote##1##2>{\def\@theenmark{##1}\par\begingroup
+        \@ResetGT
+        \edef\@currentlabel{\csname p@endnote\endcsname\@theenmark}%
+        \enoteformat}
+    \def\@endanenote{\par\endgroup}%
+    \enoteheading
+    \enotesize
+    \input{\jobname.ent}%
+  \endgroup}
+%
+%%%%% End
+%
+%% Definition for auto-tateyoko option
+\if@autotateyoko
+  \if@utf
+    \if@kakko
+      \def\@makeenmark{%
+        \iftdir\endnj@tate@utf@makeenmark
+        \else\endnj@single@utf@makeenmark
+        \fi}
+      \def\enoteformat{%
+        \iftdir\endnj@tate@utf@enoteformat
+        \else\endnj@single@utf@enoteformat
+        \fi}
+    \else
+      \def\@makeenmark{%
+        \iftdir\endnj@tate@utf@makeenmark
+        \else\endnj@yoko@utf@makeenmark
+        \fi}
+      \def\enoteformat{%
+        \iftdir\endnj@tate@utf@enoteformat
+        \else\endnj@yoko@utf@enoteformat
+        \fi}
+    \fi
+  \else
+    \if@kakko
+      \def\@makeenmark{%
+        \iftdir\endnj@tate@makeenmark
+        \else\endnj@single@makeenmark
+        \fi}
+      \def\enoteformat{%
+        \iftdir\endnj@tate@enoteformat
+        \else\endnj@single@enoteformat
+        \fi}
+    \else
+      \def\@makeenmark{%
+        \iftdir\endnj@tate@makeenmark
+        \else\endnj@yoko@makeenmark
+        \fi}
+      \def\enoteformat{%
+        \iftdir\endnj@tate@enoteformat
+        \else\endnj@yoko@enoteformat
+        \fi}
+    \fi
+  \fi
+\fi
+%
+%
+% ****************************************
+% * Lines per page & Characters per line *
+% ****************************************
+%
+%  Changes in v3.0:
+%    * \linesparpage: the number of interline skip is fewer
+%      than the number of lines
+%    * \linesparpage: subtract \topskip from \textheight
+%    * \kcharparline: add \relax at the end of definition
+%
+\def\linesparpage#1{%
+  \@tempcnta=#1\relax
+  \advance\@tempcnta by \m@ne
+  \baselineskip=\textheight
+  \advance\baselineskip by -\topskip
+  \divide\baselineskip by \@tempcnta\relax}
+\def\kcharparline#1{%
+  \xkanjiskip 0mm plus 0.2mm minus 0.2mm
+  \settowidth{\textwidth}{\char\jis"2422}%
+  \multiply\textwidth by #1\relax}
+%
+\endinput
