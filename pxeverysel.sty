@@ -3,7 +3,7 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2016/05/02 v0.2 Patch to everysel for (u)pLaTeX]
+    [2016/05/03 v0.3 Patch to everysel for (u)pLaTeX]
 
 %% preparations
 \def\pxys@pkgname{pxeverysel}
@@ -73,14 +73,14 @@
   % extract "pre-\size@update" insertion
   \pxys@append@to\pxys@selectfont\pxys@term
   \pxys@patch@cmd\pxys@selectfont
-    {\font@name\enc@update}{\size@update\pxys@term}%
-    {\font@name\pxys@self@hook\pxys@everysel@hook
+    {\pickup@font\font@name}{\size@update\pxys@term}%      % plfonts/ptrace
+    {\pickup@font\font@name\pxys@self@hook\pxys@everysel@hook
      \size@update\enc@update}%
   \ifx\pxys@fragment\relax
     \let\pxys@selectfont\pxys@org@selectfont
     % extract "pre-\enc@update" insertion
     \pxys@patch@cmd\pxys@selectfont
-      {\pickup@font\font@name}{\size@update\enc@update}%
+      {\pickup@font\font@name}{\size@update\enc@update}%   % ltfsstrc/tracefnt
       {\pickup@font\font@name\pxys@self@hook\pxys@everysel@hook
        \size@update\enc@update}%
     \ifx\pxys@fragment\relax % failure
@@ -93,11 +93,18 @@
   \fi
   \let\pxys@new@selectfont\pxys@selectfont
   % prepare for everysel routine
-  \let\CheckCommand\@gobble}
+  \let\CheckCommand\@gobble
+  % hack for disabling duplicate font info
+  \expandafter\let\expandafter\pxys@ver@tracefnt
+    \csname ver@tracefnt.sty\endcsname
+  \expandafter\let\csname ver@tracefnt.sty\endcsname\@undefined}
 
 %% \pxys@postproc
 \@onlypreamble\pxys@postproc
 \def\pxys@postproc{%
+  % revert the hack for disabling duplicate font info
+  \expandafter\let\csname ver@tracefnt.sty\endcsname\pxys@ver@tracefnt
+  % post handling of everysel routine
   \let\CheckCommand\pxys@CheckCommand
   \let\pxys@CheckCommand\@undefined
   \expandafter\let\expandafter\pxys@selectfont
