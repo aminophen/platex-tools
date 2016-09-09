@@ -12,9 +12,18 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/09/08 v1.0b Tabular extension package for plext and array]
+  [2016/09/10 v1.0c Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
+%
+%% save definitions from array.sty
+%
+\def\array{\col@sep\arraycolsep
+  \def\d@llarbegin{$}\let\d@llarend\d@llarbegin\gdef\@halignto{}%
+  \@tabarray}
+\def\tabular{\gdef\@halignto{}\@tabular}
+%
+%% patching internal code for array.sty and plext.sty
 %
 \def\@startpbox#1{\bgroup
   \box@dir\adjustbaseline %% added
@@ -84,5 +93,7 @@
 \def\endarray{\crcr \egroup \egroup \@end@alignbox \gdef\@preamble{}}
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
+%
+%% all done
 %
 \endinput
