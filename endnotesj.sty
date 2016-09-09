@@ -22,7 +22,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{endnotesj}
-  [2016/09/09 v2.9a endnotesj (H. Ogawa and H. Yamashita]
+  [2016/09/09 v2.9b endnotesj (H. Ogawa and H. Yamashita)]
 %
 %% Ensure that endnotes.sty is NOT loaded after this package
 \@ifpackageloaded{endnotes}{}{%
@@ -32,11 +32,19 @@
 %% Initialize \notesname
 \def\notesname{} % should be empty by default (endnotesj.sty original)
 %
-%% Package options
+%% Package options (endnotesj original)
+%
+%% Brackets - single or twin?
 \newif\if@kakko \@kakkofalse
 \DeclareOption{single}{\@kakkotrue}
+%
+%% Directions - yoko (horizontal) or tate (vertical)?
 \newif\if@yoko \@yokofalse
 \DeclareOption{yoko}{\@yokotrue}
+\newif\if@tate \@tatefalse
+\DeclareOption{tate}{\@tatetrue}
+%
+%% Use utf/otf package?
 \newif\if@utf \@utffalse
 \DeclareOption{utf}{\@utftrue}
 \DeclareOption{otf}{\@utftrue}
@@ -48,6 +56,7 @@
 %
 %% Other options are used as \notesname
 \DeclareOption*{\edef\notesname{\CurrentOption}}
+\ExecuteOptions{tate}
 \ProcessOptions
 %
 %% If otf/utf options are specified, load either of otf.sty/utf.sty
@@ -69,17 +78,25 @@
 %
 %% Customized endnote marks inside the main text for Japanese documents
 %
-% (1) Common style for vertical writing with twin full-width brackets
+% (1) Common style for vertical writing with twin full-width round brackets
 %     like "Journal of Japanese history" (Nihonshi kenkyu)
-%     the default style
+%     enabled by \usepackage[tate]{endnotesj} (default style)
 \def\endnj@tate@makeenmark{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.2zw}{\hbox{\yoko\@theenmark}}\hspace{0.2zw}\char\jis"214B\relax}}
 %
-% (2) Common style for horizontal writing with twin full-width brackets
+% (1A) Improved a little (added 2016/09/09)
+%     enabled by \usepackage[tate*]{endnotesj}
+\def\endnj@tate@star@makeenmark{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}{\hbox{\yoko\@theenmark}}\hspace{0.1zw}\char\jis"214B\relax}}
+%
+% (2) Common style for horizontal writing with twin round brackets
 %     enabled by \usepackage[yoko]{endnotesj}
 \def\endnj@yoko@makeenmark{\raisebox{.5zh}{\tiny (\hspace{0.2zw}{\hbox{\@theenmark}})}}
 %
-% (3) Style for horizontal writing with single full-width brackets
-%     like"Journal of historical studies" (Rekishigaku kenkyu)
+% (2A) Improved a little using twin full-width round brackets (added 2016/09/09)
+%     enabled by \usepackage[yoko*]{endnotesj}
+\def\endnj@yoko@star@makeenmark{\raisebox{.5zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}{\hbox{\@theenmark}}\hspace{0.1zw}\char\jis"214B\relax}}
+%
+% (3) Style for horizontal writing with single round bracket
+%     like "Journal of historical studies" (Rekishigaku kenkyu)
 %     enabled by \usepackage[single]{endnotesj}
 \def\endnj@single@makeenmark{\raisebox{.5zh}{\tiny {\hbox{\@theenmark}})}}
 %
@@ -197,19 +214,29 @@
 %% Settings of endnote formatting at the end of Japanese documents
 %% (The numbering styles and indentation are considered.)
 %
-% (1) Common style for vertical writing with twin brackets
+% (1) Common style for vertical writing with twin round brackets
 %     like "Journal of Japanese history" (Nihonshi kenkyu)
-%     the default style
+%     enabled by \usepackage[tate]{endnotesj} (default style)
 \def\endnj@tate@enoteformat#1{\parindent 1em\noindent
   \@hangfrom{\raisebox{.07zh}{(}\hspace{0.2zw}\hbox{\yoko\@theenmark}\hspace{0.2zw}\raisebox{.07zh}{)}}#1}
 %
-% (2) Common style for horizontal writing with twin full-width brackets
+% (1A) Improved a little (added 2016/09/09)
+%     enabled by \usepackage[tate*]{endnotesj}
+\def\endnj@tate@star@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1zw}\hbox{\yoko\@theenmark}\hspace{0.1zw}\char\jis"214B\relax\mbox{}}#1}
+%
+% (2) Common style for horizontal writing with twin round brackets
 %     enabled by \usepackage[yoko]{endnotesj}
 \def\endnj@yoko@enoteformat#1{\parindent 1em\noindent
   \@hangfrom{(\hspace{0.2zw}\hbox{\@theenmark}\hspace{0.2zw})}#1}
 %
-% (3) Style for horizontal writing with single full-width brackets
-%     like"Journal of historical studies" (Rekishigaku kenkyu)
+% (2A) Improved a little using twin full-width round brackets (added 2016/09/09)
+%     enabled by \usepackage[yoko*]{endnotesj}
+\def\endnj@yoko@star@enoteformat#1{\parindent 1em\noindent
+  \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1zw}\hbox{\@theenmark}\hspace{0.1zw}\char\jis"214B\relax\mbox{}}#1}
+%
+% (3) Style for horizontal writing with single round bracket
+%     like "Journal of historical studies" (Rekishigaku kenkyu)
 %     enabled by \usepackage[single]{endnotesj}
 \def\endnj@single@enoteformat#1{\parindent 1em\noindent
   \@hangfrom{\hbox{\@theenmark})}#1}
