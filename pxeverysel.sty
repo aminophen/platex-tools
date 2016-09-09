@@ -3,7 +3,12 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2016/05/03 v0.3 Patch to everysel for (u)pLaTeX]
+    [2016/09/09 v0.4 Patch to everysel for (u)pLaTeX]
+
+%% if ctex classes/packages are already loaded, exit silently
+\ifdefined\CTEXoptions % defined at least CTeX 2007/05/06
+  \expandafter\endinput
+\fi
 
 %% preparations
 \def\pxys@pkgname{pxeverysel}
@@ -117,7 +122,7 @@
   \else % success
     \pxys@append@to\pxys@everysel@hook\pxys@fragment
   \fi
-  % commit hte change
+  % commit the change
   \ifx\pxys@new@selectfont\relax % failure
     \let\pxys@selectfont\pxys@org@selectfont % revert
     \pxys@warn{Failed in patching \string\selectfont}%
