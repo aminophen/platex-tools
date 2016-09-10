@@ -12,7 +12,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/09/10 v1.0c Tabular extension package for plext and array]
+  [2016/09/10 v1.0d Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
 %
@@ -90,7 +90,7 @@
   \let\\\@arraycr\let\tabularnewline\\
   \lineskip\z@skip\baselineskip\z@skip\@preamble}
 %
-\def\endarray{\crcr \egroup \egroup \@end@alignbox \gdef\@preamble{}}
+\def\endarray{\crcr \egroup \egroup \@end@alignbox \@arrayright \gdef\@preamble{}}
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
