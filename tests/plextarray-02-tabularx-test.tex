@@ -1,0 +1,91 @@
+% http://www.biwako.shiga-u.ac.jp/sensei/kumazawa/tex/tabularx.html
+\documentclass{jsarticle}
+\usepackage{tabularx} % 内部で array.sty を読む
+\usepackage{plextarray} % これで array.sty にパッチ
+% 通常は array/tabularx より後に plext を読むと有害
+% だが plextarray を使えば大丈夫
+\title{tabularx + plextのテスト}
+\author{Hironobu Yamashita}
+\begin{document}
+\maketitle
+
+幅を規定した表はtabularx.styを使う。ただし、tabularx.styは内部で
+array.styを読み込むため、そのままではplext.styと共存しない。
+
+plextarrayパッケージはtabular*環境にも対応している。
+
+\begin{tabular*}{10cm}<y>{@{\extracolsep{\fill}}|c|c|c|r|}
+  \hline
+  ラベル1 & ラベル2 & ラベル3 & ラベル4 \\ \hline
+  項目1  & 項目2 & 項目3 & 項目4 \\ \hline
+\end{tabular*}
+
+\medskip
+
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}{>{\raggedleft\arraybackslash}X}
+
+したがって、plextarrayパッケージを使用すれば、plextパッケージを
+読み込んでいても、tabularx環境を使えるようになる。
+
+\begin{tabularx}{.75\textwidth}{|l|X|r|X|} \hline
+  作者 & 冒頭 & 発表時期 & 備考 \\ \hline
+  夏目漱石 & 吾輩は猫である。名前はまだ無い。 & 明治時代 &
+  夏目漱石の処女作でもある\footnote{長編小説です。}。 \\ \hline
+\end{tabularx}
+
+\begin{tabularx}{9cm}{|c|R|c|L|}\hline
+  \multicolumn{2}{|c|}{Multicolumn entry!} & THREE & FOUR \\ \hline
+  夏目漱石 & 吾輩は猫である。名前はまだ無い。 & 長編小説 &
+  何でも薄暗いじめじめした所でニャーニャー泣いていた
+  事だけは記憶している。 \\ \hline
+\end{tabularx}
+
+\medskip
+
+ただし、tabularx環境の組方向を変えることは想定していない。
+\iffalse
+% 組方向変更が機能するが結果が異常
+\begin{tabularx}{9cm}<t>{|c|R|c|L|}\hline
+  \multicolumn{2}{|c|}{Multicolumn entry!} & THREE & FOUR \\ \hline
+  夏目漱石 & 吾輩は猫である。名前はまだ無い。 & 長編小説 &
+  何でも薄暗いじめじめした所でニャーニャー泣いていた
+  事だけは記憶している。 \\ \hline
+\end{tabularx}
+\fi
+
+\clearpage
+\renewcommand{\arraystretch}{1.5}
+
+通常のtabular環境だと
+\begin{tabular}{|l|c|c|c|c|c|c|} \hline
+   &       $a$  & $b$ & $c$ & $p$ &         $q$  & $h$ \\ \hline\hline
+a) &        6   &  12 &     &     &              &     \\ \hline
+b) &            &   4 &   6 &     &              &     \\ \hline
+c) &            &     &  12 &     &              &  6  \\ \hline
+d) &        6   &     &  12 &     &              &     \\ \hline
+e) &        4   &     &     &   2 &              &     \\ \hline
+f) &        6   &     &     &   8 &              &     \\ \hline
+g) &            &   4 &     &     & $4/\sqrt{5}$ &     \\ \hline
+h) &        8   &     &     &     &              &  6  \\ \hline
+i) &            &     &  12 &   4 &              &     \\ \hline
+j) & $\sqrt{5}$ &   6 &     &     &              &     \\ \hline
+\end{tabular}
+
+tabularx環境だと
+\begin{tabularx}{100mm}{*{7}{|C}|} \hline
+   &       $a$  & $b$ & $c$ & $p$ &         $q$  & $h$ \\ \hline\hline
+a) &        6   &  12 &     &     &              &     \\ \hline
+b) &            &   4 &   6 &     &              &     \\ \hline
+c) &            &     &  12 &     &              &  6  \\ \hline
+d) &        6   &     &  12 &     &              &     \\ \hline
+e) &        4   &     &     &   2 &              &     \\ \hline
+f) &        6   &     &     &   8 &              &     \\ \hline
+g) &            &   4 &     &     & $4/\sqrt{5}$ &     \\ \hline
+h) &        8   &     &     &     &              &  6  \\ \hline
+i) &            &     &  12 &   4 &              &     \\ \hline
+j) & $\sqrt{5}$ &   6 &     &     &              &     \\ \hline
+\end{tabularx}
+
+\end{document}

@@ -1,0 +1,47 @@
+% http://www.biwako.shiga-u.ac.jp/sensei/kumazawa/tex/array.html
+% http://mechanics.civil.tohoku.ac.jp/bear/bear-collections/style-files/mz5array.tex
+% http://blogs.yahoo.co.jp/koh_hotta/34949782.html
+\documentclass{tarticle}
+\usepackage{array}
+\usepackage{plextarray}
+\title{array + plextのテスト}
+\author{Hironobu Yamashita}
+\begin{document}
+\maketitle
+
+arrayパッケージを用いると表のセル幅指定が可能。plextarrayパッケージ
+を使って、plextの「組方向オプション」と共存させる。
+
+\medskip
+
+縦組中で横組の表を書く例。
+組方向 \verb+<y>+ 指定
+\begin{tabular}<y>{|>{$}c<{$}|c|}\hline
+\exp(x) & 指数関数 \\ \hline
+\log(x) & 対数関数 \\ \hline
+\end{tabular}
+組方向 \verb+<z>+ 指定
+\begin{tabular}<z>{|p{21mm}|m{24mm}|b{21mm}|}
+\hline
+Using \texttt{p} option & Using \texttt{m} option &
+Using \texttt{b} option \\ \hline
+[t]指定のparboxと同様 & [c]指定のparboxと同様 &
+[b]指定のparboxと同様 \\ \hline
+\end{tabular}
+
+\medskip
+
+再び縦組に。
+\setlength{\arrayrulewidth}{1.2pt} %%% 全体の罫線の幅を 1.2pt に指定
+\begin{tabular}{|m{12zw}|m{5zw}|m{5zw}|}
+  \hline
+  \multicolumn{3}{|c|}{\textbf{名古屋鉄道・知立駅の名物}} \\ \hline
+  品名 & 金額 & 評価 \\ \hline
+  栗入り大あん巻き & 170円 & ◎ \\ \hline
+  たこ焼き一皿 & 250円 & ▲ \\ \hline
+  うどん & 280円 & ○ \\ \hline
+  そば & 300円 & △ \\ \hline
+  知立ラーメン & 350円 & ☆ \\ \hline
+\end{tabular}
+
+\end{document}

@@ -1,0 +1,94 @@
+\documentclass{jsarticle}
+\usepackage{delarray}
+\usepackage{plextdelarray} % 無理やりパッチ
+\title{delarray + plextのテスト}
+\author{Hironobu Yamashita}
+\begin{document}
+\maketitle
+delarray.styが提供する機能で\verb+\left+と\verb+\right+の括弧を付ける
+\[
+  \begin{array}[t]\{{c}\}
+    3 \\ 4 \\ 5
+  \end{array}
+  \begin{array}[c]\{{c}\}
+    2 \\ 3 \\ 4
+  \end{array}
+  \begin{array}[b]\{{c}\}
+    1 \\ 2 \\ 3
+  \end{array}
+\]
+この機能（特に\verb+[t]+と\verb+[b]+）は、delarrayなしでは実現できない。
+\[
+\left\{
+  \begin{array}[t]{c}
+    3 \\ 4 \\ 5
+  \end{array}
+\right\}
+\left\{
+  \begin{array}[c]{c}
+    2 \\ 3 \\ 4
+  \end{array}
+\right\}
+\left\{
+  \begin{array}[b]{c}
+    1 \\ 2 \\ 3
+  \end{array}
+\right\}
+\]
+ただ、この拡張機能はplext.styの「組方向オプション」\verb+<y>+などと
+衝突し、\verb+<>+の括弧をdelarray向けの「左右括弧」のつもりで使うと、
+実際の処理ではplextの「組方向オプション」と誤認される恐れがある。
+\iffalse
+\[
+  \begin{array}<{cc}>
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+  \end{array}
+\]
+\fi
+% ==================================
+% ! Missing delimiter (. inserted).
+% ==================================
+しかし、これは元のdelarray.styでも、「左右括弧」に\verb+[]+を使う
+場合にはこれが「垂直位置指定」と誤認されて類似の問題が起きる。
+\iffalse
+\[
+  \begin{array}[{cc}]
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+  \end{array}
+\]
+\fi
+そこで、これらの挙動を含めて「仕様」と設定する。
+特にplextdelarrayの場合は、delarrayの左右括弧に\verb+<>+でなく
+\verb+\langle+と\verb+\rangle+を使えば問題は生じない。
+\[
+  \begin{array}\langle{cc}\rangle
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+  \end{array}
+\]
+こうすると、plext.styとdelarray.styが（一応）共存できるようになる。
+\[
+  \begin{array}<t>[t]\{{c}\}
+    3 \\ 4 \\ 5
+  \end{array}
+  \begin{array}<t>[c]\{{c}\}
+    2 \\ 3 \\ 4
+  \end{array}
+  \begin{array}<t>[b]\{{c}\}
+    1 \\ 2 \\ 3
+  \end{array}
+\]
+\[
+\newcolumntype{L}{>{$}l<{$}}
+f(x)=
+  \begin{array}<t>\{{lL}.
+    0 & if $x=0$ \\
+    \sin(x)/x & otherwise
+  \end{array}
+\]
+…必要なのだろうか？ とはいえ、delarrayを使うと「plextの部分的な
+縦書き機能（tabular環境を含む）までキャンセルされる」という従来の
+挙動は嬉しく場合もあるだろう。無いよりはマシかもしれない。
+\end{document}

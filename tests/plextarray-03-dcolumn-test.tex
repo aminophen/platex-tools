@@ -1,0 +1,35 @@
+% http://www.yamamo10.jp/yamamoto/comp/latex/make_doc/table/table.php
+%\RequirePackage{exppl2e}
+\documentclass[10pt,a4paper]{tarticle}
+\usepackage{dcolumn} % 内部で array.sty を読む
+\usepackage{plextarray} % これで array.sty にパッチ
+\begin{document}
+
+\begin{tabular}{|D{.}{.}{5}|D{.}{.}{-1}|D{.}{,}{5}|D{.}{\otimes}{5}|}
+  \hline
+  \multicolumn{1}{|c}{\texttt{D\{.\}\{.\}\{5\}}} &
+  \multicolumn{1}{|c}{\texttt{D\{.\}\{.\}\{-1\}}} &
+  \multicolumn{1}{|c}{\texttt{D\{.\}\{,\}\{5\}}} &
+  \multicolumn{1}{|c|}{\texttt{D\{.\}\{\textbackslash otimes\}\{5\}}} \\
+  \hline\hline
+  1.234           & 1.234           & 1.234           & 1.234 \\
+  987654321.12345 & 987654321.12345 & 987654321.12345 & 987654321.12345 \\
+  12.345          & 12.345          & 12.345          & 12.345 \\
+  13579           & 13579           & 13579           & 13579 \\
+  \hline
+\end{tabular}
+\begin{tabular}<y>{|D{.}{.}{5}|D{.}{.}{-1}|D{.}{,}{5}|D{.}{\otimes}{5}|}
+  \hline
+  \multicolumn{1}{|c}{\texttt{D\{.\}\{.\}\{5\}}} &
+  \multicolumn{1}{|c}{\texttt{D\{.\}\{.\}\{-1\}}} &
+  \multicolumn{1}{|c}{\texttt{D\{.\}\{,\}\{5\}}} &
+  \multicolumn{1}{|c|}{\texttt{D\{.\}\{\textbackslash otimes\}\{5\}}} \\
+  \hline\hline
+  1.234           & 1.234           & 1.234           & 1.234 \\
+  987654321.12345 & 987654321.12345 & 987654321.12345 & 987654321.12345 \\
+  12.345          & 12.345          & 12.345          & 12.345 \\
+  13579           & 13579           & 13579           & 13579 \\
+  \hline
+\end{tabular}
+
+\end{document}

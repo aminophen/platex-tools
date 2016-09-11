@@ -1,0 +1,143 @@
+% http://www.yamamo10.jp/yamamoto/comp/latex/make_doc/table/table.php
+%\RequirePackage{exppl2e}
+\documentclass[10pt,a4paper]{tarticle}
+\usepackage{dcolumn} % 内部で array.sty を読む
+\usepackage{longtable}
+\usepackage{plextarray} % これで array.sty にパッチ
+% plextarray は longtable 自体には不要だが、今回の例は
+% dcolumn を使った longtable なので plextarray パッチが必要
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\begin{document}
+
+表\ref{tab:elements_list}は原子番号99までの元素の名前と特徴を表してい
+ます．
+%
+%===================================================
+% longtable のサンプル   dcolumn も使っている
+%===================================================
+\begin{longtable}[c]{rllld{-2}r}
+ \caption{元素の名前と性質．}
+ \label{tab:elements_list}
+ \\
+ %------ 最初のページの表の最上部 ----
+ \hline
+ 原子番号 & 元素記号 & 日本語 & 英語 & \multicolumn{1}{c}{原子量} & 融点/$^\circ C$ \\
+ \hline\hline
+ \endfirsthead
+ %------ 2ページ以降の表の最上部 ----
+ \multicolumn{6}{l}{\small\it 前ページからの続き}\\
+ \hline
+ 原子番号 & 元素記号 & 日本語 & 英語 & \multicolumn{1}{c}{原子量} & 融点/$^\circ C$ \\
+ \hline\hline
+ \endhead
+ %----- ページの表の最下部 --------
+ \hline
+ \multicolumn{6}{r}{\small\it 表は次ページに続く}\\
+ \endfoot
+ %----- 最終ページの表の最下部 --------
+ \hline
+ \multicolumn{6}{r}{\small\it これで終わり}\\
+ \endlastfoot
+ %----------------------------------------------------------------
+ 1  & H  & 水素               & Hydrogen      & 1.0079  & -259 \\
+ 2  & He & ヘリウム\footnote{最も融点が低い} & Helium & 4.0026  & -272 \\
+ 3  & Li & リチウム           & Lithium       & 6.941   & 180 \\
+ 4  & Be & ベリリウム         & Beryllium     & 9.0122  & 1278 \\
+ 5  & B  & ホウ素             & Boron         & 10.811  & 2300 \\
+ 6  & C  & 炭素               & Carbon        & 12.0107 & 3500 \\
+ 7  & N  & 窒素               & Nitrogen      & 14.0067 & -210 \\
+ 8  & O  & 酸素               & Oxygen        & 15.9994 & -218 \\
+ 9  & F  & フッ素             & Fluorine      & 18.9984 & -220 \\
+ 10 & Ne & ネオン             & Neon          & 20.1797 & -249 \\
+ 11 & Na & ナトリウム         & Sodium        & 22.9897 & 98 \\
+ 12 & Mg & マグネシウム       & Magnesium     & 24.305  & 639 \\
+ 13 & Al & アルミニウム       & Aluminum      & 26.9815 & 660 \\
+ 14 & Si & ケイ素             & Silicon      & 28.0855 & 1410 \\
+ 15 & P  & リン               & Phosphorus   & 30.9738 & 44 \\
+ 16 & S  & 硫黄               & Sulfur       & 32.065  & 113 \\
+ 17 & Cl & 塩素               & Chlorine     & 35.453  & -101 \\
+ 18 & Ar & アルゴン           & Argon        & 39.948  & -189 \\
+ 19 & K  & カリウム           & Potassium    & 39.0983 & 64 \\
+ 20 & Ca & カルシウム         & Calcium      & 40.078  & 839 \\
+ 21 & Sc & スカンジウム       & Scandium     & 44.9559 & 1539 \\
+ 22 & Ti & チタン             & Titanium     & 47.867  & 1660 \\
+ 23 & V  & バナジウム         & Vanadium     & 50.9415 & 1890 \\
+ 24 & Cr & クロム             & Chromium     & 51.9961 & 1857 \\
+ 25 & Mn & マンガン           & Manganese    & 54.938  & 1245 \\
+ 26 & Fe & 鉄                & Iron         & 55.845   & 1535 \\
+ 27 & Co & コバルト           & Cobalt       & 58.9332 & 1495 \\
+ 28 & Ni & ニッケル           & Nickel       & 58.6934 & 1453 \\
+ 29 & Cu & 銅                 & Copper       & 63.546  & 1083 \\
+ 30 & Zn & 亜鉛               & Zinc         & 65.39   & 420 \\
+ 31 & Ga & ガリウム           & Gallium      & 69.723   & 30 \\
+ 32 & Ge & ゲルマニウム       & Germanium     & 72.64   & 937 \\
+ 33 & As & ヒ素              & Arsenic       & 74.9216 & 81 \\
+ 34 & Se & セレン            & Selenium      & 78.96   & 217 \\
+ 35 & Br & 臭素              & Bromine       & 79.904  & -7 \\
+ 36 & Kr & クリプトン        & Krypton       & 83.8     & -157 \\
+ 37 & Rb & ルビジウム        & Rubidium      & 85.4678  & 39 \\
+ 38 & Sr & ストロンチウム    & Strontium     & 87.62    & 769 \\
+ 39 & Y  & イットリウム      & Yttrium       & 88.9059  & 1523 \\
+ 40 & Zr & ジルコニウム      & Zirconium     & 91.224   & 1852 \\
+ 41 & Nb & ニオブ            & Niobium       & 92.9064  & 2468 \\
+ 42 & Mo & モリブデン        & Molybdenum    & 95.94    & 2617 \\
+ 43 & Tc & テクネチウム      & Technetium    & 98       & 2200 \\
+ 44 & Ru & ルテニウム        & Ruthenium     & 101.07   & 2250 \\
+ 45 & Rh & ロジウム          & Rhodium       & 102.9055 & 1966 \\
+ 46 & Pd & パラジウム        & Palladium     & 106.42   & 1552 \\
+ 47 & Ag & 銀                & Silver       & 107.8682 & 962 \\
+ 48 & Cd & カドミウム        & Cadmium       & 112.411 & 321 \\
+ 49 & In & インジウム        & Indium        & 114.818 & 157 \\
+ 50 & Sn & スズ              & Tin          & 118.71   & 232 \\
+ 51 & Sb & アンチモン        & Antimony     & 121.76   & 630 \\
+ 52 & Te & テルル            & Tellurium    & 127.6    & 449 \\
+ 53 & I  & ヨウ素            & Iodine       & 126.9045 & 114 \\
+ 54 & Xe & キセノン          & Xenon        & 131.293  & -112 \\
+ 55 & Cs & セシウム          & Cesium       & 132.9055 & 29 \\
+ 56 & Ba & バリウム          & Barium       & 137.327  & 725 \\
+ 57 & La & ランタン          & Lanthanum    & 138.9055 & 920 \\
+ 58 & Ce & セリウム          & Cerium       & 140.116  & 795 \\
+ 59 & Pr & プラセオジム      & Praseodymium & 140.9077 & 935 \\
+ 60 & Nd & ネオジム          & Neodymium    & 144.24   & 1010 \\
+ 61 & Pm & プロメチウム      & Promethium   & 145      & 1100 \\
+ 62 & Sm & サマリウム        & Samarium     & 150.36   & 1072 \\
+ 63 & Eu & ユウロピウム      & Europium     & 151.964  & 822 \\
+ 64 & Gd & ガドリニウム      & Gadolinium   & 157.25   & 1311 \\
+ 65 & Tb & テルビウム        & Terbium      & 158.9253 & 1360 \\
+ 66 & Dy & ジスプロシウム    & Dysprosium   & 162.5    & 1412 \\
+ 67 & Ho & ホルミウム        & Holmium      & 164.9303 & 1470 \\
+ 68 & Er & エルビウム        & Erbium       & 167.259  & 1522 \\
+ 69 & Tm & ツリウム          & Thulium      & 168.9342 & 1545 \\
+ 70 & Yb & イッテルビウム     & Ytterbium    & 173.04  & 824 \\
+ 71 & Lu & ルテチウム        & Lutetium     & 174.967  & 1656 \\
+ 72 & Hf & ハフニウム        & Hafnium      & 178.49   & 2150 \\
+ 73 & Ta & タンタル          & Tantalum     & 180.9479 & 2996 \\
+ 74 & W  & タングステン      & Tungsten     & 183.84   & 3410 \\
+ 75 & Re & レニウム          & Rhenium      & 186.207  & 3180 \\
+ 76 & Os & オスミウム        & Osmium       & 190.23   & 3045 \\
+ 77 & Ir & イリジウム        & Iridium      & 192.217  & 2410 \\
+ 78 & Pt & 白金             & Platinum      & 195.078  & 1772 \\
+ 79 & Au & 金               & Gold          & 196.9665 & 1064 \\
+ 80 & Hg & 水銀             & Mercury       & 200.59   & -39 \\
+ 81 & Tl & タリウム          & Thallium     & 204.3833 & 303 \\
+ 82 & Pb & 鉛               & Lead          & 207.2   & 327 \\
+ 83 & Bi & ビスマス          & Bismuth      & 208.9804 & 271 \\
+ 84 & Po & ポロニウム        & Polonium     & 209      & 254 \\
+ 85 & At & アスタチン        & Astatine     & 210      & 302 \\
+ 86 & Rn & ラドン            & Radon        & 222      & -71 \\
+ 87 & Fr & フランシウム      & Francium     & 223      & 27 \\
+ 88 & Ra & ラジウム          & Radium       & 226      & 700 \\
+ 89 & Ac & アクチニウム      & Actinium     & 227      & 1050 \\
+ 90 & Th & トリウム          & Thorium     & 232.0381  & 1750 \\
+ 91 & Pa & プロアクチニウム  & Protactinium & 231.0359  & 1568 \\
+ 92 & U  & ウラン           & Uranium      & 238.0289  & 1132 \\
+ 93 & Np & ネプツニウム      & Neptunium    & 237      & 640 \\
+ 94 & Pu & プルトニウム      & Plutonium    & 244      & 640 \\
+ 95 & Am & アメリシウム      & Americium    & 243      & 994 \\
+ 96 & Cm & キュリウム        & Curium       & 247      & 1340 \\
+ 97 & Bk & バークリウム       & Berkelium   & 247      & 986 \\
+ 98 & Cf & カリホルニウム     & Californium & 251      & 900 \\
+ 99 & Es & アインスタイニウム & Einsteinium & 252      & 860 \\
+\end{longtable}
+
+\end{document}
