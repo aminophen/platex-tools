@@ -12,7 +12,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/09/10 v1.0d Tabular extension package for plext and array]
+  [2016/09/11 v1.0e Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
 %
@@ -22,6 +22,9 @@
   \def\d@llarbegin{$}\let\d@llarend\d@llarbegin\gdef\@halignto{}%
   \@tabarray}
 \def\tabular{\gdef\@halignto{}\@tabular}
+\expandafter\def\csname tabular*\endcsname#1{%
+       \setlength\dimen@{#1}%
+       \xdef\@halignto{to\the\dimen@}\@tabular}
 %
 %% patching internal code for array.sty and plext.sty
 %
