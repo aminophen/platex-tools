@@ -22,7 +22,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{endnotesj}
-  [2016/09/15 v2.9d endnotesj (H. Ogawa and H. Yamashita)]
+  [2016/09/15 v2.9e endnotesj (H. Ogawa and H. Yamashita)]
 %
 %% Ensure that endnotes.sty is NOT loaded after this package
 \@ifpackageloaded{endnotes}{}{%
@@ -99,7 +99,7 @@
 \if@tatestar
 \def\endnj@tate@makeenmark{%
   \hb@xt@\z@{%
-    \kern -1.2zw%
+    \kern -1.2zw\hfil
     \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}%
       \hbox{\yoko\@theenmark}%
       \hspace{0.1zw}\char\jis"214B\relax
@@ -149,7 +149,7 @@
 \if@tatestar
 \def\endnj@tate@utf@makeenmark{%
   \hb@xt@\z@{%
-    \kern -1.2zw%
+    \kern -1.2zw\hfil
     \raisebox{.8zh}{\tiny \char\jis"214A\relax
       \hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
       \char\jis"214B\relax
