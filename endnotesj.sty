@@ -22,7 +22,7 @@
 %
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{endnotesj}
-  [2016/09/09 v2.9b endnotesj (H. Ogawa and H. Yamashita)]
+  [2016/09/14 v2.9c endnotesj (H. Ogawa and H. Yamashita)]
 %
 %% Ensure that endnotes.sty is NOT loaded after this package
 \@ifpackageloaded{endnotes}{}{%
@@ -43,6 +43,10 @@
 \DeclareOption{yoko}{\@yokotrue}
 \newif\if@tate \@tatefalse
 \DeclareOption{tate}{\@tatetrue}
+\newif\if@yokostar \@yokostarfalse
+\DeclareOption{yoko*}{\@yokostartrue}
+\newif\if@tatestar \@tatestarfalse
+\DeclareOption{tate*}{\@tatestartrue}
 %
 %% Use utf/otf package?
 \newif\if@utf \@utffalse
@@ -53,6 +57,7 @@
 %% vertical/horizontal Japanese writing direction
 \newif\if@autotateyoko \@autotateyokofalse
 \DeclareOption{auto-tateyoko}{\@autotateyokotrue}
+\DeclareOption{auto-tateyoko*}{\@autotateyokotrue\@tatestartrue\@yokostartrue}
 %
 %% Other options are used as \notesname
 \DeclareOption*{\edef\notesname{\CurrentOption}}
@@ -85,7 +90,9 @@
 %
 % (1A) Improved a little (added 2016/09/09)
 %     enabled by \usepackage[tate*]{endnotesj}
-\def\endnj@tate@star@makeenmark{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}{\hbox{\yoko\@theenmark}}\hspace{0.1zw}\char\jis"214B\relax}}
+\if@tatestar
+\def\endnj@tate@makeenmark{\hb@xt@\z@{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}{\hbox{\yoko\@theenmark}}\hspace{0.1zw}\char\jis"214B\relax}}}
+\fi
 %
 % (2) Common style for horizontal writing with twin round brackets
 %     enabled by \usepackage[yoko]{endnotesj}
@@ -93,7 +100,9 @@
 %
 % (2A) Improved a little using twin full-width round brackets (added 2016/09/09)
 %     enabled by \usepackage[yoko*]{endnotesj}
-\def\endnj@yoko@star@makeenmark{\raisebox{.5zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}{\hbox{\@theenmark}}\hspace{0.1zw}\char\jis"214B\relax}}
+\if@yokostar
+\def\endnj@yoko@makeenmark{\raisebox{.5zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}{\hbox{\@theenmark}}\hspace{0.1zw}\char\jis"214B\relax}}
+\fi
 %
 % (3) Style for horizontal writing with single round bracket
 %     like "Journal of historical studies" (Rekishigaku kenkyu)
@@ -102,7 +111,13 @@
 %
 % (1')-(3') More beautiful definitions using otf/utf package
 \def\endnj@tate@utf@makeenmark{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax{\hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
+\if@tatestar
+\def\endnj@tate@utf@makeenmark{\hb@xt@\z@{\kern -1.2zw \raisebox{.8zh}{\tiny \char\jis"214A\relax{\hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}}
+\fi
 \def\endnj@yoko@utf@makeenmark{\raisebox{.5zh}{\tiny \char\jis"214A\relax{\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
+\if@yokostar
+\def\endnj@yoko@utf@makeenmark{\raisebox{.5zh}{\tiny \char\jis"214A\relax{\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
+\fi
 \def\endnj@single@utf@makeenmark{\raisebox{.5zh}{\tiny {\hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}}\char\jis"214B\relax}}
 %
 %% Now, redefine \@makeenmark using above definitions
@@ -222,8 +237,10 @@
 %
 % (1A) Improved a little (added 2016/09/09)
 %     enabled by \usepackage[tate*]{endnotesj}
-\def\endnj@tate@star@enoteformat#1{\parindent 1em\noindent
+\if@tatestar
+\def\endnj@tate@enoteformat#1{\parindent 1em\noindent
   \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1zw}\hbox{\yoko\@theenmark}\hspace{0.1zw}\char\jis"214B\relax\mbox{}}#1}
+\fi
 %
 % (2) Common style for horizontal writing with twin round brackets
 %     enabled by \usepackage[yoko]{endnotesj}
@@ -232,8 +249,10 @@
 %
 % (2A) Improved a little using twin full-width round brackets (added 2016/09/09)
 %     enabled by \usepackage[yoko*]{endnotesj}
-\def\endnj@yoko@star@enoteformat#1{\parindent 1em\noindent
+\if@yokostar
+\def\endnj@yoko@enoteformat#1{\parindent 1em\noindent
   \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1zw}\hbox{\@theenmark}\hspace{0.1zw}\char\jis"214B\relax\mbox{}}#1}
+\fi
 %
 % (3) Style for horizontal writing with single round bracket
 %     like "Journal of historical studies" (Rekishigaku kenkyu)
