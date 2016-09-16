@@ -22,7 +22,21 @@
 %
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{endnotesj}
-  [2016/09/15 v2.9e endnotesj (H. Ogawa and H. Yamashita)]
+  [2016/09/16 v2.9f endnotesj (H. Ogawa and H. Yamashita)]
+%
+%% This package supports pTeX/upTeX and LuaTeX-ja only
+%% otherwise, falling back to endnotes.sty (unsupported feature)
+%
+\ifx\pfmtname\@undefined
+  \expandafter\ifx\csname ver@luatexja.sty\endcsname\relax
+    \PackageError{endnotesj}{%
+      Unsupported engine detected!\MessageBreak
+      Please use pLaTeX, upLaTeX or LuaTeX-ja instead}{%
+      I will load `endnotes.sty' instead, but
+      the result will be undesired.}
+    \RequirePackage{endnotes}
+  \expandafter\expandafter\expandafter\endinput\expandafter\fi
+\fi
 %
 %% Ensure compatibility between pTeX/upTeX and LuaTeX-ja
 \ifx\directlua\@undefined
@@ -80,14 +94,14 @@
 \if@utf
 \ifx\directlua\@undefined
   \@ifpackageloaded{utf}{}{\@ifpackageloaded{otf}{}{%
-    \IfFileExists{otf.sty}{\AtEndOfPackage{\RequirePackage{otf}}}{%
-    \IfFileExists{utf.sty}{\AtEndOfPackage{\RequirePackage{utf}}}{%
-    \PackageError{endnotesj}{Neither otf.sty nor utf.sty found}\@ehc}
+    \IfFileExists{otf.sty}{\RequirePackage{otf}}{%
+    \IfFileExists{utf.sty}{\RequirePackage{utf}}{%
+    \PackageError{endnotesj}{Neither otf.sty nor utf.sty found}\@ehc}%
   }}}
 \else
   \@ifpackageloaded{luatexja-otf}{}{%
-    \IfFileExists{luatexja-otf.sty}{\AtEndOfPackage{\RequirePackage{luatexja-otf}}}{%
-    \PackageError{endnotesj}{luatexja-otf.sty not found}\@ehc}
+    \IfFileExists{luatexja-otf.sty}{\RequirePackage{luatexja-otf}}{%
+    \PackageError{endnotesj}{luatexja-otf.sty not found}\@ehc}%
   }
 \fi
 \fi
