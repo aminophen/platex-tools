@@ -20,7 +20,7 @@
 % *           ENDNOTE MACROS             *
 % ****************************************
 %
-\NeedsTeXFormat{pLaTeX2e}
+\NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{endnotesj}
   [2016/09/15 v2.9e endnotesj (H. Ogawa and H. Yamashita)]
 %
@@ -429,49 +429,90 @@
 %%%%% End
 %
 %% Definition for auto-tateyoko option
+\ifx\directlua\@undefined
+  \catcode`\L=14\relax
+  \catcode`\P=9\relax
+\else
+  \catcode`\L=9\relax
+  \catcode`\P=14\relax
+\fi
 \if@autotateyoko
   \if@utf
     \if@kakko
       \def\@makeenmark{%
-        \iftdir\endnj@tate@utf@makeenmark
-        \else\endnj@single@utf@makeenmark
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@utf@makeenmark
+        \else
+          \endnj@single@utf@makeenmark
         \fi}
       \def\enoteformat{%
-        \iftdir\endnj@tate@utf@enoteformat
-        \else\endnj@single@utf@enoteformat
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@utf@enoteformat
+        \else
+          \endnj@single@utf@enoteformat
         \fi}
     \else
       \def\@makeenmark{%
-        \iftdir\endnj@tate@utf@makeenmark
-        \else\endnj@yoko@utf@makeenmark
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@utf@makeenmark
+        \else
+          \endnj@yoko@utf@makeenmark
         \fi}
       \def\enoteformat{%
-        \iftdir\endnj@tate@utf@enoteformat
-        \else\endnj@yoko@utf@enoteformat
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@utf@enoteformat
+        \else
+          \endnj@yoko@utf@enoteformat
         \fi}
     \fi
   \else
     \if@kakko
       \def\@makeenmark{%
-        \iftdir\endnj@tate@makeenmark
-        \else\endnj@single@makeenmark
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@makeenmark
+        \else
+          \endnj@single@makeenmark
         \fi}
       \def\enoteformat{%
-        \iftdir\endnj@tate@enoteformat
-        \else\endnj@single@enoteformat
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@enoteformat
+        \else
+          \endnj@single@enoteformat
         \fi}
     \else
       \def\@makeenmark{%
-        \iftdir\endnj@tate@makeenmark
-        \else\endnj@yoko@makeenmark
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@makeenmark
+        \else
+          \endnj@yoko@makeenmark
         \fi}
       \def\enoteformat{%
-        \iftdir\endnj@tate@enoteformat
-        \else\endnj@yoko@enoteformat
+P       \iftdir
+L       \ifnum\numexpr
+L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
+          \endnj@tate@enoteformat
+        \else
+          \endnj@yoko@enoteformat
         \fi}
     \fi
   \fi
 \fi
+\catcode`\L=11\relax
+\catcode`\P=11\relax
 %
 %
 % ****************************************
