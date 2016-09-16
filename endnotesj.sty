@@ -78,11 +78,18 @@
 %
 %% If otf/utf options are specified, load either of otf.sty/utf.sty
 \if@utf
+\ifx\directlua\@undefined
   \@ifpackageloaded{utf}{}{\@ifpackageloaded{otf}{}{%
     \IfFileExists{otf.sty}{\AtEndOfPackage{\RequirePackage{otf}}}{%
     \IfFileExists{utf.sty}{\AtEndOfPackage{\RequirePackage{utf}}}{%
     \PackageError{endnotesj}{Neither otf.sty nor utf.sty found}\@ehc}
   }}}
+\else
+  \@ifpackageloaded{luatexja-otf}{}{%
+    \IfFileExists{luatexja-otf.sty}{\AtEndOfPackage{\RequirePackage{luatexja-otf}}}{%
+    \PackageError{endnotesj}{luatexja-otf.sty not found}\@ehc}
+  }
+\fi
 \fi
 %
 %%%%% Import from endnotes.sty
