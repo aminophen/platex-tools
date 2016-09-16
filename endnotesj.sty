@@ -24,6 +24,18 @@
 \ProvidesPackage{endnotesj}
   [2016/09/15 v2.9e endnotesj (H. Ogawa and H. Yamashita)]
 %
+%% Ensure compatibility between pTeX/upTeX and LuaTeX-ja
+\ifx\directlua\@undefined
+  % pTeX/upTeX should have `zw' and `zh'
+  \newdimen\endnj@zw \newdimen\endnj@zh
+  \endnj@zw=1zw
+  \endnj@zh=1zh
+\else
+  % LuaTeX-ja should have `\zw` and `\zh'
+  \def\endnj@zw{\zw}
+  \def\endnj@zh{\zh}
+\fi
+%
 %% Ensure that endnotes.sty is NOT loaded after this package
 \@ifpackageloaded{endnotes}{}{%
   \IfFileExists{endnotes.sty}{%
@@ -87,10 +99,10 @@
 %     like "Journal of Japanese history" (Nihonshi kenkyu)
 %     enabled by \usepackage[tate]{endnotesj} (default style)
 \def\endnj@tate@makeenmark{%
-    \kern -1.2zw%
-    \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.2zw}%
+    \kern -1.2\endnj@zw%
+    \raisebox{.8\endnj@zh}{\tiny \char\jis"214A\relax\hspace{0.2\endnj@zw}%
       \hbox{\yoko\@theenmark}%
-      \hspace{0.2zw}\char\jis"214B\relax
+      \hspace{0.2\endnj@zw}\char\jis"214B\relax
     }%
 }
 %
@@ -99,10 +111,10 @@
 \if@tatestar
 \def\endnj@tate@makeenmark{%
   \hb@xt@\z@{%
-    \kern -1.2zw\hfil
-    \raisebox{.8zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}%
+    \kern -1.2\endnj@zw\hfil
+    \raisebox{.8\endnj@zh}{\tiny \char\jis"214A\relax\hspace{0.1\endnj@zw}%
       \hbox{\yoko\@theenmark}%
-      \hspace{0.1zw}\char\jis"214B\relax
+      \hspace{0.1\endnj@zw}\char\jis"214B\relax
     }%
   }%
 }
@@ -111,7 +123,7 @@
 % (2) Common style for horizontal writing with twin round brackets
 %     enabled by \usepackage[yoko]{endnotesj}
 \def\endnj@yoko@makeenmark{%
-  \raisebox{.5zh}{\tiny (\hspace{0.2zw}%
+  \raisebox{.5\endnj@zh}{\tiny (\hspace{0.2\endnj@zw}%
     \hbox{\@theenmark}%
     )%
   }%
@@ -121,9 +133,9 @@
 %     enabled by \usepackage[yoko*]{endnotesj}
 \if@yokostar
 \def\endnj@yoko@makeenmark{%
-  \raisebox{.5zh}{\tiny \char\jis"214A\relax\hspace{0.1zw}%
+  \raisebox{.5\endnj@zh}{\tiny \char\jis"214A\relax\hspace{0.1\endnj@zw}%
     \hbox{\@theenmark}%
-    \hspace{0.1zw}\char\jis"214B\relax
+    \hspace{0.1\endnj@zw}\char\jis"214B\relax
   }%
 }
 \fi
@@ -132,7 +144,7 @@
 %     like "Journal of historical studies" (Rekishigaku kenkyu)
 %     enabled by \usepackage[single]{endnotesj}
 \def\endnj@single@makeenmark{%
-  \raisebox{.5zh}{\tiny
+  \raisebox{.5\endnj@zh}{\tiny
     \hbox{\@theenmark}%
     )%
   }%
@@ -140,8 +152,8 @@
 %
 % (1')-(3') More beautiful definitions using otf/utf package
 \def\endnj@tate@utf@makeenmark{%
-    \kern -1.2zw%
-    \raisebox{.8zh}{\tiny \char\jis"214A\relax
+    \kern -1.2\endnj@zw%
+    \raisebox{.8\endnj@zh}{\tiny \char\jis"214A\relax
       \hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
       \char\jis"214B\relax
     }%
@@ -149,8 +161,8 @@
 \if@tatestar
 \def\endnj@tate@utf@makeenmark{%
   \hb@xt@\z@{%
-    \kern -1.2zw\hfil
-    \raisebox{.8zh}{\tiny \char\jis"214A\relax
+    \kern -1.2\endnj@zw\hfil
+    \raisebox{.8\endnj@zh}{\tiny \char\jis"214A\relax
       \hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
       \char\jis"214B\relax
     }%
@@ -158,21 +170,21 @@
 }
 \fi
 \def\endnj@yoko@utf@makeenmark{%
-  \raisebox{.5zh}{\tiny \char\jis"214A\relax
+  \raisebox{.5\endnj@zh}{\tiny \char\jis"214A\relax
     \hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
     \char\jis"214B\relax
   }%
 }
 \if@yokostar % currently the same as above
 \def\endnj@yoko@utf@makeenmark{%
-  \raisebox{.5zh}{\tiny \char\jis"214A\relax
+  \raisebox{.5\endnj@zh}{\tiny \char\jis"214A\relax
     \hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
     \char\jis"214B\relax
   }%
 }
 \fi
 \def\endnj@single@utf@makeenmark{%
-  \raisebox{.5zh}{\tiny
+  \raisebox{.5\endnj@zh}{\tiny
     \hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
     \char\jis"214B\relax
   }%
@@ -292,9 +304,9 @@
 %     enabled by \usepackage[tate]{endnotesj} (default style)
 \def\endnj@tate@enoteformat#1{%
   \parindent 1em\noindent
-  \@hangfrom{\raisebox{.07zh}{(}\hspace{0.2zw}%
+  \@hangfrom{\raisebox{.07\endnj@zh}{(}\hspace{0.2\endnj@zw}%
     \hbox{\yoko\@theenmark}%
-    \hspace{0.2zw}\raisebox{.07zh}{)}%
+    \hspace{0.2\endnj@zw}\raisebox{.07\endnj@zh}{)}%
   }#1%
 }
 %
@@ -303,9 +315,9 @@
 \if@tatestar
 \def\endnj@tate@enoteformat#1{%
   \parindent 1em\noindent
-  \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1zw}%
+  \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1\endnj@zw}%
     \hbox{\yoko\@theenmark}%
-    \hspace{0.1zw}\char\jis"214B\relax\mbox{}%
+    \hspace{0.1\endnj@zw}\char\jis"214B\relax\mbox{}%
   }#1%
 }
 \fi
@@ -314,9 +326,9 @@
 %     enabled by \usepackage[yoko]{endnotesj}
 \def\endnj@yoko@enoteformat#1{%
   \parindent 1em\noindent
-  \@hangfrom{(\hspace{0.2zw}%
+  \@hangfrom{(\hspace{0.2\endnj@zw}%
     \hbox{\@theenmark}%
-    \hspace{0.2zw})%
+    \hspace{0.2\endnj@zw})%
   }#1%
 }
 %
@@ -325,9 +337,9 @@
 \if@yokostar
 \def\endnj@yoko@enoteformat#1{%
   \parindent 1em\noindent
-  \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1zw}%
+  \@hangfrom{\mbox{}\char\jis"214A\relax\hspace{0.1\endnj@zw}%
     \hbox{\@theenmark}%
-    \hspace{0.1zw}\char\jis"214B\relax\mbox{}%
+    \hspace{0.1\endnj@zw}\char\jis"214B\relax\mbox{}%
   }#1%
 }
 \fi
