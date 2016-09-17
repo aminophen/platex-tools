@@ -24,8 +24,10 @@
 \ProvidesPackage{endnotesj}
   [2016/09/17 v2.9g endnotesj (H. Ogawa and H. Yamashita)]
 %
-%% This package supports pTeX/upTeX and LuaTeX-ja only
-%% otherwise, falling back to endnotes.sty (unsupported feature)
+%% This package supports pTeX/upTeX and LuaTeX-ja only;
+%% otherwise, throw an error
+%% When the error is ignored, fall back to endnotes.sty and exit
+%% (unsupported feature, of course)
 %
 \ifx\pfmtname\@undefined
   \expandafter\ifx\csname ver@luatexja.sty\endcsname\relax
@@ -38,7 +40,12 @@
   \expandafter\expandafter\expandafter\endinput\expandafter\fi
 \fi
 %
-%% Ensure compatibility between pTeX/upTeX and LuaTeX-ja
+%% Ensure compatibility in units between pTeX/upTeX and LuaTeX-ja
+%%  * \endnj@zw = width of the current full-width Japanese font
+%%                (zen-kaku width)
+%%  * \endnj@zh = height of the current full-width Japanese font
+%%                (zen-kaku height)
+%
 \ifx\directlua\@undefined
   % pTeX/upTeX should have `zw' and `zh'
   \newdimen\endnj@zw \newdimen\endnj@zh
@@ -51,28 +58,36 @@
 \fi
 %
 %% Ensure that endnotes.sty is NOT loaded after this package
+%
 \@ifpackageloaded{endnotes}{}{%
   \IfFileExists{endnotes.sty}{%
     \expandafter\def\csname ver@endnotes.sty\endcsname{}}{}}
 %
 %% Initialize \notesname
+%
 \def\notesname{} % should be empty by default (endnotesj.sty original)
 %
 %% Package options (endnotesj original)
+%%  * Note that the order of declarations is also important, especially
+%%    for options which compete with each other (e.g. tate/yoko)
+%%    cf. ltclass.dtx
+%%      "In the case of \ProcessOptions, they are processed in the
+%%       order that they were declared in the class or package."
 %
 %% Brackets - single or twin?
 \newif\if@kakko \@kakkofalse
+\DeclareOption{twin}{\@kakkofalse} % => default
 \DeclareOption{single}{\@kakkotrue}
 %
 %% Directions - yoko (horizontal) or tate (vertical)?
-\newif\if@yoko \@yokofalse
-\DeclareOption{yoko}{\@yokotrue}
 \newif\if@tate \@tatefalse
 \DeclareOption{tate}{\@tatetrue}
-\newif\if@yokostar \@yokostarfalse
-\DeclareOption{yoko*}{\@yokostartrue}
 \newif\if@tatestar \@tatestarfalse
 \DeclareOption{tate*}{\@tatestartrue}
+\newif\if@yoko \@yokofalse
+\DeclareOption{yoko}{\@yokotrue}
+\newif\if@yokostar \@yokostarfalse
+\DeclareOption{yoko*}{\@yokostartrue}
 %
 %% Use utf/otf package?
 \newif\if@utf \@utffalse
@@ -85,10 +100,38 @@
 \DeclareOption{auto-tateyoko}{\@autotateyokotrue}
 \DeclareOption{auto-tateyoko*}{\@autotateyokotrue\@tatestartrue\@yokostartrue}
 %
-%% Other options are used as \notesname
-\DeclareOption*{\edef\notesname{\CurrentOption}}
-\ExecuteOptions{tate}
+%% Other options are unknown, however endnotesj.sty accepts only one
+%% unknown option, which is then regarded as \notesname (= endnote section title)
+%% If more than one unknown options are requested, the last one is chosen;
+%% the others are simply ignored, so throw an error (for fear of misspelling)
+\def\endnj@temp@ptions{}
+\DeclareOption*{\ifx\endnj@temp@ptions\@empty
+                  \edef\endnj@temp@ptions{\CurrentOption}%
+                \else
+                  \edef\endnj@temp@ptions{\endnj@temp@ptions,\CurrentOption}%
+                \fi
+                \edef\notesname{\CurrentOption}}
+\ExecuteOptions{twin,tate}
 \ProcessOptions
+%
+%% Throw an error for more than one unknown options
+%% Also, show info about what will be used as `\notesname'
+\@for\reserved@a:=\endnj@temp@ptions\do{%
+  \ifx\reserved@a\notesname
+    \typeout{*** Package endnotesj will use `\notesname' as \string\notesname. ***}%
+  \else
+    \ifx\reserved@a\@empty\else
+      \PackageError{endnotesj}{%
+        Unknown option `\reserved@a' ignored!\MessageBreak
+        It seems that more than one unknown options\MessageBreak
+        were requested, and `\notesname' was taken as\MessageBreak
+        \string\notesname. Perhaps you misspelled some options}{%
+        The options `\endnj@temp@ptions' were not declared in package endnotesj.\MessageBreak
+        Package endnotesj accepts ONLY ONE unknown option (the last one;\MessageBreak
+        in this case `\notesname'), which is regarded as \string\notesname.\MessageBreak
+        The others will be simply ignored.}
+    \fi
+  \fi}
 %
 %% If otf/utf options are specified, load either of otf.sty/utf.sty
 \if@utf
@@ -96,12 +139,14 @@
   \@ifpackageloaded{utf}{}{\@ifpackageloaded{otf}{}{%
     \IfFileExists{otf.sty}{\RequirePackage{otf}}{%
     \IfFileExists{utf.sty}{\RequirePackage{utf}}{%
-    \PackageError{endnotesj}{Neither otf.sty nor utf.sty found}\@ehc}%
+    \PackageError{endnotesj}{Neither otf.sty nor utf.sty found}\@ehc
+    \@utffalse}% fall back
   }}}
 \else
   \@ifpackageloaded{luatexja-otf}{}{%
     \IfFileExists{luatexja-otf.sty}{\RequirePackage{luatexja-otf}}{%
-    \PackageError{endnotesj}{luatexja-otf.sty not found}\@ehc}%
+    \PackageError{endnotesj}{luatexja-otf.sty not found}\@ehc
+    \@utffalse}% fall back
   }
 \fi
 \fi
