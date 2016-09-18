@@ -75,9 +75,9 @@
 %
 %  Directions - yoko (horizontal) or tate (vertical)?
 \newif\if@tate \@tatefalse
-\DeclareOption{tate}{\@tatetrue}
 \newif\if@yoko \@yokofalse
-\DeclareOption{yoko}{\@yokotrue}
+\DeclareOption{tate}{\@tatetrue\@yokofalse}
+\DeclareOption{yoko}{\@yokotrue\@tatefalse}
 %
 %  Use conditional definitions for switching marks depending on
 %  vertical/horizontal Japanese writing direction
@@ -229,7 +229,7 @@
 % (3) Style for horizontal writing with single round bracket
 %     like "Journal of historical studies" (Rekishigaku kenkyu)
 %     enabled by \usepackage[single]{endnotesj}
-\def\endnj@single@makeenmark{%
+\def\endnj@yoko@single@makeenmark{%
   \raisebox{.5\endnj@zh}{\tiny
     \hbox{\@theenmark}%
     )%
@@ -237,7 +237,7 @@
 }
 %
 % (3') More beautiful output using "tsume-suji" (requires otf/utf package)
-\def\endnj@single@utf@makeenmark{%
+\def\endnj@yoko@single@utf@makeenmark{%
   \raisebox{.5\endnj@zh}{\tiny
     \hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
     \char\jis"214B\relax
@@ -251,7 +251,7 @@
     \let\@makeenmark\endnj@yoko@utf@makeenmark
   \fi
   \if@kakko
-    \let\@makeenmark\endnj@single@utf@makeenmark
+    \let\@makeenmark\endnj@yoko@single@utf@makeenmark
   \fi
 \else
   \let\@makeenmark\endnj@tate@makeenmark
@@ -259,7 +259,7 @@
     \let\@makeenmark\endnj@yoko@makeenmark
   \fi
   \if@kakko
-    \let\@makeenmark\endnj@single@makeenmark
+    \let\@makeenmark\endnj@yoko@single@makeenmark
   \fi
 \fi
 %
@@ -424,7 +424,7 @@
 % (3) Style for horizontal writing with single round bracket
 %     like "Journal of historical studies" (Rekishigaku kenkyu)
 %     enabled by \usepackage[single]{endnotesj}
-\def\endnj@single@enoteformat#1{%
+\def\endnj@yoko@single@enoteformat#1{%
   \parindent 1em\noindent
   \@hangfrom{%
     \hbox{\@theenmark}%
@@ -434,7 +434,7 @@
 %
 % (3') More beautiful output using "tsume-suji"
 %      requires otf/utf package
-\def\endnj@single@utf@enoteformat#1{%
+\def\endnj@yoko@single@utf@enoteformat#1{%
   \parindent 1em\noindent
   \@hangfrom{%
     \hbox{\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
@@ -449,7 +449,7 @@
     \let\enoteformat\endnj@yoko@utf@enoteformat
   \fi
   \if@kakko
-    \let\enoteformat\endnj@single@utf@enoteformat
+    \let\enoteformat\endnj@yoko@single@utf@enoteformat
   \fi
 \else
   \let\enoteformat\endnj@tate@enoteformat
@@ -457,7 +457,7 @@
     \let\enoteformat\endnj@yoko@enoteformat
   \fi
   \if@kakko
-    \let\enoteformat\endnj@single@enoteformat
+    \let\enoteformat\endnj@yoko@single@enoteformat
   \fi
 \fi
 %
@@ -521,7 +521,7 @@ L       \ifnum\numexpr
 L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
           \endnj@tate@utf@makeenmark
         \else
-          \endnj@single@utf@makeenmark
+          \endnj@yoko@single@utf@makeenmark
         \fi}
       \def\enoteformat{%
 P       \iftdir
@@ -529,7 +529,7 @@ L       \ifnum\numexpr
 L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
           \endnj@tate@utf@enoteformat
         \else
-          \endnj@single@utf@enoteformat
+          \endnj@yoko@single@utf@enoteformat
         \fi}
     \else
       \def\@makeenmark{%
@@ -557,7 +557,7 @@ L       \ifnum\numexpr
 L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
           \endnj@tate@makeenmark
         \else
-          \endnj@single@makeenmark
+          \endnj@yoko@single@makeenmark
         \fi}
       \def\enoteformat{%
 P       \iftdir
@@ -565,7 +565,7 @@ L       \ifnum\numexpr
 L         \ltjgetparameter{direction}-(\ltjgetparameter{direction}/8)*8=3\relax
           \endnj@tate@enoteformat
         \else
-          \endnj@single@enoteformat
+          \endnj@yoko@single@enoteformat
         \fi}
     \else
       \def\@makeenmark{%
