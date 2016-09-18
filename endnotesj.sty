@@ -48,9 +48,8 @@
 %
 \ifx\directlua\@undefined
   % pTeX/upTeX should have `zw' and `zh'
-  \newdimen\endnj@zw \newdimen\endnj@zh
-  \endnj@zw=1zw
-  \endnj@zh=1zh
+  \def\endnj@zw{zw}
+  \def\endnj@zh{zh}
 \else
   % LuaTeX-ja should have `\zw` and `\zh'
   \def\endnj@zw{\zw}
