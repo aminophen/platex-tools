@@ -175,7 +175,7 @@
 %  once #1 is executed, throw a warning and replace its definition with
 %  the definition of #2, and execute it
 \def\endnj@tate@single@unavailable#1#2{%
-  \expandafter\def\noexpand#1{%
+  \def#1{%
     \PackageWarning{endnotesj}{%
       `single' style is unavailable in `tate' direction.\MessageBreak
       I'll use `twin' style instead.}%
