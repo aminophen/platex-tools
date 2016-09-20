@@ -22,7 +22,7 @@
 %
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{endnotesj}
-  [2016/09/18 v2.9i endnotesj (H. Ogawa and H. Yamashita)]
+  [2016/09/21 v2.9i endnotesj (H. Ogawa and H. Yamashita)]
 %
 %% Requirements: engine & format
 %
@@ -456,9 +456,9 @@
 % *** ver 3 ***
 \def\endnj@iii@tate@utf@enoteformat#1{%
   \parindent 1em\noindent
-  \@hangfrom{\char\jis"214A\relax
+  \@hangfrom{\mbox{}\char\jis"214A\relax
     \hbox{\yoko\expandafter\ajTumesuji\expandafter*\expandafter{\number\@theenmark}}%
-    \char\jis"214B\relax
+    \char\jis"214B\relax\mbox{}%
   }#1%
 }
 %
