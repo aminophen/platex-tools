@@ -7,6 +7,11 @@ by LaTeX team, mainly intended to support pLaTeX2e and upLaTeX2e.
 
 All the package files contain ASCII characters only.
 
+## Installation
+
+- *.sty -> $TEXMF/tex/platex/platex-tools
+- *.tex, *.pdf -> $TEXMF/doc/platex/platex-tools
+
 ## Repository
 
 The bundle is maintained on GitHub:
