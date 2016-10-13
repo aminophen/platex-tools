@@ -1,0 +1,52 @@
+%# -*- coding: utf-8 -*-
+\ifdefined\epTeXinputencoding % defined in e-pTeX (> TL2016)
+  \epTeXinputencoding utf8    % ensure utf-8 encoding for platex
+\fi
+
+\documentclass[a4paper]{jsarticle}
+\usepackage{doc}
+\usepackage{array}
+\usepackage{plextarray}
+\GetFileInfo{plextarray.sty}
+\title{Package \textsf{plextarray} \fileversion}
+\author{Hironobu Yamashita}
+\date{\filedate}
+\begin{document}
+
+\maketitle
+
+\begin{center}
+日本語文書は\texttt{plextarray-ja.pdf}です。
+\end{center}
+
+Package \textsf{array}, included in \textsf{latex-tools} bundle, is
+incompatible with \textsf{plext} package for p\LaTeX.
+This is because \textsf{plext} extends the environment \texttt{tabular}
+and \texttt{array} to add an optional argument for direction specification.
+This new package \textsf{plextarray} solves this incompatibility, and enables
+coexistence of both extensions provided by \textsf{plext} and \textsf{array}.
+
+Package \textsf{plext} extends \texttt{tabular} and \texttt{array}
+environments by adding \texttt{<dir>} option, which specifies the
+writing direction:
+\begin{verbatim}
+  \begin{tabular}<dir>[pos]{table spec} ... \end{tabular}
+  \begin{array}<dir>[pos]{table spec} ... \end{array}
+\end{verbatim}
+This option permits one of the following three values.
+If none of them is specified, the direction inside the environment
+is same as that outside the enviromnent.
+\begin{quote}
+  \begin{description}
+  \item[y] \emph{yoko} direction (horizontal writing)
+  \item[t] \emph{tate} direction (vertical writing)
+  \item[z] native direction of \TeX
+\end{description}
+\end{quote}
+
+This package is part of \textsf{platex-tools} bundle:
+\begin{verbatim}
+  https://github.com/aminophen/platex-tools
+\end{verbatim}
+
+\end{document}
