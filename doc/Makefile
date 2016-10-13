@@ -1,8 +1,7 @@
 KANJI = -kanji=utf8
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
-all: plextarray.pdf plextdelarray.pdf \
-	plextarray-ja.pdf plextdelarray-ja.pdf
+all: plextarray.pdf plextdelarray.pdf pxftnright.pdf
 
 .SUFFIXES: .tex .dvi .pdf
 .tex.dvi:
