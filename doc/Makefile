@@ -1,4 +1,4 @@
-KANJI = -kanji=jis
+KANJI = -kanji=utf8
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
 all: plextarray.pdf plextdelarray.pdf \
