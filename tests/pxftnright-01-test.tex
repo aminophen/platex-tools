@@ -1,0 +1,24 @@
+\documentclass[a4paper,twocolumn]{tarticle}
+\usepackage{pxftnright}
+\def\hoge{ほげほげ。ふがふがふが。ぴよぴよぴよぴよ。} % ダミーテキスト用
+\def\HOGE{\hoge\hoge\hoge\hoge\hoge\hoge\hoge\hoge} % 長めのダミーテキストを準備
+\begin{document}
+
+\HOGE\HOGE
+
+\HOGE 脚注を\footnote{脚注です。}入れます。\HOGE\HOGE
+
+\begin{table}[b]
+  \begin{tabular}{ll}
+    \hline
+    AAA & BBB \\
+    CCC & DDD \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\HOGE もう一つ脚注を\footnote{ふたつめの脚注です。}入れます。
+\HOGE さらに脚注を\footnote{みっつめの脚注です。}入れます。
+\HOGE
+
+\end{document}
