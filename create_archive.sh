@@ -16,10 +16,6 @@ rm $TMP/$PROJECT/.gitignore
 rm $TMP/$PROJECT/create_archive.sh
 rm -rf $TMP/$PROJECT/tests
 rm -rf $TMP/$PROJECT/archive
-### ----- Remove endnotesj.sty and related files (temporarily)
-rm $TMP/$PROJECT/endnotesj.sty
-rm -rf $TMP/$PROJECT/doc/endnotesj*.tex
-### -----
 perl -pi.bak -e "s/\\\$RELEASEDATE/$RELEASEDATE/g" $TMP/$PROJECT/README.md
 rm -f $TMP/$PROJECT/README.md.bak
 
