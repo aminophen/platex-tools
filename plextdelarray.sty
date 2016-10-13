@@ -9,12 +9,13 @@
 %   * delarray.sty in latex-tools (2014/10/28 v1.01)
 %   * plext.sty in platex (2016/08/20 v1.2a)
 %
+
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextdelarray}
   [2016/09/11 v1.0 array delimiter package for plext and delarray]
 \RequirePackage{plextarray}
 \RequirePackage{delarray}
-%
+
 %% patching internal code for array.sty and plext.sty
 %
 \def\@tabarray{\@ifnextchar<\p@tabarray{\p@tabarray<Z>}}
@@ -43,5 +44,5 @@
   \p@array<#1>[#2]{#4}}
 %
 %% all done
-%
+
 \endinput

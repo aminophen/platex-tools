@@ -19,10 +19,11 @@
 %     (rather a problem of \strutbox in pLaTeX2e kernel?)
 % so, this package provides patches.
 %
+
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxftnright}
   [2016/09/07 v1.0 footnote layout package for pLaTeX]
-%
+
 %% save \@makefntext definition from pLaTeX class
 \@ifpackageloaded{ftnright}{%
   \PackageError{pxftnright}{%
@@ -30,12 +31,13 @@
     Load pxftnright earlier}\@ehc
 }{}
 \let\pxftn@makefntext\@makefntext
-%
+
 %% load ftnright package
 \RequirePackage{ftnright}
-%
+
 %% patches for ftnright to work fine with pLaTeX
 %% This code is based on pLaTeX2e 2016/09/03 community ed.
+
 \def\@startcolumn{%
  \ifx\@deferlist\@empty
    \global\@fcolmadefalse
@@ -62,7 +64,7 @@
     \unvbox\footins}\fi
 %%%%%
  \fi}
-%
+
 \def\@makecol{%
 %%%%% change for pLaTeX
   \setbox\@outputbox\box\@cclv
@@ -119,12 +121,12 @@
   \fi
   \global\maxdepth\@maxdepth
 }
-%
+
 %% adjust \footnotesep for vertical typesetting
 \AtBeginDocument
   {\global\footnotesep\ht\iftdir\tstrutbox\else\strutbox\fi}
-%
+
 %% restore \@makefntext
 \let\@makefntext\pxftn@makefntext
-%
+
 \endinput

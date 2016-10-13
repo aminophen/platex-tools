@@ -10,14 +10,14 @@
 %   * plext.sty in platex (2016/08/20 v1.2a)
 % and lltjext.sty from LuaTeX-ja project.
 %
+
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
   [2016/10/07 v1.0f Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
-%
+
 %% save definitions from array.sty
-%
 \def\array{\col@sep\arraycolsep
   \def\d@llarbegin{$}\let\d@llarend\d@llarbegin\def\@halignto{}%
   \@tabarray}
@@ -25,7 +25,7 @@
 \expandafter\def\csname tabular*\endcsname#1{%
        \setlength\dimen@{#1}%
        \edef\@halignto{to\the\dimen@}\@tabular}
-%
+
 %% patching internal code for array.sty and plext.sty
 %
 \def\@startpbox#1{\bgroup
@@ -98,5 +98,5 @@
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
 %% all done
-%
+
 \endinput
