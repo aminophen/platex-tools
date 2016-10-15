@@ -7,7 +7,8 @@ Martin Schröder) are included.
 
 ## Character encoding
 
-All the package files contain ASCII characters only.
+All the package files (.sty) contain ASCII characters only.
+All the document files (.tex) are encoded in UTF-8.
 
 ## Installation
 
