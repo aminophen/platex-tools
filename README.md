@@ -3,7 +3,7 @@
 This bundle is an extended version of latex-tools bundle developed
 by LaTeX team, mainly intended to support pLaTeX2e and upLaTeX2e.
 Currently patches for latex-tools bundle and ms bundle (by Martin
-Martin Schröder) are included.
+Schröder) are included.
 
 ## Character encoding
 
