@@ -13,7 +13,7 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/10/07 v1.0f Tabular extension package for plext and array]
+  [2016/10/23 v1.0g Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{array}
 
@@ -97,6 +97,13 @@
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
+%% done
+
+%% support for other packages
+\@ifpackageloaded{colortbl}{%
+  \PackageInfo{plextarray}{Package colortbl detected}%
+  \def\endarray{\crcr \egroup \egroup \@end@alignbox \@arrayright \gdef\@preamble{}\CT@end}%
+}{}
 %% all done
 
 \endinput
