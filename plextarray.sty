@@ -100,7 +100,7 @@
 %% done
 
 %% support for other packages
-\@ifpackageloaded{colortbl}{%
+\@ifpackageloaded{colortbl}{% --- colortbl.sty 2012/06/21 v1.0b
   \PackageInfo{plextarray}{Package colortbl detected}%
   \def\endarray{\crcr \egroup \egroup \@end@alignbox \@arrayright \gdef\@preamble{}\CT@end}%
 }{}
