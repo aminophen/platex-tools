@@ -32,14 +32,10 @@
 % so, we set \stock{width,height} to invoke stock test in those
 % files (probably meant for memoir.cls).
 Q \iftombow
-Q   \ifx\stockwidth\@undefined
-Q     \newdimen\stockwidth
-Q     \stockwidth\paperwidth \advance\stockwidth2in
-Q   \fi
-Q   \ifx\stockheight\@undefined
-Q     \newdimen\stockheight
-Q     \stockheight\paperheight \advance\stockheight2in
-Q   \fi
+Q   \ifx\stockwidth\@undefined \newdimen\stockwidth \fi
+Q   \ifx\stockheight\@undefined \newdimen\stockheight \fi
+Q   \stockwidth\paperwidth \advance\stockwidth2in
+Q   \stockheight\paperheight \advance\stockheight2in
 Q \fi
 
 % following code is almost equivalent to
