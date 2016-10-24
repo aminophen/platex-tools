@@ -1,15 +1,78 @@
+%
+% bounddvi.sty
+% 2016/10/24 v7.0 h.y.acetaminophen@gmail.com
+% 2004/12/15 v6.0-v1.0 inoue@ma.ns.tcu.ac.jp
+%
+% This package, originally written by Koichi Inoue
+% and modified by Hironobu Yamashita, is distributed
+% as part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bounddvi}[2004/12/15 v6.0]
+\ProvidesPackage{bounddvi}[2016/10/24 v7.0 bounddvi]
+
+% catcode trick to hide \iftombow ... \else ... \fi
+% since \iftombow is defined only in pLaTeX.
+\ifx\pfmtname\@undefined
+  \catcode`\Q=14\relax
+\else
+  \catcode`\Q=9\relax
+\fi
+
+% Note: graphics/color drivers
+%  - dvips.def 2016/07/10 v3.1a or later
+%  - dvipdfmx.def 2016/07/10 v4.12 or later
+% emit papersize special _only_ when \Gin@setpagesizetrue
+% and \mag = 1000. When graphicx(s) or color is used with
+% setpagesize option (= default since 2016) and \mag equals
+% to 1000, we can exploit its routine.
+% (they are using \AtBeginDocument{\AtBeginDvi{...}})
+% However, these .def files do _not_ care about tombow by pLaTeX;
+% so, we set \stock{width,height} to invoke stock test in those
+% files (probably meant for memoir.cls).
+Q \iftombow
+Q   \ifx\stockwidth\@undefined
+Q     \newdimen\stockwidth
+Q     \stockwidth\paperwidth \advance\stockwidth2in
+Q   \fi
+Q   \ifx\stockheight\@undefined
+Q     \newdimen\stockheight
+Q     \stockheight\paperheight \advance\stockheight2in
+Q   \fi
+Q \fi
+
+% following code is almost equivalent to
+%   \AtBeginDocument{\AtBeginDvi{...}}
+% however, we append the specification to the _beginning_ of
+% \@begindocumenthook; this ensures proper papersize on dvips.
 \begingroup
 \def\@prependto@begindocumenthook{\global\setbox\@begindvibox
   \vbox{\csname yoko\endcsname\unvbox\@begindvibox
     \begingroup
-      \divide\paperwidth\@m\multiply\paperwidth\mag
-      \divide\paperheight\@m\multiply\paperheight\mag
-      \special{papersize=\the\paperwidth,\the\paperheight}%
-%      \special{pdf: pagesize width \the\paperwidth\space height \the\paperheight}%
+Q     \iftombow
+Q       \divide\stockwidth\@m\multiply\stockwidth\mag
+Q       \divide\stockheight\@m\multiply\stockheight\mag
+Q       \special{papersize=\the\stockwidth,\the\stockheight}%
+Q     \else
+        \divide\paperwidth\@m\multiply\paperwidth\mag
+        \divide\paperheight\@m\multiply\paperheight\mag
+        \special{papersize=\the\paperwidth,\the\paperheight}%
+Q     \fi
     \endgroup}}
 \toks@\expandafter\expandafter\expandafter
   {\expandafter\@prependto@begindocumenthook\@begindocumenthook}
 \xdef\@begindocumenthook{\the\toks@}
+% append papersize special again to the _end_ of the
+% current \@begindocumenthook; this will be meaningful when
+% geometry is loaded before bounddvi and dvipdfm(x) is used.
+% (geometry adds \AtBeginDocument{\AtBeginDvi{...}}, but
+% `sandwich' specification can inactivate the effect of geometry)
+\expandafter\g@addto@macro\expandafter\@begindocumenthook
+  \expandafter{\@prependto@begindocumenthook}
 \endgroup
+
+% reset catcode trick
+\catcode`\Q=11\relax
+
+\endinput
