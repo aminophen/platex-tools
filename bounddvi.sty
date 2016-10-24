@@ -1,0 +1,15 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bounddvi}[2004/12/15 v6.0]
+\begingroup
+\def\@prependto@begindocumenthook{\global\setbox\@begindvibox
+  \vbox{\csname yoko\endcsname\unvbox\@begindvibox
+    \begingroup
+      \divide\paperwidth\@m\multiply\paperwidth\mag
+      \divide\paperheight\@m\multiply\paperheight\mag
+      \special{papersize=\the\paperwidth,\the\paperheight}%
+%      \special{pdf: pagesize width \the\paperwidth\space height \the\paperheight}%
+    \endgroup}}
+\toks@\expandafter\expandafter\expandafter
+  {\expandafter\@prependto@begindocumenthook\@begindocumenthook}
+\xdef\@begindocumenthook{\the\toks@}
+\endgroup
