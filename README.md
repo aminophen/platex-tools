@@ -57,7 +57,10 @@ All the document files (.tex) are encoded in UTF-8.
 ## Repository
 
 The bundle is maintained on GitHub:
-https://github.com/aminophen/platex-tools
+  https://github.com/aminophen/platex-tools
+
+You can also obtain this bundle from CTAN:
+  https://www.ctan.org/pkg/platex-tools
 
 ## License
 
