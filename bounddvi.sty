@@ -1,6 +1,6 @@
 %
 % bounddvi.sty
-% 2016/10/24 v7.0 h.y.acetaminophen@gmail.com
+% 2016/10/25 v7.0-v7.1 h.y.acetaminophen@gmail.com
 % 2004/12/15 v6.0-v1.0 inoue@ma.ns.tcu.ac.jp
 %
 % This package, originally written by Koichi Inoue
@@ -10,7 +10,7 @@
 %
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bounddvi}[2016/10/24 v7.0 bounddvi]
+\ProvidesPackage{bounddvi}[2016/10/25 v7.1 bounddvi]
 
 % catcode trick to hide \iftombow ... \else ... \fi
 % since \iftombow is defined only in pLaTeX.
@@ -32,11 +32,23 @@
 % so, we set \stock{width,height} to invoke stock test in those
 % files (probably meant for memoir.cls).
 Q \iftombow
+Q   % if \stockwidth/\stockheight are not available,
+Q   % define them now
 Q   \ifx\stockwidth\@undefined \newdimen\stockwidth \fi
 Q   \ifx\stockheight\@undefined \newdimen\stockheight \fi
-Q   \stockwidth\paperwidth \advance\stockwidth2in
-Q   \stockheight\paperheight \advance\stockheight2in
+Q   % if \stockwidth already has effective value, do nothing;
+Q   % otherwise assume pLaTeX-style tombow and set it to
+Q   % \paperwidth + 2in (similar for \stockheight)
+Q   \ifdim\stockwidth>\z@\else
+Q     \stockwidth\paperwidth \advance\stockwidth2in
+Q   \fi
+Q   \ifdim\stockheight>\z@\else
+Q     \stockheight\paperheight \advance\stockheight2in
+Q   \fi
 Q \fi
+
+% reset catcode trick
+\catcode`\Q=11\relax
 
 % following code is almost equivalent to
 %   \AtBeginDocument{\AtBeginDvi{...}}
@@ -46,15 +58,19 @@ Q \fi
 \def\@prependto@begindocumenthook{\global\setbox\@begindvibox
   \vbox{\csname yoko\endcsname\unvbox\@begindvibox
     \begingroup
-Q     \iftombow
-Q       \divide\stockwidth\@m\multiply\stockwidth\mag
-Q       \divide\stockheight\@m\multiply\stockheight\mag
-Q       \special{papersize=\the\stockwidth,\the\stockheight}%
-Q     \else
-        \divide\paperwidth\@m\multiply\paperwidth\mag
-        \divide\paperheight\@m\multiply\paperheight\mag
-        \special{papersize=\the\paperwidth,\the\paperheight}%
-Q     \fi
+      % if \stockwidth/\stockheight are defined & have effective
+      % values, copy them to \paperwidth/\paperheight
+      % for current group
+      \ifx\stockwidth\@undefined\else \ifdim\stockwidth>\z@
+        \paperwidth\stockwidth
+      \fi\fi
+      \ifx\stockheight\@undefined\else \ifdim\stockheight>\z@
+        \paperheight\stockheight
+      \fi\fi
+      % adjust for \mag and emit papersize special
+      \divide\paperwidth\@m\multiply\paperwidth\mag
+      \divide\paperheight\@m\multiply\paperheight\mag
+      \special{papersize=\the\paperwidth,\the\paperheight}%
     \endgroup}}
 \toks@\expandafter\expandafter\expandafter
   {\expandafter\@prependto@begindocumenthook\@begindocumenthook}
@@ -67,8 +83,5 @@ Q     \fi
 \expandafter\g@addto@macro\expandafter\@begindocumenthook
   \expandafter{\@prependto@begindocumenthook}
 \endgroup
-
-% reset catcode trick
-\catcode`\Q=11\relax
 
 \endinput
