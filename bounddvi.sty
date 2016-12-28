@@ -1,6 +1,6 @@
 %
 % bounddvi.sty
-% 2016/10/25 v7.0-v7.1 h.y.acetaminophen@gmail.com
+% 2016/12/28 v7.2-v7.0 h.y.acetaminophen@gmail.com
 % 2004/12/15 v6.0-v1.0 inoue@ma.ns.tcu.ac.jp
 %
 % This package, originally written by Koichi Inoue
@@ -10,7 +10,7 @@
 %
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bounddvi}[2016/10/25 v7.1 bounddvi]
+\ProvidesPackage{bounddvi}[2016/12/28 v7.2 bounddvi]
 
 % catcode trick to hide \iftombow ... \else ... \fi
 % since \iftombow is defined only in pLaTeX.
@@ -53,7 +53,8 @@ Q \fi
 % following code is almost equivalent to
 %   \AtBeginDocument{\AtBeginDvi{...}}
 % however, we append the specification to the _beginning_ of
-% \@begindocumenthook; this ensures proper papersize on dvips.
+% \@begindocumenthook; this ensures proper papersize when
+% dvips (TeX Live 2016 or earlier) is used.
 \begingroup
 \def\@prependto@begindocumenthook{\global\setbox\@begindvibox
   \vbox{\csname yoko\endcsname\unvbox\@begindvibox
@@ -76,10 +77,9 @@ Q \fi
   {\expandafter\@prependto@begindocumenthook\@begindocumenthook}
 \xdef\@begindocumenthook{\the\toks@}
 % append papersize special again to the _end_ of the
-% current \@begindocumenthook; this will be meaningful when
-% geometry is loaded before bounddvi and dvipdfm(x) is used.
-% (geometry adds \AtBeginDocument{\AtBeginDvi{...}}, but
-% `sandwich' specification can inactivate the effect of geometry)
+% current \@begindocumenthook; this will be meaningful e.g. when
+% geometry is loaded before bounddvi.
+% (geometry adds \AtBeginDocument{\AtBeginDvi{...}} specification)
 \expandafter\g@addto@macro\expandafter\@begindocumenthook
   \expandafter{\@prependto@begindocumenthook}
 \endgroup
