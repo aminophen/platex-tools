@@ -21,11 +21,11 @@ DVIファイルは用紙サイズ情報を含みませんが、PostScriptやPDF�
 用紙サイズを規定するフォーマットへ変換するプログラム（\texttt{dvips}や
 \texttt{dvipdfmx}）は、\verb+\special+命令によってDVIファイルに埋め込ま
 れた用紙サイズ情報を解釈します。
-% たとえば、幅100mm、高さ200mmの用紙に出力したい場合は
-%\begin{verbatim}
-%  \special{papersize=100mm,200mm}
-%\end{verbatim}
-% のように指定してやることができます。
+たとえば、幅100mm、高さ200mmの用紙に出力したい場合は
+\begin{verbatim}
+  \special{papersize=100mm,200mm}
+\end{verbatim}
+のように指定してやることができます。
 
 \textsf{bounddvi}パッケージは、クラスファイルなどが想定している用紙
 サイズ情報（\verb+\paperwidth+, \verb+\paperheight+）をDVIファイルに
@@ -73,21 +73,24 @@ DVIファイルは用紙サイズ情報を含みませんが、PostScriptやPDF�
       うまくいく可能性があります（付録を参照）。
 \end{itemize}
 
-\section*{付録：\texttt{dvips}と\texttt{dvipdfmx}の違い}
+\section*{付録：複数の用紙サイズ指定が発行された場合の挙動}
 
 一つのDVIファイルに複数の用紙サイズ指定\verb+\special+命令が
-埋め込まれる場合があります。このうち、\texttt{dvips}ではDVIファイル
-の\emph{最初}に指定されたものが有効になります。
-逆に\texttt{dvipdfmx}では、DVIファイルの\emph{最後}に指定されたもの
-が有効になります。このため、たとえば\textsf{bounddvi}と
+埋め込まれる場合があります。このうち、\texttt{dvipdfmx}および
+\TeX\ Live 2017以降の\texttt{dvips}では、DVIファイルの\emph{最後}に
+指定されたものが有効になります\footnote{\TeX\ Live 2016以前の
+\texttt{dvips}では、DVIファイルの\emph{最初}に指定されたものが有効
+でしたが、\TeX\ Live r42420で挙動が変更されました。\texttt{-L0}オプ
+ションを指定すると従来の挙動に戻ります。}。たとえば\textsf{bounddvi}と
 \textsf{geometry}を併用したソース
 \begin{verbatim}
   \documentclass{...}
   \usepackage{bounddvi}
   \usepackage[dvipdfm]{geometry}
 \end{verbatim}
-を\textsf{dvipdfmx}でPDFに変換すると、用紙サイズの設定が正しくなさ
-れない可能性があります。
+を\textsf{dvipdfmx}でPDFに変換すると、\textsf{geometry}パッケージの
+指定が優先されます。このとき、用紙サイズの設定が正しいかどうかは
+\textsf{geometry}パッケージに依存します。
 
 \section*{付録：\texttt{\char92mag}の扱いについて}
 
@@ -96,8 +99,8 @@ DVIファイルは用紙サイズ情報を含みませんが、PostScriptやPDF�
 しかし、\verb+\mag+の使い方はCTANにある多様なパッケージの中で統一
 されておらず、大きく分けて二通りの使い方があるようです。
 
-たとえば、物理的なA4サイズ($210\,\mathrm{mm}\times297\,\mathrm{mm}$)
-の出力を得たい場合
+たとえば、版面を2倍に拡大 (\verb+\mag=2000+) して物理的なA4サイズ
+($210\,\mathrm{mm}\times297\,\mathrm{mm}$)の出力を得たい場合
 \begin{quote}
   \texttt{\char92mag=2000}\\
   \texttt{\char92paperwidth=210mm} ($= 420\,\mathrm{truemm}$)\\

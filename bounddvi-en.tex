@@ -44,22 +44,35 @@ Process the \texttt{.tex} file using \texttt{latex} +
 
 \begin{enumerate}
 \item The compatibility with \textsf{geometry} package may not be
-perfect. When \texttt{dvips} is used, the specification which
-appears \emph{first} in DVI takes effect. On the other hand,
-when \texttt{dvipdfmx} is used, the specification which appears
-\emph{at last} in DVI takes effect. For this reason,
+perfect, as both \textsf{geometry} and \textsf{bounddvi} embeds
+papersize special into a DVI file. The loading order of these
+two packages may affect the actual size of output.
+\item This package supports ``\textsf{jsclasses}-like employment''
+of \verb+\mag+, because it's more widely used in Japan. This may
+be incompatible with some classes or packages which employ
+\verb+\mag+ in other ways.
+\end{enumerate}
+The details are described in the sections below.
+
+\subsection*{The behavior of multiple papersize specials}
+
+Sometimes multiple papersize specials may be embedded into a DVI
+file. Among these specials, the specification which appears
+\emph{at last} in DVI takes effect when \texttt{dvipdfmx} or
+\texttt{dvips} (\TeX\ Live 2017 or later) is used\footnote{%
+When \texttt{dvips} in \TeX\ Live 2016 or earlier is used,
+the specification which appears \emph{first} in DVI took effect,
+but the default behavior was changed in \TeX\ Live r42420 to
+be compatible with \texttt{dvipdfmx}. The new option \texttt{-L0}
+can be used to recover the old behavior.}. For example, when the
+following source is processed with \texttt{dvipdfmx},
 \begin{verbatim}
   % latex + dvipdfmx
   \documentclass{...}
   \usepackage{bounddvi}
   \usepackage[dvipdfm]{geometry}
 \end{verbatim}
-can sometimes fail to set proper paper size.
-\item This package supports ``\textsf{jsclasses}-like employment''
-of \verb+\mag+, because it's more widely used in Japan. This may
-be incompatible with some classes or packages which employ
-\verb+\mag+ in other ways (see descriptions below).
-\end{enumerate}
+the specification by \textsf{geometry} wins.
 
 \section*{Note about \texttt{\char92mag} handling}
 
@@ -68,8 +81,8 @@ in terms of \verb+\mag+ employment. It seems that there is no
 (official or practical) ``standard'' in \verb+\mag+ treatment.
 
 When the output is going to the physical size of A4
-($210\,\mathrm{mm} \times 297\,\mathrm{mm}$),
-there are two ways: some classes/packages can set
+($210\,\mathrm{mm} \times 297\,\mathrm{mm}$) with the setting of
+\verb+\mag=2000+, there are two ways: some classes/packages can set
 \begin{quote}
   \texttt{\char92mag=2000}\\
   \texttt{\char92paperwidth=210mm} ($= 420\,\mathrm{truemm}$)\\
