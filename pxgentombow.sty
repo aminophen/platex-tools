@@ -1,0 +1,206 @@
+% pxgentombow.sty
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{pxgentombow}
+    [2017/02/10 v0.1 Generate crop mark 'tombow']
+\def\pxgtmb@pkgname{pxgentombow}
+
+%% this package will use tombo feature in pLaTeX kernel
+\iftombow\else
+  \PackageInfo\pxgtmb@pkgname{tombow feature enabled by \pxgtmb@pkgname}
+  \tombowtrue
+  \setlength{\@tombowwidth}{.1\p@}%
+  \@bannertoken{%
+    \jobname\space:\space\number\year/\number\month/\number\day
+     (\number\hour:\number\minute)}
+\fi
+
+%% prepare dimension
+\ifx\stockheight\@undefined \newdimen\stockheight \fi
+\ifx\stockwidth\@undefined  \newdimen\stockwidth  \fi
+
+%% prepare flag
+\newif\ifpxgtmb@switch    \pxgtmb@switchtrue
+\newif\ifpxgtmb@detected  \pxgtmb@detectedfalse
+\newif\ifpxgtmb@landscape \pxgtmb@landscapefalse
+
+%% package options part 1
+\DeclareOption{tombowdate}{\tombowdatetrue}
+\DeclareOption{notombowdate}{\tombowdatefalse}
+
+%% register a list of candidate papersize
+%  - \pxgtmb@addpapersize{<papername>}{<shorter edge>}{<longer edge>}
+%      used for declaration of papersize.
+%      when \ifpxgtmb@switch = \iftrue, also used for automatic stocksize determination.
+\def\pxgtmb@addpapersize#1#2#3{%
+  % get current papersize and search through known standard in ascending order
+  \ifpxgtmb@switch\ifpxgtmb@detected
+    % save for console message
+    \def\pxgtmb@guessedtombow{#1}%
+    % set stockwidth/height
+    \ifpxgtmb@landscape
+      \setlength\stockwidth{#3}%
+      \setlength\stockheight{#2}%
+    \else
+      \setlength\stockwidth{#2}%
+      \setlength\stockheight{#3}%
+    \fi
+    % stop search immediately
+    \pxgtmb@switchfalse
+  \else
+    % shorter edge -> tempdima, longer edge -> tempdimb
+    \ifdim\paperwidth<\paperheight\relax
+      \pxgtmb@landscapefalse
+      \@tempdima\paperwidth  \@tempdimb\paperheight
+    \else
+      \pxgtmb@landscapetrue
+      \@tempdima\paperheight \@tempdimb\paperwidth
+    \fi
+    % compare
+    \ifdim\@tempdima=#2\relax \ifdim\@tempdimb=#3\relax
+      \def\pxgtmb@guessedpaper{#1}%
+      \pxgtmb@detectedtrue
+    \fi \fi
+  \fi\fi
+  \DeclareOption{tombow:#1}{%
+    \pxgtmb@switchtrue\pxgtmb@detectedfalse
+    \tombowdatetrue
+    % set stockwidth/height
+    \ifpxgtmb@landscape
+      \setlength\stockwidth{#3}%
+      \setlength\stockheight{#2}%
+    \else
+      \setlength\stockwidth{#2}%
+      \setlength\stockheight{#3}%
+    \fi
+  }%
+  \DeclareOption{tombo:#1}{%
+    \pxgtmb@switchtrue\pxgtmb@detectedfalse
+    \tombowdatefalse
+    % set stockwidth/height
+    \ifpxgtmb@landscape
+      \setlength\stockwidth{#3}%
+      \setlength\stockheight{#2}%
+    \else
+      \setlength\stockwidth{#2}%
+      \setlength\stockheight{#3}%
+    \fi
+  }%
+  \DeclareOption{mentuke:#1}{%
+    \pxgtmb@switchtrue\pxgtmb@detectedfalse
+    \tombowdatefalse
+    \setlength{\@tombowwidth}{\z@}%
+    % set stockwidth/height
+    \ifpxgtmb@landscape
+      \setlength\stockwidth{#3}%
+      \setlength\stockheight{#2}%
+    \else
+      \setlength\stockwidth{#2}%
+      \setlength\stockheight{#3}%
+    \fi
+  }%
+}
+\@onlypreamble\pxgtmb@addpapersize
+
+%% initialize before search
+\def\pxgtmb@guessedpaper{}
+\def\pxgtmb@guessedtombow{}
+
+%% package options part 2
+%  search + declaration
+%  ISO A series <=> JIS B series in the ascending order
+\pxgtmb@addpapersize{a10}{26mm}{37mm}
+\pxgtmb@addpapersize{b10}{32mm}{45mm}
+\pxgtmb@addpapersize{a9}{37mm}{52mm}
+\pxgtmb@addpapersize{b9}{45mm}{64mm}
+\pxgtmb@addpapersize{a8}{52mm}{74mm}
+\pxgtmb@addpapersize{b8}{64mm}{91mm}
+\pxgtmb@addpapersize{a7}{74mm}{105mm}
+\pxgtmb@addpapersize{b7}{91mm}{128mm}
+\pxgtmb@addpapersize{a6}{105mm}{148mm}
+\pxgtmb@addpapersize{b6}{128mm}{182mm}
+\pxgtmb@addpapersize{a5}{148mm}{210mm}
+\pxgtmb@addpapersize{b5}{182mm}{257mm}
+\pxgtmb@addpapersize{a4}{210mm}{297mm}
+\pxgtmb@addpapersize{b4}{257mm}{364mm}
+\pxgtmb@addpapersize{a3}{297mm}{420mm}
+\pxgtmb@addpapersize{b3}{364mm}{515mm}
+\pxgtmb@addpapersize{a2}{420mm}{594mm}
+\pxgtmb@addpapersize{b2}{515mm}{728mm}
+\pxgtmb@addpapersize{a1}{594mm}{841mm}
+\pxgtmb@addpapersize{b1}{728mm}{1030mm}
+\pxgtmb@addpapersize{a0}{841mm}{1189mm}
+\pxgtmb@addpapersize{b0}{1030mm}{1456mm}
+
+%% stop search
+\pxgtmb@switchfalse
+\ifx\pxgtmb@guessedtombow\@empty
+  \def\pxgtmb@guessedpaper{}
+  \pxgtmb@detectedfalse
+\fi
+
+%% package options part 3
+%  only declaration
+%  ISO C series
+\pxgtmb@addpapersize{c0}{917mm}{1297mm}
+\pxgtmb@addpapersize{c1}{648mm}{917mm}
+\pxgtmb@addpapersize{c2}{458mm}{648mm}
+\pxgtmb@addpapersize{c3}{324mm}{458mm}
+\pxgtmb@addpapersize{c4}{229mm}{354mm}
+\pxgtmb@addpapersize{c5}{162mm}{229mm}
+\pxgtmb@addpapersize{c6}{114mm}{162mm}
+\pxgtmb@addpapersize{c7}{81mm}{114mm}
+\pxgtmb@addpapersize{c8}{57mm}{81mm}
+\pxgtmb@addpapersize{c9}{40mm}{57mm}
+\pxgtmb@addpapersize{c10}{28mm}{40mm}
+%  misc
+\pxgtmb@addpapersize{a4j}{210mm}{297mm}
+\pxgtmb@addpapersize{a5j}{148mm}{210mm}
+\pxgtmb@addpapersize{b4j}{257mm}{364mm}
+\pxgtmb@addpapersize{b5j}{182mm}{257mm}
+\pxgtmb@addpapersize{a4var}{210mm}{283mm}
+\pxgtmb@addpapersize{b5var}{182mm}{230mm}
+\pxgtmb@addpapersize{letter}{8.5in}{11in}
+\pxgtmb@addpapersize{legal}{8.5in}{14in}
+\pxgtmb@addpapersize{executive}{7.25in}{10.5in}
+
+%% default options
+\ExecuteOptions{tombowdate}
+\ProcessOptions
+
+%% warnings
+\ifdim\stockwidth<\paperwidth
+  \PackageWarningNoLine\pxgtmb@pkgname{%
+    \string\stockwidth\space is smaller than \string\paperwidth!\MessageBreak
+    Is this really what you want?}
+\fi
+\ifdim\stockheight<\paperheight
+  \PackageWarningNoLine\pxgtmb@pkgname{%
+    \string\stockheight\space is smaller than \string\paperheight!\MessageBreak
+    Is this really what you want?}
+\fi
+
+%% display search result
+%  if any of explicit size option is specified, \ifpxgtmb@switch = \iftrue.
+%  otherwise, automatic size detection should be successful.
+\ifpxgtmb@switch\else\ifpxgtmb@detected
+  \typeout{***** Package \pxgtmb@pkgname\space detected \pxgtmb@guessedpaper paper. *****}
+  \typeout{***** Now the output size is automatically set to \pxgtmb@guessedtombow. *****}
+\else
+  \PackageError\pxgtmb@pkgname{%
+    No size option specified, and automatic papersize\MessageBreak
+    detection also failed. Please add size option\MessageBreak
+    to specify output size}\@ehc
+\fi\fi
+
+%% make tombow box according to (no)tombowdate & \@tombowwidth status
+\maketombowbox
+
+%% shift amount
+\advance\voffset -.5\paperheight
+\advance\voffset  .5\stockheight
+\advance\voffset-1in\relax
+\advance\hoffset -.5\paperwidth
+\advance\hoffset  .5\stockwidth
+\advance\hoffset-1in\relax
+
+\endinput
