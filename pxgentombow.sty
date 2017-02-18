@@ -1,7 +1,7 @@
 % pxgentombow.sty
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/02/10 v0.1 Generate crop mark 'tombow']
+    [2017/02/17 v0.2 Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% this package will use tombo feature in pLaTeX kernel
@@ -20,7 +20,6 @@
 
 %% prepare flag
 \newif\ifpxgtmb@switch    \pxgtmb@switchtrue
-\newif\ifpxgtmb@detected  \pxgtmb@detectedfalse
 \newif\ifpxgtmb@landscape \pxgtmb@landscapefalse
 
 %% package options part 1
@@ -28,25 +27,14 @@
 \DeclareOption{notombowdate}{\tombowdatefalse}
 
 %% register a list of candidate papersize
-%  - \pxgtmb@addpapersize{<papername>}{<shorter edge>}{<longer edge>}
+%  * \pxgtmb@addpapersize{<papername>}{<shorter edge>}{<longer edge>}
 %      used for declaration of papersize.
-%      when \ifpxgtmb@switch = \iftrue, also used for automatic stocksize determination.
+%      when no option is specified (that is, \ifpxgtmb@switch = \iffalse),
+%      also used for automatic stocksize determination.
 \def\pxgtmb@addpapersize#1#2#3{%
   % get current papersize and search through known standard in ascending order
-  \ifpxgtmb@switch\ifpxgtmb@detected
-    % save for console message
-    \def\pxgtmb@guessedtombow{#1}%
-    % set stockwidth/height
-    \ifpxgtmb@landscape
-      \setlength\stockwidth{#3}%
-      \setlength\stockheight{#2}%
-    \else
-      \setlength\stockwidth{#2}%
-      \setlength\stockheight{#3}%
-    \fi
-    % stop search immediately
-    \pxgtmb@switchfalse
-  \else
+  \ifx\pxgtmb@guessedtombow\@empty
+  \ifx\pxgtmb@guessedpaper\@empty
     % shorter edge -> tempdima, longer edge -> tempdimb
     \ifdim\paperwidth<\paperheight\relax
       \pxgtmb@landscapefalse
@@ -58,48 +46,40 @@
     % compare
     \ifdim\@tempdima=#2\relax \ifdim\@tempdimb=#3\relax
       \def\pxgtmb@guessedpaper{#1}%
-      \pxgtmb@detectedtrue
     \fi \fi
+  \else
+    \def\pxgtmb@guessedtombow{#1}% save for console message
+    \pxgtmb@setstock{#2}{#3}%      set stockwidth/height
+    \pxgtmb@switchfalse          % stop search immediately
   \fi\fi
-  \DeclareOption{tombow:#1}{%
-    \pxgtmb@switchtrue\pxgtmb@detectedfalse
+  \DeclareOption{tombow-#1}{%
+    \pxgtmb@switchtrue
     \tombowdatetrue
-    % set stockwidth/height
-    \ifpxgtmb@landscape
-      \setlength\stockwidth{#3}%
-      \setlength\stockheight{#2}%
-    \else
-      \setlength\stockwidth{#2}%
-      \setlength\stockheight{#3}%
-    \fi
+    \pxgtmb@setstock{#2}{#3}%
   }%
-  \DeclareOption{tombo:#1}{%
-    \pxgtmb@switchtrue\pxgtmb@detectedfalse
+  \DeclareOption{tombo-#1}{%
+    \pxgtmb@switchtrue
     \tombowdatefalse
-    % set stockwidth/height
-    \ifpxgtmb@landscape
-      \setlength\stockwidth{#3}%
-      \setlength\stockheight{#2}%
-    \else
-      \setlength\stockwidth{#2}%
-      \setlength\stockheight{#3}%
-    \fi
+    \pxgtmb@setstock{#2}{#3}%
   }%
-  \DeclareOption{mentuke:#1}{%
-    \pxgtmb@switchtrue\pxgtmb@detectedfalse
+  \DeclareOption{mentuke-#1}{%
+    \pxgtmb@switchtrue
     \tombowdatefalse
     \setlength{\@tombowwidth}{\z@}%
-    % set stockwidth/height
-    \ifpxgtmb@landscape
-      \setlength\stockwidth{#3}%
-      \setlength\stockheight{#2}%
-    \else
-      \setlength\stockwidth{#2}%
-      \setlength\stockheight{#3}%
-    \fi
+    \pxgtmb@setstock{#2}{#3}%
   }%
 }
+\def\pxgtmb@setstock#1#2{%
+  \ifpxgtmb@landscape
+    \setlength\stockwidth{#2}%
+    \setlength\stockheight{#1}%
+  \else
+    \setlength\stockwidth{#1}%
+    \setlength\stockheight{#2}%
+  \fi
+}%
 \@onlypreamble\pxgtmb@addpapersize
+\@onlypreamble\pxgtmb@setstock
 
 %% initialize before search
 \def\pxgtmb@guessedpaper{}
@@ -135,7 +115,6 @@
 \pxgtmb@switchfalse
 \ifx\pxgtmb@guessedtombow\@empty
   \def\pxgtmb@guessedpaper{}
-  \pxgtmb@detectedfalse
 \fi
 
 %% package options part 3
@@ -167,6 +146,22 @@
 \ExecuteOptions{tombowdate}
 \ProcessOptions
 
+%% display search result
+%  if any of explicit size option is specified, \ifpxgtmb@switch = \iftrue.
+%  otherwise, automatic size detection should be successful.
+\ifpxgtmb@switch\else
+\ifx\pxgtmb@guessedtombow\@empty
+  \PackageWarningNoLine\pxgtmb@pkgname{%
+    No size option specified, and automatic papersize\MessageBreak
+    detection also failed. Please add size option\MessageBreak
+    to specify output size. Falling back to +1in ...}
+  \stockwidth\paperwidth   \advance\stockwidth 2in
+  \stockheight\paperheight \advance\stockheight 2in
+\else
+  \typeout{***** Package \pxgtmb@pkgname\space detected \pxgtmb@guessedpaper paper. *****}
+  \typeout{***** Now the output size is automatically set to \pxgtmb@guessedtombow. *****}
+\fi\fi
+
 %% warnings
 \ifdim\stockwidth<\paperwidth
   \PackageWarningNoLine\pxgtmb@pkgname{%
@@ -179,28 +174,15 @@
     Is this really what you want?}
 \fi
 
-%% display search result
-%  if any of explicit size option is specified, \ifpxgtmb@switch = \iftrue.
-%  otherwise, automatic size detection should be successful.
-\ifpxgtmb@switch\else\ifpxgtmb@detected
-  \typeout{***** Package \pxgtmb@pkgname\space detected \pxgtmb@guessedpaper paper. *****}
-  \typeout{***** Now the output size is automatically set to \pxgtmb@guessedtombow. *****}
-\else
-  \PackageError\pxgtmb@pkgname{%
-    No size option specified, and automatic papersize\MessageBreak
-    detection also failed. Please add size option\MessageBreak
-    to specify output size}\@ehc
-\fi\fi
-
 %% make tombow box according to (no)tombowdate & \@tombowwidth status
 \maketombowbox
 
 %% shift amount
-\advance\voffset -.5\paperheight
-\advance\voffset  .5\stockheight
-\advance\voffset-1in\relax
+\hoffset .5\stockwidth
 \advance\hoffset -.5\paperwidth
-\advance\hoffset  .5\stockwidth
 \advance\hoffset-1in\relax
+\voffset .5\stockheight
+\advance\voffset -.5\paperheight
+\advance\voffset-1in\relax
 
 \endinput
