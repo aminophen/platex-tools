@@ -16,13 +16,14 @@
 %   * \@makefntext is redefined
 %     (incompatible with some pLaTeX classes)
 %   * \footnotesep is not suitable for vertical typesetting
-%     (rather a problem of \strutbox in pLaTeX2e kernel?)
+%     when used with pLaTeX 2016/11/29 or earlier
+%     (rather a problem of \strutbox in pLaTeX2e kernel)
 % so, this package provides patches.
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxftnright}
-  [2016/09/07 v1.0 footnote layout package for pLaTeX]
+  [2017/02/28 v1.1 footnote layout package for pLaTeX]
 
 %% save \@makefntext definition from pLaTeX class
 \@ifpackageloaded{ftnright}{%
@@ -36,7 +37,7 @@
 \RequirePackage{ftnright}
 
 %% patches for ftnright to work fine with pLaTeX
-%% This code is based on pLaTeX2e 2016/09/03 community ed.
+%% This code is based on pLaTeX2e 2017/04/08 community ed.
 
 \def\@startcolumn{%
  \ifx\@deferlist\@empty
@@ -91,34 +92,41 @@
      formatted page.}%
   \fi
  \fi
+%%%%% change for pLaTeX (bottom float first)
   \xdef\@freelist{\@freelist\@midlist}%
   \global \let \@midlist \@empty
   \@combinefloats
+  \let\pltx@textbottom\@textbottom %%% pLaTeX
+ \if@firstcolumn\else
+  \ifvoid\footins\else
+    \setbox\@outputbox \vbox {%
+      \boxmaxdepth \@maxdepth
+      \unvbox \@outputbox
+      \@textbottom %%% pLaTeX
+      \vskip \skip\footins
+      \color@begingroup
+        \normalcolor
+        \footnoterule
+        \unvbox \footins
+      \color@endgroup
+      }%
+      \let\@textbottom\relax %%% pLaTeX
+  \fi
+ \fi
+%%%%%
   \ifvbox\@kludgeins
     \@makespecialcolbox
   \else
-%%%%% change for pLaTeX (import from \@makecol in plcore)
-     \setbox\@outputbox \vbox to\@colht {%
-       \boxmaxdepth\maxdepth
-       \@texttop
-       \dimen@ \dp\@outputbox
-       \unvbox \@outputbox
-       \iftdir\vbox{\hskip\z@}\fi
-       \vskip -\dimen@
-       \@textbottom
-     \if@firstcolumn\else
-       \ifvoid\footins\else % for pLaTeX
-         \vskip \skip\footins
-         \color@begingroup
-            \normalcolor
-            \footnoterule
-            \unvbox \footins
-         \color@endgroup
-       \fi
-     \fi
-       }%
-%%%%%
+   \setbox\@outputbox\vbox to\@colht
+     {\boxmaxdepth\maxdepth
+      \@texttop
+      \dimen@ \dp\@outputbox
+      \unvbox \@outputbox
+      \iftdir\vbox{\hskip\z@}\fi %%% pLaTeX
+      \vskip -\dimen@
+      \@textbottom}%
   \fi
+  \let\@textbottom\pltx@textbottom %%% pLaTeX
   \global\maxdepth\@maxdepth
 }
 
