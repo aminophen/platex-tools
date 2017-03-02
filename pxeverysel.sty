@@ -12,7 +12,7 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2016/12/28 v0.5 Patch to everysel for (u)pLaTeX]
+    [2017/03/02 v0.6 Patch to everysel for (u)pLaTeX]
 
 %% previous code for ctex support has been removed in v0.5,
 %% as ctex has depended on pxeverysel since 2016/12/27 v2.4.7
@@ -117,6 +117,7 @@
 \def\pxys@postproc{%
   % revert the hack for disabling duplicate font info
   \expandafter\let\csname ver@tracefnt.sty\endcsname\pxys@ver@tracefnt
+  \let\pxys@ver@tracefnt\@undefined
   % post handling of everysel routine
   \let\CheckCommand\pxys@CheckCommand
   \let\pxys@CheckCommand\@undefined
