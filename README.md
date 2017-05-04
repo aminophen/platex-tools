@@ -43,6 +43,10 @@ and some additional packages are included.
     Koichi INOUE in 2004
     (https://www.ma.ns.tcu.ac.jp/Pages/TeX/bounddvi.sty.html),
     and incorporated into this bundle by his courtesy.
+- pxgentombow.sty:
+    Generate crop mark (called 'tombow' in Japanese) for
+    practical use in self-publishing.
+    Can be used on pLaTeX/upLaTeX.
 
 ## Character encoding
 
