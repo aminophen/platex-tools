@@ -1,8 +1,18 @@
+%
 % pxgentombow.sty
+% written by Hironobu Yamashita (@aminophen)
+%
+% This package is part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/05/05 v0.5 Generate crop mark 'tombow']
+    [2017/05/06 v0.6 Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
+
+%% error status
+\chardef\pxgtmb@errlevel=\z@
 
 %% import from jsclasses
 \hour\time \divide\hour by 60\relax
@@ -222,11 +232,24 @@
 \maketombowbox
 
 %% shift amount
-\hoffset .5\stockwidth
-\advance\hoffset -.5\paperwidth
-\advance\hoffset-1truein\relax
-\voffset .5\stockheight
-\advance\voffset -.5\paperheight
-\advance\voffset-1truein\relax
+\AtBeginDocument{%
+  \ifdim\hoffset=\z@\else \chardef\pxgtmb@errlevel=\@ne \fi
+  \ifdim\voffset=\z@\else \chardef\pxgtmb@errlevel=\@ne \fi
+  \ifnum\pxgtmb@errlevel>\z@
+    \PackageError{\pxgtmb@pkgname}{%
+      What!? \string\hoffset\space or \string\voffset\space has a non-zero
+      value!\MessageBreak I cannot proceed anymore}{%
+      Are you changing the page layout? -- If so, you should not change
+      \string\hoffset\space or\MessageBreak \string\voffset. Please set
+      \string\topmargin\space and \string\oddsidemargin\space properly,
+      or leave it to\MessageBreak `geometry' package.}
+  \fi
+  \hoffset .5\stockwidth
+  \advance\hoffset -.5\paperwidth
+  \advance\hoffset-1truein\relax
+  \voffset .5\stockheight
+  \advance\voffset -.5\paperheight
+  \advance\voffset-1truein\relax
+}
 
 \endinput
