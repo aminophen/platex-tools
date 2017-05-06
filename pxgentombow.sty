@@ -6,13 +6,23 @@
 % https://github.com/aminophen/platex-tools
 %
 
-\NeedsTeXFormat{pLaTeX2e}
+\NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
     [2017/05/06 v0.6 Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% error status
 \chardef\pxgtmb@errlevel=\z@
+
+%% supported engines
+\ifx\pfmtversion\@undefined
+  \@ifpackageloaded{luatexja}{}{\chardef\pxgtmb@errlevel=\@ne}
+\fi
+\ifnum\pxgtmb@errlevel>\z@
+  \PackageError{\pxgtmb@pkgname}{%
+    Only pLaTeX, upLaTeX and LuaTeX-ja are supported now}\@ehc
+  \expandafter\endinput
+\fi
 
 %% import from jsclasses
 \hour\time \divide\hour by 60\relax
@@ -23,6 +33,20 @@
 %  if tombow-related option is not included in class option list,
 %  show info and enable it now
 \iftombow\else
+  % if jsclasses is detected, it's too late
+  % -- When a size option other than `10pt' is specified,
+  %    jsclasses uses \mag and calculates \oddsidemargin and \topmargin
+  %    differently, depending on tombow status.
+  %    In order to force `jsclasses' to calculate correctly,
+  %    `tombow' or `tombo' is required as a class option.
+  %    ... or, you may add `nomag' or `nomag*' instead.
+  \ifnum\mag=\@m\else \ifx\inv@mag\@undefined\else
+    \PackageError{\pxgtmb@pkgname}{%
+      It seems you are using Japanese `jsclasses'\MessageBreak
+      (jsarticle, jsbook, jsreport, etc.) or some\MessageBreak
+      derived class. Please add `tombow' or `tombo'\MessageBreak
+      to the class option list}\@ehc
+  \fi \fi
   \PackageInfo\pxgtmb@pkgname{tombow feature enabled by \pxgtmb@pkgname}
 \fi
 \tombowtrue %\tombowdatetrue %% enabled by tombowdate option
@@ -242,7 +266,7 @@
       Are you changing the page layout? -- If so, you should not change
       \string\hoffset\space or\MessageBreak \string\voffset. Please set
       \string\topmargin\space and \string\oddsidemargin\space properly,
-      or leave it to\MessageBreak `geometry' package.}
+      or leave it to\MessageBreak `geometry' package.}%
   \fi
   \hoffset .5\stockwidth
   \advance\hoffset -.5\paperwidth

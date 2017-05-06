@@ -5,6 +5,32 @@
 
 \documentclass[a4paper]{jsarticle}
 \usepackage{doc}
+\makeatletter
+%%% import from jltxdoc.cls
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup \let\do\do@noligs \verbatim@nolig@list
+    \ttfamily \verb@eol@error \let\do\@makeother \dospecials
+    \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
+\xspcode"5C=3 %% \
+\xspcode"22=3 %% "
+%%% dangerous bend
+\font\man=manfnt at 10pt
+\def\dbend{\leavevmode\raise0pt\hbox{\man\char'177}}
+\newenvironment{dangerous}{%
+  \ifnum\@listdepth>\z@
+    \GenericError{}{Do not use `dangerous' environment inside any list}{}{}
+  \fi
+  \par\addvspace\medskipamount
+  \@tempdima=\dimexpr\textwidth-2zw\relax\small
+  \divide\@tempdima by\dimexpr1zw\relax\@tempcnta=\@tempdima
+  \leftskip=\dimexpr\textwidth-\@tempcnta zw\relax
+    \@totalleftmargin\dimexpr\leftskip+0zw
+    \linewidth=\dimexpr\@tempcnta zw-0zw
+  \parindent1zw\noindent\kern-\leftskip\hbox to\leftskip{\dbend\hss}%
+  \everypar{\everypar{}}\ignorespaces
+}{\par\addvspace\medskipamount}
+%%%
+\makeatother
 \usepackage{longtable}
 \usepackage{pxgentombow}
 \usepackage{bounddvi}
@@ -24,9 +50,13 @@
 \textsf{pxgentombow}パッケージは、クラスファイルなどが想定している用紙
 サイズ情報（\verb+\paperwidth+, \verb+\paperheight+）を検知し、それより
 一回り大きなサイズの用紙の中央にトンボ付きで出力するために必要な機能を
-提供します。ただし、このパッケージはpapersize specialを発行しませんので、
-\textsf{bounddvi}パッケージまたは\textsf{bxpapersize}パッケージと
-併用するとよいでしょう。
+提供します。ただし、このパッケージは実際の出力サイズ指定を発行しません
+ので、\textsf{bxpapersize}パッケージまたは\textsf{bounddvi}パッケージと
+併用するとよいでしょう\footnote{\textsf{bounddvi}パッケージは、
+\textsf{pxgentombow}と同じく\textsf{platex-tools}バンドルに収録
+されていますが、名前のとおりDVIを経由する場合にしか利用できません。
+一方、\textsf{bxpapersize}パッケージは汎用で、Lua\TeX のような
+PDF直接出力の場合にも利用できます。}。
 
 使い方の例は
 \begin{verbatim}
@@ -39,7 +69,7 @@
 \end{verbatim}
 です。p\LaTeX における横組と縦組の両方で使え、また\textsf{jsclasses}の
 ような版面拡大(\verb+\mag+)が使われた場合にも対応しています。
-なお、現時点ではp\LaTeX とup\LaTeX のみで動作します。
+なお、現時点ではp\LaTeX とup\LaTeX およびLua\TeX-jaのみで動作します。
 
 本パッケージは、\textsf{platex-tools}バンドルの一部として
 配布されています：
@@ -139,6 +169,83 @@ a4var, b5var, letter, legal, executiveです。
 \end{verbatim}
 とします。
 
+\section*{\textsf{jsclasses}で使用する場合の注意}
+
+奥村晴彦氏による\textsf{jsclasses}のクラス（2016年以降は日本語\TeX 開発
+コミュニティが管理）を使用していて、10pt以外のサイズオプションを
+指定する場合は、以下のいずれかの方法をとってください。
+\begin{itemize}
+\item クラスオプションに「トンボオプション」
+      （\verb+tombow+または\verb+tombo+）を追加する。
+\item クラスオプションに「\verb+\mag+を使わないオプション」
+      （\verb+nomag+または\verb+nomag*+）を追加する。
+\end{itemize}
+これは、\textsf{jsclasses}クラス内で行われる\verb+\oddsidemargin+と
+\verb+\topmargin+の計算の都合からくる制約です。たとえば
+\begin{verbatim}
+  \documentclass[a4j,14pt]{jarticle}
+  \usepackage{pxgentombow}
+\end{verbatim}
+という使い方は\emph{誤り}です（このままでは誤った余白設定が
+適用されますので、安全のため\textsf{pxgentombow}パッケージ
+がエラーを出すようにしてあります）。代わりに
+\begin{verbatim}
+  \documentclass[a4j,14pt,tombow]{jarticle}
+  \usepackage{pxgentombow}
+\end{verbatim}
+と書くようにしてください。
+
+\section*{レイアウト設定の注意}
+
+余白などのレイアウト設定でありがちですが、
+\verb+\hoffset+や\verb+\voffset+の値が$0$以外になっている場合、
+\textsf{pxgentombow}パッケージはエラーを出します。
+レイアウト設定のために変更すべきなのはこれらの寸法ではなく、
+\verb+\oddsidemargin+や\verb+\topmargin+であることがほとんどです。
+したがって、それらを適切な値に設定するか、レイアウトの設定すべてを\textsf{geometry}パッケージに任せてしまうのも一つの方法です。
+
+\begin{dangerous}
+たとえば左右の余白を$25\,\mathrm{mm}$に、上下の余白を
+$30\,\mathrm{mm}$にしたいとき\footnote{ここでは「本文の領域以外」を
+余白と定義します。すなわち、ヘッダとフッタは余白の一部です。}、
+まず「\TeX の1インチ」を
+削除してから\verb+\oddsidemargin+や\verb+\topmargin+を変更すると、
+「見かけ上は」期待どおりの結果になることがあります。
+\begin{verbatim}
+  \setlength{\hoffset}{-1in}% <== NG
+  \setlength{\voffset}{-1in}% <== NG
+  \setlength{\oddsidemargin}{25mm}
+  \setlength{\topmargin}{30mm}
+  \setlength{\textwidth}{\paperwidth}
+  \addtolength{\textwidth}{-2\oddsidemargin}
+  \setlength{\textheight}{\paperheight}
+  \addtolength{\textheight}{-2\topmargin}
+  \addtolength{\topmargin}{-\headheight}
+  \addtolength{\topmargin}{-\headsep}
+\end{verbatim}
+しかし、この設定では\textsf{pxgentombow}パッケージがトンボを
+追加するとき、正しい余白を維持することができません。
+
+一方、\verb+\hoffset+や\verb+\voffset+は$0$のままで、以下のように
+\verb+\oddsidemargin+や\verb+\topmargin+を設定していれば問題ありません。
+\begin{verbatim}
+  \setlength{\oddsidemargin}{-0.4mm}% 25mm = 1inch - 0.4mm
+  \setlength{\topmargin}{4.6mm}%      30mm = 1inch + 4.6mm
+  \setlength{\textwidth}{\paperwidth}
+  \addtolength{\textwidth}{-50mm}
+  \addtolength{\topmargin}{-\headheight}
+  \addtolength{\topmargin}{-\headsep}
+  \setlength{\textheight}{\paperheight}
+  \addtolength{\textheight}{-60mm}
+\end{verbatim}
+これと同等のレイアウト設定は、以下のように\textsf{geometry}パッケージで
+行うのが簡単です。
+\begin{verbatim}
+  \usepackage[lmargin=25mm,rmargin=25mm,
+              tmargin=30mm,bmargin=30mm]{geometry}
+\end{verbatim}
+\end{dangerous}
+
 \section*{雑記}
 
 発端はこの話です。
@@ -166,7 +273,7 @@ a4var, b5var, letter, legal, executiveです。
   \verb+\paperwidth+/\verb+\paperheight+より小さい場合の動作。
   現在は警告を出すだけとしているが、さらに天地左右1inに
   フォールバックしたほうが無難だろうか。
-\item p\LaTeX/up\LaTeX 以外のサポート。直近ではLua\TeX-jaは容易なはず。
+\item p\LaTeX/up\LaTeX/Lua\TeX-ja以外のサポート。
 \end{itemize}
 
 \section*{変更履歴}
@@ -176,6 +283,7 @@ a4var, b5var, letter, legal, executiveです。
   \item 2017/03/01 v0.4 トンボ形式の修正など
   \item 2017/05/05 v0.5 \textsf{jsclasses}の$\verb+\mag+ \ne 1000$に対応、
                         最初のCTANリリース版
+  \item 2017/05/06 v0.6 エラー処理の強化、Lua\TeX-jaでの動作確認
 \end{itemize}
 
 \end{document}

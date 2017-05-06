@@ -46,7 +46,7 @@ and some additional packages are included.
 - pxgentombow.sty:
     Generate crop mark (called 'tombow' in Japanese) for
     practical use in self-publishing.
-    Can be used on pLaTeX/upLaTeX.
+    Can be used on pLaTeX/upLaTeX and LuaTeX-ja.
 
 ## Character encoding
 
