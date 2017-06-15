@@ -13,9 +13,9 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2016/10/23 v1.0g Tabular extension package for plext and array]
+  [2017/06/15 v1.0h Tabular extension package for plext and array]
 \RequirePackage{plext}
-\RequirePackage{array}
+\RequirePackage{parray}
 
 %% save definitions from array.sty
 \def\array{\col@sep\arraycolsep
@@ -94,8 +94,6 @@
   \lineskip\z@skip\baselineskip\z@skip\@preamble}
 %
 \def\endarray{\crcr \egroup \egroup \@end@alignbox \@arrayright \gdef\@preamble{}}
-\def\endtabular{\endarray $\egroup\null}
-\expandafter \let \csname endtabular*\endcsname = \endtabular
 %
 %% done
 

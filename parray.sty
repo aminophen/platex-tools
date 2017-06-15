@@ -1,0 +1,39 @@
+%
+% parray.sty
+% written by Hironobu Yamashita (@aminophen)
+%
+% This package is part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+% This package `parray.sty' is based on:
+%   * array.sty in latex-tools (2016/10/06 v2.4d)
+%   * plcore.ltx in platex (2017/07/01 v1.2p)
+%
+
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{parray}
+  [2017/06/15 v0.1a Tabular extension package for pLaTeX/upLaTeX]
+\RequirePackage{array}
+
+%% patching internal code for array.sty
+%
+%% remove extra \xkanjiskip (pLaTeX2e 2016/04/17)
+\def\@tabular{%
+  \leavevmode \null
+  \hbox \bgroup $\col@sep\tabcolsep \let\d@llarbegin\begingroup
+                                    \let\d@llarend\endgroup
+  \@tabarray}
+\def\endtabular{\endarray $\egroup\null}
+\expandafter \let \csname endtabular*\endcsname = \endtabular
+%
+%% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/01)
+\def\insert@column{%
+   \the@toks \the \@tempcnta
+   \mbox{\inhibitglue \ignorespaces \@sharp \unskip}%
+   \the@toks \the \count@ \relax}
+%
+%% done
+
+%% all done
+
+\endinput
