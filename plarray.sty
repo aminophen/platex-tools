@@ -12,7 +12,7 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plarray}
-  [2017/06/15 v0.1a Tabular extension package for pLaTeX/upLaTeX]
+  [2017/06/15 v0.1b Tabular extension package for pLaTeX/upLaTeX]
 \RequirePackage{array}
 
 %% patching internal code for array.sty
@@ -29,7 +29,11 @@
 %% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/01)
 \def\insert@column{%
    \the@toks \the \@tempcnta
+  \ifmmode
+   \ignorespaces \@sharp \unskip
+  \else
    \mbox{\inhibitglue \ignorespaces \@sharp \unskip}%
+  \fi
    \the@toks \the \count@ \relax}
 %
 %% done
