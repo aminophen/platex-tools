@@ -13,7 +13,7 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2017/06/15 v1.0h Tabular extension package for plext and array]
+  [2017/06/29 v1.0i Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{plarray}
 
@@ -30,7 +30,7 @@
 %
 \def\@startpbox#1{\bgroup
   \box@dir\adjustbaseline %% added
-  \hsize=#1\@arrayparboxrestore
+  \setlength\hsize{#1}\@arrayparboxrestore
    \everypar{%
       \vrule \@height \ht\@arstrutbox \@width \z@
       \everypar{}}%
