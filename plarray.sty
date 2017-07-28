@@ -7,12 +7,12 @@
 %
 % This package `plarray.sty' is based on:
 %   * array.sty in latex-tools (2016/10/06 v2.4d)
-%   * plcore.ltx in platex (2017/07/01 v1.2p)
+%   * plcore.ltx in platex (2017/07/21 v1.2p)
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plarray}
-  [2017/06/15 v0.1b Tabular extension package for pLaTeX/upLaTeX]
+  [2017/07/29 v0.1c Tabular extension package for pLaTeX/upLaTeX]
 \RequirePackage{array}
 
 %% patching internal code for array.sty
@@ -26,11 +26,11 @@
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
-%% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/01)
+%% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/29)
 \def\insert@column{%
    \the@toks \the \@tempcnta
   \ifmmode
-   \ignorespaces \@sharp \unskip
+   \mbox{}\inhibitglue \ignorespaces \@sharp \unskip
   \else
    \mbox{\inhibitglue \ignorespaces \@sharp \unskip}%
   \fi
