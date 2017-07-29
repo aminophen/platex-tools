@@ -7,6 +7,10 @@ and some additional packages are included.
 
 ## Bundle contents
 
+- plarray.sty:
+    Patch for array.sty (latex-tools) to improve
+    compatibility with pLaTeX/upLaTeX kernels.
+    Can be used on pLaTeX/upLaTeX.
 - plextarray.sty:
     Patch for array.sty (latex-tools) to improve
     compatibility with plext.sty in pLaTeX.
