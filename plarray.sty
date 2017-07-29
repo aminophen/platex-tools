@@ -29,11 +29,7 @@
 %% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/29)
 \def\insert@column{%
    \the@toks \the \@tempcnta
-  \ifmmode
-   \mbox{}\inhibitglue \ignorespaces \@sharp \unskip
-  \else
-   \mbox{\inhibitglue \ignorespaces \@sharp \unskip}%
-  \fi
+   \mbox{}\inhibitglue \ignorespaces \@sharp \unskip \unskip
    \the@toks \the \count@ \relax}
 %
 %% done
