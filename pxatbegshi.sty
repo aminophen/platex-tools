@@ -11,7 +11,7 @@
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxatbegshi}
-    [2017/09/03 v0.1 Patch to atbegshi for (u)pLaTeX]
+    [2017/09/03 v0.2 Patch to atbegshi for (u)pLaTeX]
 
 %% preparations
 \def\pxabgs@pkgname{pxatbegshi}
@@ -43,14 +43,14 @@
 
 %---------------------------------------
 
-% concept: execute all hooks inside yoko direction
+% concept: execute all hooks inside yoko direction \vbox
 
 % prepare
 \let\pxabgs@AtBegShi@Output\AtBegShi@Output
 % try first patch
 \pxabgs@patch@cmd\pxabgs@AtBegShi@Output
   {\let\AtBegShi@OrgProtect\protect}%
-  {\setbox8\hbox\bgroup\yoko\let\AtBegShi@OrgProtect\protect}
+  {\setbox8\vbox\bgroup\yoko\let\AtBegShi@OrgProtect\protect}
 \ifx\pxabgs@fragment\relax % failure
   \let\pxabgs@AtBegShi@Output\relax
 \else % success, try second patch
