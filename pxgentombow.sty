@@ -8,20 +8,27 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/07/23 v0.7 Generate crop mark 'tombow']
+    [2017/11/22 v0.8 Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
-%% error status
-\chardef\pxgtmb@errlevel=\z@
+%% error status (shared with gentombow.sty)
+\ifx\pxgtmb@errlevel\@undefined
+  \chardef\pxgtmb@errlevel=\z@
+\fi
 
 %% supported engines
 \ifx\pfmtversion\@undefined
   \@ifpackageloaded{luatexja}{}{\chardef\pxgtmb@errlevel=\@ne}
 \fi
 \ifnum\pxgtmb@errlevel>\z@
-  \PackageError{\pxgtmb@pkgname}{%
-    Only pLaTeX, upLaTeX and LuaTeX-ja are supported now}\@ehc
-  \expandafter\endinput
+  \ifx\pxgtmb@emu@pkgname\@undefined % gentombow.sty not loaded
+    \PackageError{\pxgtmb@pkgname}{%
+      Only pLaTeX, upLaTeX and LuaTeX-ja are supported!\MessageBreak
+      Please use `gentombow' package instead}\@ehc
+    \expandafter\expandafter\expandafter\endinput\expandafter
+  \fi
+\else
+  \@namedef{ver@gentombow.sty}{}% fake
 \fi
 
 %% import from jsclasses
