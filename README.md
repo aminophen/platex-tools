@@ -39,6 +39,12 @@ and some additional packages are included.
     Takayuki YATO in 2012
     (https://gist.github.com/zr-tex8r/2702969),
     and incorporated into this bundle by his courtesy.
+- pxatbegshi.sty:
+    Patch for atbegshi.sty (oberdiek) to support
+    Japanese classes for vertical writing.
+    Can be used on pLaTeX/upLaTeX.
+    The essential part of this package was proposed by
+    Hironori Kitagawa in 2017.
 - bounddvi.sty:
     Set papersize special to DVI file.
     Can be used on LaTeX/pLaTeX/upLaTeX
