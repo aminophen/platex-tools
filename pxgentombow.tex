@@ -7,7 +7,7 @@
 \usepackage{doc}
 \makeatletter
 %%% import from jltxdoc.cls
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
   \bgroup \let\do\do@noligs \verbatim@nolig@list
     \ttfamily \verb@eol@error \let\do\@makeother \dospecials
     \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
@@ -29,6 +29,9 @@
   \parindent1zw\noindent\kern-\leftskip\hbox to\leftskip{\dbend\hss}%
   \everypar{\everypar{}}\ignorespaces
 }{\par\addvspace\medskipamount}
+%%% misc
+\newcommand{\Meta}[1]{$\langle$\mbox{}\textit{#1}\mbox{}$\rangle$}
+\newcommand{\jMeta}[1]{$\langle$\mbox{}\textsf{#1}\mbox{}$\rangle$}
 %%%
 \makeatother
 \usepackage{longtable}
@@ -42,21 +45,34 @@
 
 \maketitle
 
-日本の出版では、たとえば版面がA4サイズの場合、一回り大きなB4サイズの用紙
-の中央にトンボ付きで印刷するということがなされることがあるようです。
+\begin{center}
+English version is available: see \textsf{gentombow} package!
+\end{center}
+
+日本の出版では、たとえば仕上がり寸法がA4サイズの場合、一回り大きな
+B4サイズの用紙の中央にトンボ付きで印刷することがあるようです。
 このドキュメントは、実際にA4用紙をB4用紙の中央にトンボ付きで
 配置している事例です。
 
 \textsf{pxgentombow}パッケージは、クラスファイルなどが想定している用紙
-サイズ情報（\verb+\paperwidth+, \verb+\paperheight+）を検知し、それより
-一回り大きなサイズの用紙の中央にトンボ付きで出力するために必要な機能を
-提供します。ただし、このパッケージは実際の出力サイズ指定を発行しません
-ので、\textsf{bxpapersize}パッケージまたは\textsf{bounddvi}パッケージと
-併用するとよいでしょう\footnote{\textsf{bounddvi}パッケージは、
-\textsf{pxgentombow}と同じく\textsf{platex-tools}バンドルに収録
-されていますが、名前のとおりDVIを経由する場合にしか利用できません。
+サイズ情報（\verb+\paperwidth+, \verb+\paperheight+）を検知し、
+それより一回り大きなサイズの用紙の中央にトンボ付きで出力するために
+必要な機能を提供します。
+ただし、このパッケージは実際の出力サイズ指定を発行しませんので、
+以下のいずれかのパッケージと併用するとよいでしょう：
+\begin{itemize}
+\item \textsf{bounddvi}パッケージ（\textsf{platex-tools}バンドル）
+\item \textsf{bxpapersize}パッケージ（ZRさん作）
+\item \textsf{graphicx}パッケージの2016年以降の版
+  （\texttt{setpagesize}機能つきのもの）
+\end{itemize}
+\textsf{bounddvi}パッケージは、\textsf{pxgentombow}と同じく
+\textsf{platex-tools}バンドルに収録されていますが、
+名前のとおりDVIを経由する場合にしか利用できません。
 一方、\textsf{bxpapersize}パッケージは汎用で、Lua\TeX のような
-PDF直接出力の場合にも利用できます。}。
+PDF直接出力の場合にも利用できます。また、\textsf{graphicx}パッケージ
+は画像挿入用のパッケージですが、2016年以降は自動的に出力サイズ指定も
+行うようです（$\verb+\mag+ \ne 1000$の場合には機能しません）。
 
 使い方の例は
 \begin{verbatim}
@@ -69,7 +85,9 @@ PDF直接出力の場合にも利用できます。}。
 \end{verbatim}
 です。p\LaTeX における横組と縦組の両方で使え、また\textsf{jsclasses}の
 ような版面拡大(\verb+\mag+)が使われた場合にも対応しています。
-なお、現時点ではp\LaTeX とup\LaTeX およびLua\TeX-jaのみで動作します。
+なお、\textsf{pxgentombow}パッケージはp\LaTeX とup\LaTeX および
+Lua\TeX-jaのみで動作します。その他（pdf\LaTeX など）で使いたい
+場合は、代わりに\textsf{gentombow}パッケージを使用してください。
 
 本パッケージは、\textsf{platex-tools}バンドルの一部として
 配布されています：
@@ -79,19 +97,24 @@ PDF直接出力の場合にも利用できます。}。
 
 \section*{用紙サイズの自動検知による出力サイズ決定}
 
-パッケージにはあらかじめA系列(a0--a10)、B系列(b0--b10), C系列(c0--c10)と
-letter, legal, executiveの用紙サイズが定義されています。
-ここで、B系列はISOではなくJISです。また、変形版としてa4var（a4の変形）と
-b5var（b5の変形）も定義されています。
+パッケージにはあらかじめA系列(\texttt{a0}--\texttt{a10})、
+B系列(\texttt{b0}--\texttt{b10})、C系列(\texttt{c0}--\texttt{c10})と
+\texttt{letter}, \texttt{legal}, \texttt{executive}の用紙サイズが
+定義されています。ここで、B系列はISOではなくJISです。
+また、変型版として\texttt{a4var}（\texttt{a4}の変型）と
+\texttt{b5var}（\texttt{b5}の変型）も定義されています。
 
-これらのうちいずれか（ただしa0, b0, c0を除く）の用紙サイズを検知すると、
+これらのうちいずれか（ただし\texttt{a0}, \texttt{b0}, \texttt{c0}を
+除く）の用紙サイズを検知すると、
 出力サイズが次の規則で自動的に決定されます\footnote{なお、
-C系列とletter, legal, executiveについては日本での慣習が不明の
+C系列と\texttt{letter}, \texttt{legal}, \texttt{executive}については
+日本での慣習が不明の
 ため、現時点ではA系列のサイズで出力することにしています。}。
 \begin{itemize}
 \item 用紙サイズがA系列のとき：
         出力サイズは一回り大きなB系列
-\item 用紙サイズがB, C系列またはletter, legal, executiveのとき：
+\item 用紙サイズがB, C系列または
+      \texttt{letter}, \texttt{legal}, \texttt{executive}のとき：
         出力サイズは一回り大きなA系列
 \end{itemize}
 この場合、パッケージを読みこんだだけでトンボが付きます。
@@ -143,13 +166,16 @@ C系列とletter, legal, executiveについては日本での慣習が不明の
   \end{document}
 \end{verbatim}
 とすると、出力サイズは（自動決定のb4は無視されて）a3に変わります。
-指定可能なサイズは、定義済みの用紙サイズと同じものです。
-すなわち、A系列(a0--a10)、B系列(b0--b10), C系列(c0--c10)と
-a4var, b5var, letter, legal, executiveです。
+指定可能なサイズは、定義済みの用紙サイズと同じものです。すなわち、
+A系列(\texttt{a0}--\texttt{a10})、
+B系列(\texttt{b0}--\texttt{b10})、
+C系列(\texttt{c0}--\texttt{c10})と
+\texttt{a4var}, \texttt{b5var},
+\texttt{letter}, \texttt{legal}, \texttt{executive}です。
 なお、ここでも用紙サイズが横長の場合は自動的に出力も横長になり、
 縦長の場合は自動的に縦長になります。
 
-オプションの書式は、トンボ形式とサイズをハイフン(-)で結びます。
+オプションは\jMeta{トンボ形式}\texttt{-}\jMeta{出力サイズ}の書式で与えます。
 トンボ形式は、p\LaTeX の標準クラスと同じで
 \verb+tombow+, \verb+tombo+, \verb+mentuke+のいずれかを選びます
 （\verb+tombow+はジョブ情報を表示し、\verb+tombo+は表示しません。

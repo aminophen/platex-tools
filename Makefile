@@ -6,7 +6,7 @@ all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 	pxatbegshi.pdf pxftnright.pdf \
 	pxeverysel.pdf pxeveryshi.pdf \
 	bounddvi.pdf bounddvi-en.pdf \
-	pxgentombow.pdf
+	gentombow.pdf pxgentombow.pdf
 
 .SUFFIXES: .tex .dvi .pdf
 .tex.dvi:
@@ -15,6 +15,15 @@ all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 	rm *.aux *.log
 .dvi.pdf:
 	dvipdfmx $(FONTMAP) $<
+
+bounddvi-en.dvi: bounddvi-en.tex
+	latex $<
+	latex $<
+	rm *.aux *.log
+gentombow.pdf: gentombow.tex
+	pdflatex $<
+	pdflatex $<
+	rm *.aux *.log
 
 .PHONY: install clean
 install:
