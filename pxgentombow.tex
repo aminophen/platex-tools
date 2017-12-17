@@ -221,11 +221,21 @@ C系列(\texttt{c0}--\texttt{c10})と
 \end{verbatim}
 と書くようにしてください。
 
+同様に、ZR氏による\textsf{BXjscls}のクラスを使用していて、10pt以外の
+サイズオプションを指定する場合は
+\begin{itemize}
+\item クラスオプションに「\verb+\mag+を使わないオプション」
+      （\verb+nomag+または\verb+nomag*+）を追加する。
+\end{itemize}
+という対処が必要です（\textsf{BXjscls}クラスでは「トンボオプション」が
+機能しないダミーになっていることに注意）。
+
 \section*{レイアウト設定の注意}
 
 余白などのレイアウト設定でありがちですが、
-\verb+\hoffset+や\verb+\voffset+の値が$0$以外になっている場合、
-\textsf{pxgentombow}パッケージはエラーを出します。
+\verb+\hoffset+や\verb+\voffset+の値を$0$以外に設定するのは
+避けてください。このような設定は\textsf{pxgentombow}パッケージの
+トンボ出力機能と衝突するため、正しい出力が得られません。
 レイアウト設定のために変更すべきなのはこれらの寸法ではなく、
 \verb+\oddsidemargin+や\verb+\topmargin+であることがほとんどです。
 したがって、それらを適切な値に設定するか、レイアウトの設定すべてを
@@ -313,6 +323,7 @@ $30\,\mathrm{mm}$にしたいとき\footnote{ここでは「本文の領域以�
   \item 2017/05/06 v0.6 \textsf{jsclasses}との共存時のチェック強化、
                         Lua\TeX-jaでの動作確認
   \item 2017/07/23 v0.7 ドキュメント更新、CTANリリース版
+  \item 2017/12/17 v0.9 \textsf{gentombow}パッケージの新設、CTANリリース版
 \end{itemize}
 
 \end{document}

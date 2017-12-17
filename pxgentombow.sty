@@ -8,7 +8,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/11/22 v0.8 Generate crop mark 'tombow']
+    [2017/12/17 v0.9 Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% error status (shared with gentombow.sty)
@@ -36,11 +36,23 @@
 \@tempcnta\hour \multiply\@tempcnta 60\relax
 \minute\time \advance\minute-\@tempcnta
 
+\ifnum\mag=\@m\else
+  % if BXjscls is detected and \mag != 1000,
+  % the layout will be definitely broken
+  \ifx\bxjs@param@mag\@undefined\else
+    \PackageError{\pxgtmb@pkgname}{%
+      It seems you are using Japanese `BXjscls'\MessageBreak
+      (bxjsarticle, bxjsbook, bxjsreport, etc.) or\MessageBreak
+      some derived class. Try adding `nomag' or\MessageBreak
+      `nomag*' to the class option list}\@ehc
+  \fi
+\fi
+
 %% this package will use tombo feature in pLaTeX kernel
 %  if tombow-related option is not included in class option list,
 %  show info and enable it now
 \iftombow\else
-  % if jsclasses is detected, it's too late
+  % if jsclasses is detected and \mag != 1000, it's too late
   % -- When a size option other than `10pt' is specified,
   %    jsclasses uses \mag and calculates \oddsidemargin and \topmargin
   %    differently, depending on tombow status.
@@ -54,6 +66,7 @@
       derived class. Please add `tombow' or `tombo'\MessageBreak
       to the class option list}\@ehc
   \fi \fi
+  % BXjscls is already checked above, no check here
   \PackageInfo\pxgtmb@pkgname{tombow feature enabled by \pxgtmb@pkgname}
 \fi
 \tombowtrue %\tombowdatetrue %% enabled by tombowdate option

@@ -190,14 +190,20 @@ class option. For example,
   \usepackage{gentombow}
 \end{verbatim}
 will not work as expected (\textsf{gentombow} throws an error
-for safety). Instead,
-\begin{verbatim}
-  \documentclass[a4paper,14pt,tombow]{bxjsarticle}
-  \usepackage{gentombow}
-\end{verbatim}
+for safety).
 
 \section*{Note about Layout Settings}
 
-[to be written]
+You should not change \verb+\hoffset+ or \verb+\voffset+ to non-zero
+value, for the purpose of layout settings. Such settings will
+conflict with the feature of \textsf{gentombow} package.
+To set page layout correctly, you should adjust \verb+\oddsidemargin+
+or \verb+\topmargin+, or leave it to \textsf{geometry} package.
+
+\section*{Change History}
+
+\begin{itemize}
+  \item 2017/12/17 v0.9 First CTAN release
+\end{itemize}
 
 \end{document}
