@@ -45,6 +45,14 @@ and some additional packages are included.
     Can be used on pLaTeX/upLaTeX.
     The essential part of this package was proposed by
     Hironori Kitagawa in 2017.
+- pxgentombow.sty:
+    Generate crop mark (called 'tombow' in Japanese) for
+    practical use in self-publishing.
+    This package requires 'tombow' feature provided by
+    pLaTeX/upLaTeX or LuaTeX-ja.
+- gentombow.sty:
+    Counterpart of pxgentombow.sty for pdfLaTeX/XeLaTeX
+    and so on, which do not provide 'tombow' feature.
 - bounddvi.sty:
     Set papersize special to DVI file.
     Can be used on LaTeX/pLaTeX/upLaTeX
@@ -53,10 +61,6 @@ and some additional packages are included.
     Koichi INOUE in 2004
     (https://www.ma.ns.tcu.ac.jp/Pages/TeX/bounddvi.sty.html),
     and incorporated into this bundle by his courtesy.
-- pxgentombow.sty:
-    Generate crop mark (called 'tombow' in Japanese) for
-    practical use in self-publishing.
-    Can be used on pLaTeX/upLaTeX and LuaTeX-ja.
 
 ## Character encoding
 
