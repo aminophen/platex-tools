@@ -8,7 +8,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/12/20 v0.9a Generate crop mark 'tombow']
+    [2017/12/20 v0.9b Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% error status (shared with gentombow.sty)
@@ -84,6 +84,12 @@
 %% prepare flag
 \newif\ifpxgtmb@switch    \pxgtmb@switchfalse
 \newif\ifpxgtmb@landscape \pxgtmb@landscapefalse
+
+%% passed from class options
+%% should be declared first inside this package (least priority)
+\DeclareOption{tombow}{\tombowdatetrue}
+\DeclareOption{tombo}{\tombowdatefalse}
+\DeclareOption{mentuke}{\tombowdatefalse \setlength{\@tombowwidth}{\z@}}
 
 %% package options part 1
 \DeclareOption{tombowdate}{\tombowdatetrue}
