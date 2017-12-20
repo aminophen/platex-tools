@@ -8,7 +8,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/12/17 v0.9 Generate crop mark 'tombow']
+    [2017/12/20 v0.9a Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% error status (shared with gentombow.sty)
@@ -282,5 +282,25 @@
 \voffset .5\stockheight
 \advance\voffset -.5\paperheight
 \advance\voffset-1truein\relax
+
+%% patch internal for pdfpages to work with tombow
+%% (tested on pdfpages 2017/10/31 v0.5l)
+\def\pxgtmb@patch@pdfpages{%
+  \RequirePackage{etoolbox}
+  \patchcmd{\AM@output}{%
+    \setlength{\@tempdima}{\AM@xmargin}%
+    \edef\AM@xmargin{\the\@tempdima}%
+    \setlength{\@tempdima}{\AM@ymargin}%
+    \edef\AM@ymargin{\the\@tempdima}%
+  }{%
+    \setlength{\@tempdima}{\AM@xmargin\iftombow+1in\fi}%
+    \edef\AM@xmargin{\the\@tempdima}%
+    \setlength{\@tempdima}{\AM@ymargin\iftombow-1in\fi}%
+    \edef\AM@ymargin{\the\@tempdima}%
+  }
+  {\PackageInfo{\pxgtmb@pkgname}{Patch for pdfpages applied}}
+  {\PackageWarningNoLine{\pxgtmb@pkgname}{Patch for pdfpages failed}}%
+  }
+\AtBeginDocument{\@ifpackageloaded{pdfpages}{\pxgtmb@patch@pdfpages}{}}
 
 \endinput
