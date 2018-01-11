@@ -8,7 +8,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2017/12/20 v0.9b Generate crop mark 'tombow']
+    [2018/01/11 v0.9c Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% error status (shared with gentombow.sty)
@@ -69,7 +69,7 @@
   % BXjscls is already checked above, no check here
   \PackageInfo\pxgtmb@pkgname{tombow feature enabled by \pxgtmb@pkgname}
 \fi
-\tombowtrue %\tombowdatetrue %% enabled by tombowdate option
+\tombowtrue %\tombowdatetrue %% enabled by tombowinfo option
 \setlength{\@tombowwidth}{.1\p@}%
 
 %% import from jsclasses
@@ -92,8 +92,18 @@
 \DeclareOption{mentuke}{\tombowdatefalse \setlength{\@tombowwidth}{\z@}}
 
 %% package options part 1
-\DeclareOption{tombowdate}{\tombowdatetrue}
-\DeclareOption{notombowdate}{\tombowdatefalse}
+\DeclareOption{tombowinfo}{\tombowdatetrue}
+\DeclareOption{notombowinfo}{\tombowdatefalse}
+\DeclareOption{tombowdate}{% obsolete since v0.9c (2018/01/11)
+  \PackageWarning{\pxgtmb@pkgname}{%
+    Option `tombowdate' is renamed;\MessageBreak
+    use `tombowinfo' instead}%
+  \tombowdatetrue}
+\DeclareOption{notombowdate}{% obsolete since v0.9c (2018/01/11)
+  \PackageWarning{\pxgtmb@pkgname}{%
+    Option `notombowdate' is renamed;\MessageBreak
+    use `notombowinfo' instead}%
+  \tombowdatefalse}
 
 %% register a list of candidate papersize
 %  * \pxgtmb@addpapersize[<tombowname>]{<papername>}{<shorter edge>}{<longer edge>}
@@ -229,7 +239,7 @@
 \pxgtmb@addpapersize[a4]{executive}{7.25in}{10.5in}
 
 %% default options
-\ExecuteOptions{tombowdate}% package defaults to tombowdatetrue
+\ExecuteOptions{tombowinfo}% package defaults to tombowdatetrue
 \ProcessOptions
 
 %% display search result
@@ -278,7 +288,7 @@
     Is this really what you want?}
 \fi
 
-%% make tombow box according to (no)tombowdate & \@tombowwidth status
+%% make tombow box according to tombowdate & \@tombowwidth status
 \maketombowbox
 
 %% shift amount
@@ -288,6 +298,15 @@
 \voffset .5\stockheight
 \advance\voffset -.5\paperheight
 \advance\voffset-1truein\relax
+
+%% user interface
+\newcommand{\settombowinfo}[1]{%
+  \iftombowdate\else
+    \PackageWarning{\pxgtmb@pkgname}{%
+      Package option `tombowinfo' is not effective.\MessageBreak
+      The info may be discarded}%
+  \fi
+  \@bannertoken{#1}\maketombowbox}
 
 %% patch internal for pdfpages to work with tombow
 %% (tested on pdfpages 2017/10/31 v0.5l)
