@@ -69,7 +69,7 @@
   % BXjscls is already checked above, no check here
   \PackageInfo\pxgtmb@pkgname{tombow feature enabled by \pxgtmb@pkgname}
 \fi
-\tombowtrue %\tombowdatetrue %% enabled by tombowinfo option
+\tombowtrue %\tombowdatetrue %% enabled by tombowbanner option
 \setlength{\@tombowwidth}{.1\p@}%
 
 %% import from jsclasses
@@ -92,17 +92,17 @@
 \DeclareOption{mentuke}{\tombowdatefalse \setlength{\@tombowwidth}{\z@}}
 
 %% package options part 1
-\DeclareOption{tombowinfo}{\tombowdatetrue}
-\DeclareOption{notombowinfo}{\tombowdatefalse}
+\DeclareOption{tombowbanner}{\tombowdatetrue}
+\DeclareOption{notombowbanner}{\tombowdatefalse}
 \DeclareOption{tombowdate}{% obsolete since v0.9c (2018/01/11)
   \PackageWarning{\pxgtmb@pkgname}{%
     Option `tombowdate' is renamed;\MessageBreak
-    use `tombowinfo' instead}%
+    use `tombowbanner' instead}%
   \tombowdatetrue}
 \DeclareOption{notombowdate}{% obsolete since v0.9c (2018/01/11)
   \PackageWarning{\pxgtmb@pkgname}{%
     Option `notombowdate' is renamed;\MessageBreak
-    use `notombowinfo' instead}%
+    use `notombowbanner' instead}%
   \tombowdatefalse}
 
 %% register a list of candidate papersize
@@ -239,7 +239,7 @@
 \pxgtmb@addpapersize[a4]{executive}{7.25in}{10.5in}
 
 %% default options
-\ExecuteOptions{tombowinfo}% package defaults to tombowdatetrue
+\ExecuteOptions{tombowbanner}% package defaults to tombowdatetrue
 \ProcessOptions
 
 %% display search result
@@ -300,11 +300,11 @@
 \advance\voffset-1truein\relax
 
 %% user interface
-\newcommand{\settombowinfo}[1]{%
+\newcommand{\settombowbanner}[1]{%
   \iftombowdate\else
     \PackageWarning{\pxgtmb@pkgname}{%
-      Package option `tombowinfo' is not effective.\MessageBreak
-      The info may be discarded}%
+      Package option `tombowbanner' is not effective.\MessageBreak
+      The banner may be discarded}%
   \fi
   \@bannertoken{#1}\maketombowbox}
 
