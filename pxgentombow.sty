@@ -307,6 +307,8 @@
       The banner may be discarded}%
   \fi
   \@bannertoken{#1}\maketombowbox}
+\newcommand{\settombowwidth}[1]{%
+  \setlength{\@tombowwidth}{#1}\maketombowbox}
 
 %% patch internal for pdfpages to work with tombow
 %% (tested on pdfpages 2017/10/31 v0.5l)
