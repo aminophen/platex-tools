@@ -8,7 +8,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxgentombow}
-    [2018/01/11 v0.9c Generate crop mark 'tombow']
+    [2018/01/12 v0.9d Generate crop mark 'tombow']
 \def\pxgtmb@pkgname{pxgentombow}
 
 %% error status (shared with gentombow.sty)
@@ -307,6 +307,8 @@
       The banner may be discarded}%
   \fi
   \@bannertoken{#1}\maketombowbox}
+\newcommand{\settombowbannerfont}[1]{%
+  \font\@bannerfont=#1\relax \maketombowbox}
 \newcommand{\settombowwidth}[1]{%
   \setlength{\@tombowwidth}{#1}\maketombowbox}
 
