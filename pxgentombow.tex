@@ -29,6 +29,9 @@
   \parindent1zw\noindent\kern-\leftskip\hbox to\leftskip{\dbend\hss}%
   \everypar{\everypar{}}\ignorespaces
 }{\par\addvspace\medskipamount}
+%%% logo
+\def\pTeX{p\kern-.15em\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
 %%% misc
 \newcommand{\Meta}[1]{$\langle$\mbox{}\textit{#1}\mbox{}$\rangle$}
 \newcommand{\jMeta}[1]{$\langle$\mbox{}\textsf{#1}\mbox{}$\rangle$}
@@ -95,7 +98,12 @@ Lua\TeX-jaのみで動作します。その他（pdf\LaTeX など）で使いた
   https://github.com/aminophen/platex-tools
 \end{verbatim}
 
-\section*{用紙サイズの自動検知による出力サイズ決定}
+\section{簡単な使用法}
+
+はじめに、パッケージをオプション指定なしに使用する場合の機能を
+説明します。
+
+\subsection{用紙サイズの自動検知による出力サイズ決定}
 
 パッケージにはあらかじめA系列(\texttt{a0}--\texttt{a10})、
 B系列(\texttt{b0}--\texttt{b10})、C系列(\texttt{c0}--\texttt{c10})と
@@ -146,7 +154,7 @@ C系列と\texttt{letter}, \texttt{legal}, \texttt{executive}については
   \hline
 \end{longtable}
 
-\section*{用紙サイズの自動検知に失敗した場合の出力サイズ決定}
+\subsection*{参考：用紙サイズの自動検知に失敗した場合の出力サイズ決定}
 
 仮に用紙サイズが定義済みのいずれとも異なる場合は、デフォルトでは
 用紙の天地左右に1インチずつのノビを付けたサイズで出力します。
@@ -154,7 +162,22 @@ C系列と\texttt{letter}, \texttt{legal}, \texttt{executive}については
 出力サイズは幅$100\,\mathrm{mm}+2\,\mathrm{in}$、
 高さ$200\,\mathrm{mm}+2\,\mathrm{in}$になります。
 
-\section*{オプションによる出力サイズの明示指定}
+\subsection{トンボへのバナーの出力}
+
+デフォルトでは\makeatletter\texttt{\the\@bannertoken}\makeatother
+のような形式で、トンボにジョブ情報（処理ファイル名と日付）を示すバナーが
+出力されます。これは、\pLaTeX 向けの日本語クラスファイルの多くで
+利用可能な\verb+tombow+オプションと同様です。
+ただし、クラスオプションに\verb+tombo+（ジョブ情報を出力しない）または
+\verb+mentuke+（トンボの線を表示しない）が指定されている場合は、
+この設定が引き継がれます。
+
+\section{パッケージオプション}
+
+パッケージオプションによって、出力サイズやバナーのジョブ情報の有無を
+指定する方法を説明します。
+
+\subsection{出力サイズの明示指定}
 
 自動決定されるサイズと異なるサイズに出力したい場合、
 パッケージオプションで明示的に指定することができます。たとえば
@@ -181,21 +204,60 @@ C系列(\texttt{c0}--\texttt{c10})と
 （\verb+tombow+はジョブ情報を表示し、\verb+tombo+は表示しません。
 また、\verb+mentuke+はトンボの線を表示しません）。
 
-\section*{トンボに表示するジョブ情報の有無}
+\subsection{トンボに表示するジョブ情報の有無}
 
-用紙サイズの自動検知によって出力サイズが決まる場合、デフォルトでは
-\makeatletter\texttt{\the\@bannertoken}\makeatother
-のようにトンボにジョブ情報が出力されます。これを無効化するには
+用紙サイズを明示的に指定する場合は、前節のようにトンボ形式と出力サイズを
+同時にオプションで与えることができます。
+逆に出力サイズを自動決定に任せつつ、ジョブ情報の有無だけを指定したい
+場合は、トンボへのバナー出力を抑制する\verb+notombowbanner+オプションを
+使用してください。
+
+\section{詳細なカスタマイズ}
+
+\textsf{pxgentombow}パッケージは、トンボの見た目やバナーの内容を
+カスタマイズする機能も提供します。
+
+\subsection{トンボに表示するバナーの内容}
+
+\verb+\settombowbanner+命令を用います。例えば\epTeX の
+\verb+\pdfcreationdate+プリミティブを使って
 \begin{verbatim}
   \documentclass[a4j]{jarticle}
-  \usepackage[notombowdate]{pxgentombow}
+  \usepackage{pxgentombow}
+  \settombowbanner{\jobname\space (\pdfcreationdate)}
   \begin{document}
   …本文…
   \end{document}
 \end{verbatim}
-とします。
+とすると、バナーの表示内容は
+{\settombowbanner{\jobname\space (\pdfcreationdate)}%
+ \makeatletter\texttt{\the\@bannertoken}\makeatother}になります。
+命令の引数には任意のトークン列を与えることができます。
 
-\section*{\textsf{jsclasses}で使用する場合の注意}
+\subsection{バナーの文字のフォント}
+
+\verb+\settombowbannerfont+命令を用います。例えば
+\begin{verbatim}
+  \settombowbannerfont{cmss10 at 9pt}
+\end{verbatim}
+のような指定が可能です。内部的には\verb+\font+プリミティブを利用しており、
+使用している\TeX エンジンがサポートする任意のフォントを指定可能です
+\footnote{Lua\TeX やXe\TeX （\textsf{gentombow}パッケージの場合）では、
+OpenTypeフォントを直接利用することもできます。}。
+
+\subsection{トンボの線の太さ}
+
+デフォルトではトンボの線の太さは0.1~ptですが、
+\verb+\settombowwidth{1pt}+とすると1~ptになります。
+命令の引数には任意の寸法を与えることができますが、
+実用上は数pt以内が良いでしょう。
+
+\section{その他の注意点}
+
+特定のクラスファイルやパッケージと一緒に使用する場合、
+いくつかの注意点があります。
+
+\subsection{\textsf{jsclasses}で使用する場合の注意}
 
 奥村晴彦氏による\textsf{jsclasses}のクラス（2016年以降は日本語\TeX 開発
 コミュニティが管理）を使用していて、10pt以外のサイズオプションを
@@ -230,7 +292,7 @@ C系列(\texttt{c0}--\texttt{c10})と
 という対処が必要です（\textsf{BXjscls}クラスでは「トンボオプション」が
 機能しないダミーになっていることに注意）。
 
-\section*{レイアウト設定の注意}
+\subsection{レイアウト設定の注意}
 
 余白などのレイアウト設定でありがちですが、
 \verb+\hoffset+や\verb+\voffset+の値を$0$以外に設定するのは
@@ -295,7 +357,7 @@ $30\,\mathrm{mm}$にしたいとき\footnote{ここでは「本文の領域以�
 \begin{itemize}
 \item 現状では、用紙の横長・縦長がそのまま出力に反映されるので、
   これを逆転させるオプションの実装。また、任意の出力サイズを
-  指定できるインタインタフェースの実現。
+  指定できるインタフェースの実現。
 \item 自動で決定できる出力サイズの拡張。現状では用紙サイズが
   定義値に完全一致する場合のみ自動決定されるが、中間のサイズでも
   その一回り大きなサイズに出力することは可能と思われる。
@@ -310,7 +372,6 @@ $30\,\mathrm{mm}$にしたいとき\footnote{ここでは「本文の領域以�
   \verb+\paperwidth+/\verb+\paperheight+より小さい場合の動作。
   現在は警告を出すだけとしているが、さらに天地左右1inに
   フォールバックしたほうが無難だろうか。
-\item p\LaTeX/up\LaTeX/Lua\TeX-ja以外のサポート。
 \end{itemize}
 
 \section*{変更履歴}

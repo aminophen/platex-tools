@@ -78,7 +78,11 @@ This package is part of \textsf{platex-tools} bundle:
   https://github.com/aminophen/platex-tools
 \end{verbatim}
 
-\section*{Automatic Determination of Output Size}
+\section{Basic Functions}
+
+First, I introduce some basic functions of \textsf{gentombow} package.
+
+\subsection{Automatic Determination of Output Size}
 
 In this package,
 the following printer's standard physical paper sizes are predefined;
@@ -129,7 +133,7 @@ The following list shows common examples:
   \hline
 \end{longtable}
 
-\section*{When Automatic Determination Failed}
+\subsection*{When Automatic Determination Failed}
 
 When the page size is different from any of the predefined sizes,
 the page is placed with the surrounding 1~inch margins.
@@ -138,7 +142,21 @@ $200\,\mathrm{mm}$ height, the output size is going to be
 $100\,\mathrm{mm}+2\,\mathrm{in}$ width and
 $200\,\mathrm{mm}+2\,\mathrm{in}$ height.
 
-\section*{Explicit Specification of Output Size}
+\subsection{Job Info Printing}
+
+By default, the crop marks are printed with a banner, which shows
+a job info like \makeatletter\texttt{\the\@bannertoken}\makeatother.
+The format is similar to \verb+tombow+ option, which is
+available in most of the common Japanese classes.
+The default also reacts to \verb+tombo+ (without a job info) or
+\verb+mentuke+ (do not print actual crop marks) class options.
+
+\section{Package Options}
+
+You can specify output size and/or disable job info printing
+using package options.
+
+\subsection{Explicit Specification of Output Size}
 
 You can also force the output size using package option.
 For example,
@@ -166,21 +184,57 @@ The crop mark format is one of the following:
 \verb+tombow+ (default), \verb+tombo+ (without a job info),
 \verb+mentuke+ (do not print actual crop marks).
 
-\section*{Disabling Job Info Printing}
+\subsection{Disabling Job Info Printing}
 
-When the output size is automatically determined,
-the crop marks are printed with a job info like
-\makeatletter\texttt{\the\@bannertoken}\makeatother.
-To disable it, use \texttt{notombowdate} option:
+When you specify the output size explicitly, the crop mark format
+can be given at the same time, as described previously.
+When the output size is automatically determined, you can disable
+job info printing by \verb+notombowbanner+ option.
+
+\section{Customization of Crop Mark}
+
+The \textsf{pxgentombow} package provides some commands to
+customize crop mark format.
+
+\subsection{Banner content}
+
+Using \verb+\settombowbanner+, you can set the banner content.
+An example using \verb+\pdfcreationdate+ (pdf\TeX\ primitive)
 \begin{verbatim}
-  \documentclass[a4j]{jarticle}
-  \usepackage[notombowdate]{gentombow}
+  \documentclass[a4paper]{article}
+  \usepackage{gentombow}
+  \settombowbanner{\jobname\space (\pdfcreationdate)}
   \begin{document}
   The content
   \end{document}
 \end{verbatim}
+will result in
+{\settombowbanner{\jobname\space (\pdfcreationdate)}%
+ \makeatletter\texttt{\the\@bannertoken}\makeatother}.
+The argument is an arbitrary token list.
 
-\section*{Note for \textsf{BXjscls} users}
+\subsection{Banner font}
+
+Using \verb+\settombowbannerfont+, you can change the font
+with which the banner is printed.
+\begin{verbatim}
+  \settombowbannerfont{cmss10 at 9pt}
+\end{verbatim}
+This feature internally calls the \TeX\ primitive \verb+\font+,
+and accepts all fonts supported by the engine. When Lua\TeX\ or
+Xe\TeX\ is used, a native OpenType font can also be given.
+
+\subsection{Crop mark line width}
+
+By default, the line width of crop marks is 0.1~pt.
+This can be change to 1~pt by \verb+\settombowwidth{1pt}+.
+The argument is an arbitrary dimension.
+
+\section{Additional Notes}
+
+Here is some additional notes for use with several classes/packages.
+
+\subsection{Note for \textsf{BXjscls} users}
 
 When using \textsf{BXjscls} (by Takayuki YATO) with size option
 other than 10pt, please add \verb+nomag+ or \verb+nomag*+ to the
@@ -192,7 +246,7 @@ class option. For example,
 will not work as expected (\textsf{gentombow} throws an error
 for safety).
 
-\section*{Note about Layout Settings}
+\subsection{Note about Layout Settings}
 
 You should not change \verb+\hoffset+ or \verb+\voffset+ to non-zero
 value, for the purpose of layout settings. Such settings will
