@@ -210,10 +210,24 @@ R& &R\\
 R&R&
 \end{tabular}
 
+% texjporg/platex#63, aminophen/platex-tools#9
+\begin{tabular}{p{5cm}}
+A\\
+\relax\par
+A
+\end{tabular}
+
 % array パッケージを壊さないことの確認
 \begin{tabular}{|>{$}c<{$}|c|}\hline
   \exp(x) & 指数関数 \\ \hline
   \log(x) & 対数関数 \\ \hline
+\end{tabular}
+
+% 既知の非互換（サポート外）
+% pLaTeX + plarray と LaTeX + array で結果が異なる
+% aminophen/platex-tools#7
+\begin{tabular}{|c|}
+\hspace{5cm}
 \end{tabular}
 
 \end{document}

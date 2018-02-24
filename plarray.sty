@@ -27,10 +27,18 @@
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
 %% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/29)
+\ifx\pltx@next@inhibitglue\@undefined
 \def\insert@column{%
    \the@toks \the \@tempcnta
    \mbox{}\inhibitglue \ignorespaces \@sharp \unskip \unskip
    \the@toks \the \count@ \relax}
+\else
+\def\insert@column{%
+   \the@toks \the \@tempcnta
+   \relax \pltx@next@inhibitglue % !!!
+   \ignorespaces \@sharp \unskip \unskip
+   \the@toks \the \count@ \relax}
+\fi
 %
 %% done
 
