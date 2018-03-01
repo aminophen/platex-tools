@@ -7,12 +7,12 @@
 %
 % This package `plarray.sty' is based on:
 %   * array.sty in latex-tools (2016/10/06 v2.4d)
-%   * plcore.ltx in platex (2017/07/21 v1.2p)
+%   * plcore.ltx in platex (2018/03/01 v1.2x)
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plarray}
-  [2017/07/29 v0.1c Tabular extension package for pLaTeX/upLaTeX]
+  [2018/03/01 v0.1d Tabular extension package for pLaTeX/upLaTeX]
 \RequirePackage{array}
 
 %% patching internal code for array.sty
@@ -26,18 +26,23 @@
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
-%% inhibit JFM glue around tabular cell components (pLaTeX2e 2017/07/29)
-\ifx\pltx@next@inhibitglue\@undefined
+%% inhibit JFM glue around tabular cell components (pLaTeX2e 2018/03/18)
+% first, provide old definition; there are some known incompatibility
+% compared to LaTeX, pLaTeX or array
 \def\insert@column{%
    \the@toks \the \@tempcnta
    \mbox{}\inhibitglue \ignorespaces \@sharp \unskip \unskip
    \the@toks \the \count@ \relax}
-\else
-\def\insert@column{%
-   \the@toks \the \@tempcnta
-   \relax \pltx@next@inhibitglue % !!!
-   \ignorespaces \@sharp \unskip \unskip
-   \the@toks \the \count@ \relax}
+\ifx\pltx@next@inhibitglue\@undefined\else
+  \ifx\removejfmglue\@undefined\else
+    % both macros are available, override with new definition
+    % (= pLaTeX2e 2018/03/18 or later, built on e-(u)pTeX 180226)
+    \def\insert@column{%
+       \the@toks \the \@tempcnta
+       \relax \pltx@next@inhibitglue
+       \ignorespaces \@sharp \unskip \removejfmglue
+       \the@toks \the \count@ \relax}
+  \fi
 \fi
 %
 %% done
