@@ -7,12 +7,12 @@
 %
 % This package `plarray.sty' is based on:
 %   * array.sty in latex-tools (2016/10/06 v2.4d)
-%   * plcore.ltx in platex (2018/03/01 v1.2x)
+%   * plcore.ltx in platex (2018/03/12 v1.2y)
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plarray}
-  [2018/03/01 v0.1d Tabular extension package for pLaTeX/upLaTeX]
+  [2018/03/12 v0.1e Tabular extension package for pLaTeX/upLaTeX]
 \RequirePackage{array}
 
 %% patching internal code for array.sty
@@ -26,7 +26,7 @@
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %
-%% inhibit JFM glue around tabular cell components (pLaTeX2e 2018/03/18)
+%% inhibit JFM glue around tabular cell components (pLaTeX2e 2018/03/09)
 % first, provide old definition; there are some known incompatibility
 % compared to LaTeX, pLaTeX or array
 \def\insert@column{%
@@ -36,7 +36,7 @@
 \ifx\pltx@next@inhibitglue\@undefined\else
   \ifx\removejfmglue\@undefined\else
     % both macros are available, override with new definition
-    % (= pLaTeX2e 2018/03/18 or later, built on e-(u)pTeX 180226)
+    % (= pLaTeX2e 2018/03/09 or later, built on e-(u)pTeX 180226)
     \def\insert@column{%
        \the@toks \the \@tempcnta
        \relax \pltx@next@inhibitglue
