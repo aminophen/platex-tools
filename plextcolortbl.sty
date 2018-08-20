@@ -1,0 +1,24 @@
+%
+% plextcolortbl.sty
+% written by Hironobu Yamashita (@aminophen)
+%
+% This package is part of the platex-tools bundle.
+% https://github.com/aminophen/platex-tools
+%
+% This package `plextcolortbl.sty' is based on:
+%   * colortbl.sty (2012/06/21 v1.0b)
+%   * plext.sty in platex (2017/07/21 v1.2h)
+%
+
+%% package declaration
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{plextcolortbl}
+  [2018/08/20 v0.1 Merge plext and colortbl]
+
+%% patching internal code for colortbl.sty
+\def\endarray{\crcr \egroup \egroup
+  \@end@alignbox %% added from plext.sty
+  \@arrayright \gdef\@preamble{}\CT@end}%
+%% done
+
+\endinput
