@@ -71,13 +71,13 @@ p\LaTeX の拡張パッケージである\textsf{plext}パッケージと互換�
 \textsf{plext}と\textsf{array}を共存させたいときに、プリアンブルに
 \verb+\usepackage{plextarray}+と書きます。既にいずれかのパッケージが
 読み込まれていても問題ありません。また、\textsf{plextarray}パッケージを
-読み込めば、\textsf{plext}と\textsf{array}も自動的に読み込まれます。
+読み込めば、\textsf{plext}と\textsf{array}\footnote{より正確には、
+\textsf{array}と(u)p\LaTeX の衝突を解消する\textsf{plarray}を読み込む
+ことで、間接的に\textsf{array}も読み込まれます。}も自動的に読み込まれます。
 
 \textsf{dcolumn}や\textsf{tabularx}のような、内部で\textsf{array}を利用
 しているパッケージを\textsf{plext}と共存させたい場合にも、
-\textsf{plextarray}が便利です。こうしたパッケージと\textsf{plextarray}を
-併用する際には、なるべく後から\textsf{plextarray}を読み込むほうがよい
-でしょう（例：\textsf{colortbl}など）。
+\textsf{plextarray}が便利です。
 
 以下に例を示します。横組中で縦組の表を書く例。
 

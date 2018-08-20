@@ -14,6 +14,8 @@
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextcolortbl}
   [2018/08/20 v0.1 Merge plext and colortbl]
+\RequirePackage{plextarray}% colortbl requires array
+\RequirePackageWithOptions{colortbl}
 
 %% patching internal code for colortbl.sty
 \def\endarray{\crcr \egroup \egroup
