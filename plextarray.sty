@@ -7,13 +7,13 @@
 %
 % This package `plextarray.sty' is based on:
 %   * array.sty in latex-tools (2016/10/06 v2.4d)
-%   * plext.sty in platex (2017/07/21 v1.2h)
+%   * plext.sty in platex (2018/09/09 v1.2i)
 % and lltjext.sty from LuaTeX-ja project.
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2018/08/20 v1.1 Tabular extension package for plext and array]
+  [2018/09/10 v1.1a Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{plarray}
 
@@ -65,8 +65,8 @@
   \fi
   %%%%% new code end
   \setbox \@arstrutbox \hbox{\box@dir %% add \box@dir
-      % the behavior of \strutbox may be changed
-      % (box resister -> conditional macro) in the future;
+      % the behavior of \strutbox has been changed
+      % (box resister -> conditional macro) in pLaTeX2e 2017/04/08;
       % so, \strutbox should appear after \box@dir is applied.
       \@tempcntb=\ifcase\@tempcnta\strutbox
                  \or\tstrutbox\or\zstrutbox\or\@ctrerr\fi
