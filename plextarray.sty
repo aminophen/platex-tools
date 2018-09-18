@@ -5,15 +5,17 @@
 % This package is part of the platex-tools bundle.
 % https://github.com/aminophen/platex-tools
 %
-% This package `plextarray.sty' is based on:
-%   * array.sty in latex-tools (2016/10/06 v2.4d)
-%   * plext.sty in platex (2018/09/09 v1.2i)
-% and lltjext.sty from LuaTeX-ja project.
+% This package `plextarray.sty' is expected to be compatible with
+%   * array.sty in latex-tools
+%     (2016/10/06 v2.4d -- 2018/09/13 v2.4i)
+%   * plext.sty in platex
+%     (2001/09/26 v1.2  -- 2018/09/09 v1.2i)
+% Largely based on lltjext.sty from LuaTeX-ja project.
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2018/09/10 v1.1a Tabular extension package for plext and array]
+  [2018/09/18 v1.1b Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{plarray}
 
@@ -28,13 +30,28 @@
 
 %% patching internal code for array.sty and plext.sty
 %
+\@ifpackagelater{array}{2018/09/13}
+  {\expandafter\@firstoftwo}
+  {\expandafter\@secondoftwo}
+{% = for 2018/09/13 v2.4i or newer
+\def\@startpbox#1{\bgroup
+  \color@begingroup
+  \box@dir\adjustbaseline %% added
+  \setlength\hsize{#1}\@arrayparboxrestore
+   \everypar{%
+      \vrule \@height \ht\@arstrutbox \@width \z@
+      \everypar{}}%
+   }%
+}% =
+{% = for 2018/04/30 v2.4h or older
 \def\@startpbox#1{\bgroup
   \box@dir\adjustbaseline %% added
   \setlength\hsize{#1}\@arrayparboxrestore
    \everypar{%
       \vrule \@height \ht\@arstrutbox \@width \z@
       \everypar{}}%
-   }
+   }%
+}% =
 %
 \def\@tabarray{\@ifnextchar<\p@tabarray{\p@tabarray<Z>}}
 %
