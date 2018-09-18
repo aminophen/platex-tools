@@ -5,19 +5,25 @@
 % This package is part of the platex-tools bundle.
 % https://github.com/aminophen/platex-tools
 %
-% This package `plarray.sty' is based on:
-%   * array.sty in latex-tools (2016/10/06 v2.4d)
-%   * plcore.ltx in platex (2018/03/12 v1.2y)
+% This package `plextarray.sty' is expected to be compatible with
+%   * array.sty in latex-tools
+%     (2016/10/06 v2.4d -- 2018/09/13 v2.4i)
+%   * plcore.ltx in platex
+%     (2001/09/26 v1.2a -- 2018/09/02 v1.3)
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plarray}
-  [2018/03/12 v0.1e Tabular extension package for pLaTeX/upLaTeX]
+  [2018/09/18 v0.1f Tabular extension package for pLaTeX/upLaTeX]
 \RequirePackage{array}
 
 %% patching internal code for array.sty
 %
 %% remove extra \xkanjiskip (pLaTeX2e 2016/04/17)
+\@ifl@t@r{\pfmtversion}{2016/04/17}
+  {\expandafter\@firstoftwo}
+  {\expandafter\@secondoftwo}
+{% = for pLaTeX2e 2016/04/17 or newer
 \def\@tabular{%
   \leavevmode \null
   \hbox \bgroup $\col@sep\tabcolsep \let\d@llarbegin\begingroup
@@ -25,18 +31,26 @@
   \@tabarray}
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
+}% =
+{% = for pLaTeX2e 2006/11/10 or older
+% nothing to be done
+}% =
 %
 %% inhibit JFM glue around tabular cell components (pLaTeX2e 2018/03/09)
+\@ifl@t@r{\pfmtversion}{2017/07/29}
+  {\expandafter\@firstoftwo}
+  {\expandafter\@secondoftwo}
+{% = for pLaTeX2e 2017/07/29 or newer
 % first, provide old definition; there are some known incompatibility
 % compared to LaTeX, pLaTeX or array
 \def\insert@column{%
    \the@toks \the \@tempcnta
    \mbox{}\inhibitglue \ignorespaces \@sharp \unskip \unskip
    \the@toks \the \count@ \relax}
+% if both macros are available, override with new definition
+% (= pLaTeX2e 2018/03/09 or later, built on e-(u)pTeX 180226)
 \ifx\pltx@next@inhibitglue\@undefined\else
   \ifx\removejfmglue\@undefined\else
-    % both macros are available, override with new definition
-    % (= pLaTeX2e 2018/03/09 or later, built on e-(u)pTeX 180226)
     \def\insert@column{%
        \the@toks \the \@tempcnta
        \relax \pltx@next@inhibitglue
@@ -44,6 +58,10 @@
        \the@toks \the \count@ \relax}
   \fi
 \fi
+}% =
+{% = for pLaTeX2e 2017/05/05 or older
+% nothing to be done
+}% =
 %
 %% done
 
