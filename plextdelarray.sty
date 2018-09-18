@@ -5,14 +5,16 @@
 % This package is part of the platex-tools bundle.
 % https://github.com/aminophen/platex-tools
 %
-% This package `plextdelarray.sty' is based on:
-%   * delarray.sty in latex-tools (2014/10/28 v1.01)
-%   * plext.sty in platex (2016/08/20 v1.2a)
+% This package is expected to be compatible with
+%   * delarray.sty in latex-tools
+%     (2014/10/28 v1.01)
+%   * plext.sty in platex
+%     (2001/09/26 v1.2  -- 2018/09/09 v1.2i)
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextdelarray}
-  [2016/09/11 v1.0 array delimiter package for plext and delarray]
+  [2018/09/18 v1.0a array delimiter package for plext and delarray]
 \RequirePackage{plextarray}
 \RequirePackage{delarray}
 
@@ -30,6 +32,11 @@
   {\p@del@array<#1>[#2]}}
 %
 %% adopt from \@del@array (from delarray.sty)
+%  Note: we can't use \unvbox\z@, because there is a possibility
+%        that \@arrayleft is followed by \raise etc, instead of
+%        a box-starting command (\vtop, \vbox etc).
+%        Otherwise, an error "! A <box> was supposed to be here."
+%        See definitions of \@begin@alignbox in \fork@array@option.
 \def\p@del@array<#1>[#2]#3#4#5{%
   \setbox\z@\hbox{$\left#3\right#5$}%
   \if#2c\def\@arrayleft{\left#3}\def\@arrayright{\right#5}%
