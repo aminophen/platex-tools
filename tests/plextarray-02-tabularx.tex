@@ -14,7 +14,7 @@ array.styを読み込むため、そのままではplext.styと共存しない�
 
 plextarrayパッケージはtabular*環境にも対応している。
 
-\begin{tabular*}{10cm}<y>{@{\extracolsep{\fill}}|c|c|c|r|}
+\begin{tabular*}<y>{10cm}{@{\extracolsep{\fill}}|c|c|c|r|}
   \hline
   ラベル1 & ラベル2 & ラベル3 & ラベル4 \\ \hline
   項目1  & 項目2 & 項目3 & 項目4 \\ \hline
@@ -46,13 +46,19 @@ plextarrayパッケージはtabular*環境にも対応している。
 
 ただし、tabularx環境の組方向を変えることは想定していない。
 \iffalse
-% 組方向変更が機能するが結果が異常
-\begin{tabularx}{9cm}<t>{|c|R|c|L|}\hline
-  \multicolumn{2}{|c|}{Multicolumn entry!} & THREE & FOUR \\ \hline
-  夏目漱石 & 吾輩は猫である。名前はまだ無い。 & 長編小説 &
-  何でも薄暗いじめじめした所でニャーニャー泣いていた
-  事だけは記憶している。 \\ \hline
-\end{tabularx}
+% plextarray.sty 2018/09/18 v1.1b までは勘違いで
+% 引数を「幅」→「組方向オプション」という逆順に指定できる状態だった。
+%\begin{tabularx}{9cm}<t>{|c|R|c|L|}\hline
+%  \multicolumn{2}{|c|}{Multicolumn entry!} & THREE & FOUR \\ \hline
+%  夏目漱石 & 吾輩は猫である。名前はまだ無い。 & 長編小説 &
+%  何でも薄暗いじめじめした所でニャーニャー泣いていた
+%  事だけは記憶している。 \\ \hline
+%\end{tabularx}
+% この場合は「組方向変更が機能するが結果が変」だった。
+% しかし、plextarray.sty 2018/09/20 v1.1c で plext.sty と互換な
+% 「組方向オプション」→「幅」の順に変更された。
+% tabularx 環境は第一引数を取って「幅」に与える仕様のため、
+% 上記の変更に伴い組方向指定が禁止された。
 \fi
 
 \clearpage
