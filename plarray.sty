@@ -14,15 +14,15 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plarray}
-  [2018/09/18 v0.1f Tabular extension package for pLaTeX/upLaTeX]
+  [2018/09/20 v0.1g Tabular extension package for pLaTeX/upLaTeX]
 \RequirePackage{array}
 
 %% patching internal code for array.sty
 %
 %% remove extra \xkanjiskip (pLaTeX2e 2016/04/17)
 \@ifl@t@r{\pfmtversion}{2016/04/17}
-  {\expandafter\@firstoftwo}
-  {\expandafter\@secondoftwo}
+  {\expandafter\@firstofone}
+  {\expandafter\@gobble}
 {% = for pLaTeX2e 2016/04/17 or newer
 \def\@tabular{%
   \leavevmode \null
@@ -32,14 +32,11 @@
 \def\endtabular{\endarray $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 }% =
-{% = for pLaTeX2e 2006/11/10 or older
-% nothing to be done
-}% =
 %
 %% inhibit JFM glue around tabular cell components (pLaTeX2e 2018/03/09)
 \@ifl@t@r{\pfmtversion}{2017/07/29}
-  {\expandafter\@firstoftwo}
-  {\expandafter\@secondoftwo}
+  {\expandafter\@firstofone}
+  {\expandafter\@gobble}
 {% = for pLaTeX2e 2017/07/29 or newer
 % first, provide old definition; there are some known incompatibility
 % compared to LaTeX, pLaTeX or array
@@ -58,9 +55,6 @@
        \the@toks \the \count@ \relax}
   \fi
 \fi
-}% =
-{% = for pLaTeX2e 2017/05/05 or older
-% nothing to be done
 }% =
 %
 %% done
