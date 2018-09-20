@@ -9,24 +9,30 @@
 %   * array.sty in latex-tools
 %     (2016/10/06 v2.4d -- 2018/09/13 v2.4i)
 %   * plext.sty in platex
-%     (2001/09/26 v1.2  -- 2018/09/09 v1.2i)
+%     (2001/09/26 v1.2  -- 2018/09/20 v1.2j)
 % Largely based on lltjext.sty from LuaTeX-ja project.
 %
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2018/09/18 v1.1b Tabular extension package for plext and array]
+  [2018/09/20 v1.1c Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{plarray}
 
 %% save definitions from array.sty
+%  the <dir> option will be handled later in \@tabarray
 \def\array{\col@sep\arraycolsep
   \def\d@llarbegin{$}\let\d@llarend\d@llarbegin\def\@halignto{}%
   \@tabarray}
 \def\tabular{\def\@halignto{}\@tabular}
-\expandafter\def\csname tabular*\endcsname#1{%
-       \setlength\dimen@{#1}%
-       \edef\@halignto{to\the\dimen@}\@tabular}
+%% merged definitions from array.sty and plext.sty
+%  take <dir> option first as in plext.sty,
+%  which will be passed to \@tabarray
+\@namedef{tabular*}{\@ifnextchar<%>
+   {\p@stabular}{\p@stabular<Z>}}
+\def\p@stabular<#1>#2{%
+   \setlength\dimen@{#2}%
+   \edef\@halignto{to\the\dimen@}\@tabular<#1>}
 
 %% patching internal code for array.sty and plext.sty
 %

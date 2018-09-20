@@ -38,6 +38,7 @@ environments by adding \texttt{<dir>} option, which specifies the
 writing direction:
 \begin{verbatim}
   \begin{tabular}<dir>[pos]{table spec} ... \end{tabular}
+  \begin{tabular*}<dir>{width}[pos]{table spec} ... \end{tabular*}
   \begin{array}<dir>[pos]{table spec} ... \end{array}
 \end{verbatim}
 The option \texttt{<dir>} permits one of the following three values.
@@ -91,7 +92,7 @@ p\LaTeX の拡張パッケージである\textsf{plext}パッケージと互換�
   \begin{tabular}<t>{|>{$}c<{$}|c|}\hline
     \exp(x) & 指数関数 \\ \hline
     \log(x) & 対数関数 \\ \hline
-  \end{tabular}
+  \end{tabular}%
   終わり
   \end{document}
 \end{verbatim}
@@ -101,7 +102,7 @@ p\LaTeX の拡張パッケージである\textsf{plext}パッケージと互換�
   \begin{tabular}<t>{|>{$}c<{$}|c|}\hline
     \exp(x) & 指数関数 \\ \hline
     \log(x) & 対数関数 \\ \hline
-  \end{tabular}
+  \end{tabular}%
   終わり
 \end{minipage}
 
@@ -127,7 +128,7 @@ p\LaTeX の拡張パッケージである\textsf{plext}パッケージと互換�
     みかん & 150円 & 和歌山県 \\ \hline
     パイナップル & 400円 & 沖縄県 \\ \hline
     バナナ & 190円 & フィリピン \\ \hline
-  \end{tabular}
+  \end{tabular}%
   終わり
   \end{document}
 \end{verbatim}
@@ -142,7 +143,7 @@ p\LaTeX の拡張パッケージである\textsf{plext}パッケージと互換�
   みかん & 150円 & 和歌山県 \\ \hline
   パイナップル & 400円 & 沖縄県 \\ \hline
   バナナ & 190円 & フィリピン \\ \hline
-\end{tabular}
+\end{tabular}%
 終わり
 \end{minipage}
 \bigskip
