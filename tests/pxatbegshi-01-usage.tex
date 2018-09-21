@@ -1,0 +1,17 @@
+\documentclass[dvipdfmx]{tbook}
+\usepackage{pxatbegshi}
+\usepackage{graphicx}
+\begin{document}
+% atbegshi だけでは \yoko が必要だが
+% pxatbegshi を読めば不要になる
+\AtBeginShipout{%\yoko
+  \AtBeginShipoutUpperLeft{%
+    \parbox[t][\paperheight][b]{\paperwidth}{%
+      \includegraphics[width=210truemm,height=297truemm]{example-image-a.png}
+    }%
+  }%
+}
+あ
+\newpage
+い
+\end{document}

@@ -11,7 +11,7 @@
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxatbegshi}
-    [2017/11/04 v0.2 Patch to atbegshi for (u)pLaTeX]
+    [2018/08/21 v0.3 Patch to atbegshi for (u)pLaTeX]
 
 %% preparations
 \def\pxabgs@pkgname{pxatbegshi}
@@ -59,6 +59,22 @@
     {\AtBeginShipoutOriginalShipout\box\AtBeginShipoutBox\egroup}
   \ifx\pxabgs@fragment\relax % failure
     \let\pxabgs@AtBegShi@Output\relax
+  \else % success, try third patch
+    \pxabgs@patch@cmd\pxabgs@AtBegShi@Output{%
+      \begingroup
+        \setbox\AtBeginShipoutBox\box\AtBeginShipoutBox
+      \endgroup
+      \let\protect\AtBegShi@OrgProtect
+    }{%
+      \begingroup
+        \setbox\AtBeginShipoutBox\box\AtBeginShipoutBox
+      \endgroup
+      \let\protect\AtBegShi@OrgProtect
+      \egroup
+    }
+    \ifx\pxabgs@fragment\relax % failure
+      \let\pxabgs@AtBegShi@Output\relax
+    \fi
   \fi
 \fi
 % commit the change only when successful
