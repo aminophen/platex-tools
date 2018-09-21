@@ -35,10 +35,12 @@ This package is part of \textsf{platex-tools} bundle:
 Heiko Oberdiek氏による\textsf{atbegshi}パッケージは
 \verb+\AtBeginShipout{...}+というコマンドを提供しますが、これを
 p\LaTeX の縦組クラス（tarticle.clsなど）で使うとエラーが出てしまいます
-\footnote{単に縦組クラスで\textsf{pxatbegshi}パッケージを読み込んだだけ
+\footnote{単に縦組クラスで\textsf{atbegshi}パッケージを読み込んだだけ
 では、エラーは出ないようです。}。
 この\textsf{pxatbegshi}パッケージは、縦組クラスでも
 \textsf{atbegshi}パッケージの機能を使えるようにするためのものです。
+もちろん、横組クラスで\textsf{pxatbegshi}パッケージを使用しても
+問題は起きません。
 
 使いかたは、\textsf{atbegshi}パッケージの代わりに、あるいは
 \textsf{atbegshi}パッケージに追加して、\textsf{pxatbegshi}パッケージを
@@ -58,9 +60,12 @@ p\LaTeX の縦組クラス（tarticle.clsなど）で使うとエラーが出て
 
 \section*{謝辞}
 
-本パッケージの実装は、北川さん(Hironori Kitagawa)さんによる
+本パッケージの実装には、Takayuki Yato (ZR) 氏による
+\textsf{bxpapersize}パッケージを参考にしました
+\footnote{2018/09/21 v0.3までは北川さん (Hironori Kitagawa) による
 「\verb+\AtBegShi@Output+の処理を強引に横組でやらせるコード」
-をベースにしています。
+をベースにしていましたが、v0.4で\verb+\AtBeginShipoutDiscard+へ
+対応させる改修を機に、書き直しました。}。
 
 \section*{References}
 
@@ -70,6 +75,8 @@ p\LaTeX の縦組クラス（tarticle.clsなど）で使うとエラーが出て
 \item \relax[tex-jp-build] [ptex] ページ・数式の組方向
       （※北川さんのコードの初出）\\
   \texttt{https://github.com/texjporg/tex-jp-build/issues/21}
+\item CTAN: Package \textsf{bxpapersize}\\
+  \texttt{https://ctan.org/pkg/bxpapersize}
 \end{itemize}
 
 \end{document}
