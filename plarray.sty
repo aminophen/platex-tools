@@ -20,9 +20,7 @@
 %% patching internal code for array.sty
 %
 %% remove extra \xkanjiskip (pLaTeX2e 2016/04/17)
-\@ifl@t@r{\pfmtversion}{2016/04/17}
-  {\expandafter\@firstofone}
-  {\expandafter\@gobble}
+\@ifl@t@r{\pfmtversion}{2016/04/17}{\@firstofone}{\@gobble}
 {% = for pLaTeX2e 2016/04/17 or newer
 \def\@tabular{%
   \leavevmode \null
@@ -34,9 +32,7 @@
 }% =
 %
 %% inhibit JFM glue around tabular cell components (pLaTeX2e 2018/03/09)
-\@ifl@t@r{\pfmtversion}{2017/07/29}
-  {\expandafter\@firstofone}
-  {\expandafter\@gobble}
+\@ifl@t@r{\pfmtversion}{2017/07/29}{\@firstofone}{\@gobble}
 {% = for pLaTeX2e 2017/07/29 or newer
 % first, provide old definition; there are some known incompatibility
 % compared to LaTeX, pLaTeX or array

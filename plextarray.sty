@@ -36,9 +36,7 @@
 
 %% patching internal code for array.sty and plext.sty
 %
-\@ifpackagelater{array}{2018/09/13}
-  {\expandafter\@firstoftwo}
-  {\expandafter\@secondoftwo}
+\@ifpackagelater{array}{2018/09/13}{\@firstoftwo}{\@secondoftwo}
 {% = for 2018/09/13 v2.4i or newer
 \def\@startpbox#1{\bgroup
   \color@begingroup
