@@ -12,10 +12,23 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2017/03/02 v0.6 Patch to everysel for (u)pLaTeX]
+    [2018/10/27 v0.7 Patch to everysel for (u)pLaTeX]
 
 %% previous code for ctex support has been removed in v0.5,
 %% as ctex has depended on pxeverysel since 2016/12/27 v2.4.7
+
+%% in case it's too late ...
+%  e.g. sidecap.sty contains \AtBeginDocument{everysel}.
+%  In this case, everysel.sty's
+%  \AtBeginDocument{\@EverySelectfont@Init}
+%  will be immediately executed without delay.
+\@ifpackageloaded{everysel}{%
+  % everysel.sty removes \@EverySelectfont@Init once it is used
+  \ifx\@EverySelectfont@Init\undefined
+    \PackageError{pxeverysel}{%
+      Patch too late!\MessageBreak
+      Load pxeverysel earlier}\@ehc
+}{}
 
 %% preparations
 \def\pxys@pkgname{pxeverysel}
