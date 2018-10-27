@@ -12,16 +12,12 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2018/10/27 v0.7 Patch to everysel for (u)pLaTeX]
+    [2018/10/27 v0.8 Patch to everysel for (u)pLaTeX]
 
 %% previous code for ctex support has been removed in v0.5,
 %% as ctex has depended on pxeverysel since 2016/12/27 v2.4.7
 
 %% in case it's too late ...
-%  e.g. sidecap.sty contains \AtBeginDocument{everysel}.
-%  In this case, everysel.sty's
-%  \AtBeginDocument{\@EverySelectfont@Init}
-%  will be immediately executed without delay.
 \@ifpackageloaded{everysel}{%
   % everysel.sty removes \@EverySelectfont@Init once it is used
   \ifx\@EverySelectfont@Init\undefined
@@ -34,7 +30,19 @@
 \def\pxys@pkgname{pxeverysel}
 \def\pxys@warn{\PackageWarningNoLine\pxys@pkgname}
 
-%% load it
+%% load it, but ensure that \@EverySelectfont@Init is not executed
+%  [Note] everysel.sty contains
+%    \AtBeginDocument{\@EverySelectfont@Init}
+%  at the end. In most cases, the execution is actually delayed;
+%  however,
+%    \AtBeginDocument{everysel} (e.g. found in sidecap.sty)
+%  can execute it immediately. In this case, delay it until the
+%  end of pxeverysel.sty.
+\ifx\AtBeginDocument\@firstofone
+  \def\pxys@begindocumenthook{\let\AtBeginDocument\@firstofone}
+  \def\AtBeginDocument{\g@addto@macro\pxys@begindocumenthook}
+  \AtEndOfPackage{\pxys@begindocumenthook}
+\fi
 \RequirePackage{everysel}
 
 %% support for (u)pLaTeX font tracing
@@ -154,5 +162,6 @@
   \expandafter\let\csname selectfont \endcsname\pxys@selectfont}
 
 %--------------------------------------- done
+
 \endinput
 %% EOF
