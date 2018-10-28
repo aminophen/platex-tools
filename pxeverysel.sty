@@ -33,9 +33,9 @@
 %    \AtBeginDocument{\@EverySelectfont@Init}
 %  at the end. In most cases, the execution is actually delayed;
 %  however,
-%    \AtBeginDocument{everysel} (e.g. found in sidecap.sty)
-%  can execute it immediately. In this case, delay it until the
-%  end of pxeverysel.sty.
+%    \AtBeginDocument{\RequirePackage{everysel}}
+%  can execute it immediately (e.g. found in sidecap.sty).
+%  In this case, delay it until the end of pxeverysel.sty.
 \ifx\AtBeginDocument\@firstofone
   \def\pxys@begindocumenthook{\let\AtBeginDocument\@firstofone}
   \def\AtBeginDocument{\g@addto@macro\pxys@begindocumenthook}

@@ -7,7 +7,7 @@ all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 	pxeverysel.pdf pxeveryshi.pdf
 
 .SUFFIXES: .tex .dvi .pdf
-.tex.dvi:
+%.dvi: %.tex %.sty
 	platex $(KANJI) $<
 	platex $(KANJI) $<
 	rm *.aux *.log
