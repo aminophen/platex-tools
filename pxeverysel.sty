@@ -12,7 +12,7 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2018/10/27 v0.8 Patch to everysel for (u)pLaTeX]
+    [2018/10/28 v0.9 Patch to everysel for (u)pLaTeX]
 
 %% previous code for ctex support has been removed in v0.5,
 %% as ctex has depended on pxeverysel since 2016/12/27 v2.4.7
@@ -24,11 +24,9 @@
     \PackageError{pxeverysel}{%
       Patch too late!\MessageBreak
       Load pxeverysel earlier}\@ehc
+    \expandafter\endinput
+  \fi
 }{}
-
-%% preparations
-\def\pxys@pkgname{pxeverysel}
-\def\pxys@warn{\PackageWarningNoLine\pxys@pkgname}
 
 %% load it, but ensure that \@EverySelectfont@Init is not executed
 %  [Note] everysel.sty contains
@@ -51,6 +49,10 @@
   \RequirePackage{ptrace}\else\RequirePackage{uptrace}\fi\fi}{}
 
 %--------------------------------------- helpers
+
+%% preparations
+\def\pxys@pkgname{pxeverysel}
+\def\pxys@warn{\PackageWarningNoLine\pxys@pkgname}
 
 %% unique tokens
 \def\pxys@mark{\pxys@mark@}
