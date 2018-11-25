@@ -1,0 +1,17 @@
+\documentclass[a4paper]{tarticle}
+\usepackage{pxmulticol}
+\def\hoge{ほげほげ。ふがふがふが。}% ダミーテキスト用
+\def\piyo{ぴよぴよぴよぴよ。}
+\def\HOGE{\hoge\hoge\hoge\hoge\hoge\hoge\hoge\hoge}
+\def\PIYO{\piyo\piyo\piyo\piyo\piyo\piyo}
+\begin{document}
+
+\begin{multicols}{2}
+\HOGE\footnote{脚注脚注脚注脚注}\HOGE
+\columnbreak
+\PIYO\footnote{脚注脚注脚注脚注}\PIYO
+\newpage
+\HOGE\footnote{脚注脚注脚注脚注}\HOGE\HOGE
+\end{multicols}
+
+\end{document}
