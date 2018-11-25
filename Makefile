@@ -3,7 +3,7 @@ FONTMAP = -f ipaex.map -f ptex-ipaex.map
 TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
 
 all: plarray.pdf plextarray.pdf plextdelarray.pdf \
-	pxatbegshi.pdf pxftnright.pdf \
+	pxatbegshi.pdf pxftnright.pdf pxmulticol.pdf \
 	pxeverysel.pdf pxeveryshi.pdf
 
 .SUFFIXES: .tex .dvi .pdf
