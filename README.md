@@ -23,6 +23,10 @@ and some additional packages are included.
     Patch for ftnright.sty (latex-tools) to support
     Japanese classes for vertical writing.
     Can be used on pLaTeX/upLaTeX.
+- pxmulticol.sty:
+    Patch for multicol.sty (latex-tools) to support
+    `\footnote` in vertical writing.
+    Can be used on pLaTeX/upLaTeX.
 - pxeverysel.sty:
     Patch for everysel.sty (ms) to improve
     compatibility with Japanese font selection in pLaTeX.
