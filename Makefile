@@ -21,7 +21,6 @@ all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 .PHONY: install clean
 install:
 	mkdir -p ${TEXMF}/doc/platex/platex-tools
-	cp ./Makefile ${TEXMF}/doc/platex/platex-tools/
 	cp ./LICENSE ${TEXMF}/doc/platex/platex-tools/
 	cp ./README.md ${TEXMF}/doc/platex/platex-tools/
 	cp ./*.pdf ${TEXMF}/doc/platex/platex-tools/
