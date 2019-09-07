@@ -1,0 +1,14 @@
+\documentclass[b5paper]{tarticle}
+\usepackage{multicol}
+\usepackage{pxatbegshi}
+
+\begin{document}
+\begin{multicols*}{2}
+\makeatletter
+\@tempcnta\z@
+\loop
+あ
+\advance\@tempcnta\@ne
+\ifnum\@tempcnta<2000\repeat
+\end{multicols*}
+\end{document}

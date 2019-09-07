@@ -5,15 +5,26 @@
 % This package is part of the platex-tools bundle.
 % https://github.com/aminophen/platex-tools
 %
-% Largely based on bxpapersize.sty by T. Yato.
-% Previous versions were largely based on H. Kitagawa's
-% code on GitHub:texjporg/tex-jp-build#21.
+% --------------------------------------------------------------------
+% [Note]
+% Previous version (2018/09/21 v0.4) was largely based on
+%   "cope with tate-direction"
+% of bxpapersize.sty 2017/05/02 v0.3a by T. Yato.
+%   -- concept: execute all hooks in temporary yoko direction,
+%   -- by prepending \yoko and switching back to the original
+% However, it was problematic when used with multicol.sty.
+%
+% Thus, in newer version (2019/09/07 v0.5), I reverted back to
+% the original code (2018/09/21 v0.3), which was largely based on
+% H. Kitagawa's on GitHub:texjporg/tex-jp-build#21.
+%   -- concept: execute all hooks inside yoko direction \vbox
+% --------------------------------------------------
 %
 
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxatbegshi}
-    [2018/09/21 v0.4 Patch to atbegshi for (u)pLaTeX]
+    [2019/09/07 v0.5 Patch to atbegshi for (u)pLaTeX]
 
 %% preparations
 \def\pxabgs@pkgname{pxatbegshi}
@@ -45,56 +56,51 @@
 
 %---------------------------------------
 
-%% patch \AtBegShi@Output
-%  concept: execute all hooks in temporary yoko direction,
-%  by prepending \yoko and switching back to the original
-%
+% concept: execute all hooks inside yoko direction \vbox
+
 % prepare
 \let\pxabgs@AtBegShi@Output\AtBegShi@Output
-% first, check hooks inserted by bxpapersize.sty
-% -> if detected, nothing to do
+% try first patch
 \pxabgs@patch@cmd\pxabgs@AtBegShi@Output
-  {\bxpr@ABS@prehook}{\bxpr@ABS@prehook}%
-\ifx\pxabgs@fragment\relax\else % found
+  {\let\AtBegShi@OrgProtect\protect}%
+  {\setbox8\vbox\bgroup\yoko\let\AtBegShi@OrgProtect\protect}
+\ifx\pxabgs@fragment\relax % failure
+  \let\pxabgs@AtBegShi@Output\relax
+\else % success, try second patch
   \pxabgs@patch@cmd\pxabgs@AtBegShi@Output
-    {\bxpr@ABS@posthook}{\bxpr@ABS@posthook}%
-  \ifx\pxabgs@fragment\relax\else % found
+    {\AtBeginShipoutOriginalShipout\box\AtBeginShipoutBox}%
+    {\AtBeginShipoutOriginalShipout\box\AtBeginShipoutBox\egroup}
+  \ifx\pxabgs@fragment\relax % failure
     \let\pxabgs@AtBegShi@Output\relax
+  \else % success, try third patch
+    \pxabgs@patch@cmd\pxabgs@AtBegShi@Output{%
+      \begingroup
+        \setbox\AtBeginShipoutBox\box\AtBeginShipoutBox
+      \endgroup
+      \let\protect\AtBegShi@OrgProtect
+    }{%
+      \begingroup
+        \setbox\AtBeginShipoutBox\box\AtBeginShipoutBox
+      \endgroup
+      \let\protect\AtBegShi@OrgProtect
+      \egroup
+    }
+    \ifx\pxabgs@fragment\relax % failure
+      \let\pxabgs@AtBegShi@Output\relax
+    \fi
   \fi
 \fi
-% -> if not detected, prepend/append hooks
-\ifx\pxabgs@AtBegShi@Output\relax\else
-  \expandafter\def\expandafter\pxabgs@AtBegShi@Output\expandafter{%
-    \expandafter\pxabgs@ABS@prehook
-    \pxabgs@AtBegShi@Output
-    \pxabgs@ABS@posthook
-  }
-  % adjust for atbegshi.sty on non-e-TeX ...
-  % (for e-TeX, this patch should fail but does nothing!)
-  \pxabgs@patch@cmd\pxabgs@AtBegShi@Output
-    {\pxabgs@ABS@prehook\egroup\endgroup}
-    {\egroup\endgroup\pxabgs@ABS@prehook}%
-  % commit the change
+% commit the change only when successful
+\ifx\pxabgs@AtBegShi@Output\relax
+  \pxabgs@warn{Failed in patching \string\AtBegShi@Output}
+\else
   \global\let\AtBegShi@Output\pxabgs@AtBegShi@Output
 \fi
-%
-%% done
-
-%--------------------------------------- done
 
 \endgroup
 %% internal macros are no longer effective
 
-%% hooks
-\let\pxabgs@restore@dir\relax
-\def\pxabgs@ABS@prehook{%
-  \iftdir
-    \yoko
-    \let\pxabgs@restore@dir\tate
-  \else
-    \let\pxabgs@restore@dir\relax
-  \fi}
-\def\pxabgs@ABS@posthook{\pxabgs@restore@dir}
+%--------------------------------------- done
 
 \endinput
 %% EOF
