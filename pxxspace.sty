@@ -31,7 +31,7 @@
 
 %% e-TeX is required
 \RequirePackage{etoolbox}[2011/01/03]% v2.1
-\ifx\numdef\@undefined \endinput \fi
+\ifx\numdef\@undefined \expandafter\endinput \fi
 
 %% packages
 \RequirePackage{xspace}[2009/10/20]% v1.13
