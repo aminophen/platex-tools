@@ -21,13 +21,16 @@
 %
 % Update: version 2020/09/09 v0.6 supports LaTeX2e 2020-10-01
 % based on a method proposed by H. Kitagawa in lltjp-atbegshi.sty.
+%
+% Update: version 2020/09/25 v0.7 does nothing, since
+% pLaTeX2e 2020-10-01 will support the situation natively.
 % --------------------------------------------------------------------
 %
 
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxatbegshi}
-    [2020/09/09 v0.6 Patch to atbegshi for (u)pLaTeX]
+    [2020/09/25 v0.7 Patch to atbegshi for (u)pLaTeX]
 
 %% preparations
 \def\pxabgs@pkgname{pxatbegshi}
@@ -42,18 +45,9 @@
 %% so we can detect it!
 
 \ifx\AtBegShi@Output\@undefined
-%
-\RequirePackage{expl3}
-\ExplSyntaxOn
-\box_new:N \l__platex_shipout_dummy_box
-\tl_put_left:Nn {\__shipout_execute_cont:}
-  {\tex_setbox:D \l__platex_shipout_dummy_box
-   \tex_vbox:D \c_group_begin_token \yoko }
-\tl_put_right:Nn {\__shipout_execute_cont:}
-  {\c_group_end_token}
-\ExplSyntaxOff
-%
-\expandafter\endinput
+  %% pLaTeX2e 2020-10-01 natively supports the situation
+  \PackageInfo{pxatbegshi}{This package is no longer needed}
+  \expandafter\endinput
 \fi
 
 %% The rest of this package is meant for
