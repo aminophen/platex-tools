@@ -25,6 +25,10 @@ with Japanese classes for vertical writing (tarticle.cls, etc).
 The package \textsf{pxatbegshi} provides a patch for \textsf{atbegshi}
 to work with both horizontal and vertical writing.
 
+With \pLaTeXe~2020-10-01 or later, this package does
+nothing because the \pLaTeXe\ itself handles the situation.
+Therefore, you will not need this package at all.
+
 This package is part of \textsf{platex-tools} bundle:
 \begin{verbatim}
   https://github.com/aminophen/platex-tools
@@ -40,7 +44,18 @@ p\LaTeX の縦組クラス（tarticle.clsなど）で使うとエラーが出て
 この\textsf{pxatbegshi}パッケージは、縦組クラスでも
 \textsf{atbegshi}パッケージの機能を使えるようにするためのものです。
 もちろん、横組クラスで\textsf{pxatbegshi}パッケージを使用しても
-問題は起きません。
+ほぼ問題は起きません。ただし、制約事項として
+\begin{quote}
+「\verb+\AtBeginShipout+の中身が外部垂直モードで実行されること」を
+想定した使用は\emph{サポートしない}
+\end{quote}
+と明言します（例：\verb+aminophen/platex-tools#15+）。
+
+\pLaTeXe~2020-10-01以降では、同等の機能が\pLaTeXe{}カーネルに
+存在するため、\textsf{pxatbegshi}パッケージは何もしません。
+
+\newpage
+\section{使いかた}
 
 使いかたは、\textsf{atbegshi}パッケージの代わりに、あるいは
 \textsf{atbegshi}パッケージに追加して、\textsf{pxatbegshi}パッケージを
@@ -58,7 +73,7 @@ p\LaTeX の縦組クラス（tarticle.clsなど）で使うとエラーが出て
   \end{document}
 \end{verbatim}
 
-\section*{謝辞}
+\section{謝辞}
 
 本パッケージの実装は、北川さん(Hironori Kitagawa)による
 「\verb+\AtBegShi@Output+の処理を強引に横組でやらせるコード」

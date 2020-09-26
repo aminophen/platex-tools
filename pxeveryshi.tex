@@ -8,7 +8,7 @@
 \usepackage{pxeveryshi}
 \GetFileInfo{pxeveryshi.sty}
 \title{Package \textsf{pxeveryshi} \fileversion}
-\author{Takayuki Yato}
+\author{Takayuki Yato \& Hironobu Yamashita}
 \date{\filedate}
 \begin{document}
 
@@ -25,6 +25,10 @@ cannot be used with Japanese classes for vertical writing
 The package \textsf{pxeveryshi} provides a patch for \textsf{everyshi}
 to work with both horizontal and vertical writing.
 
+With \pLaTeXe~2020-10-01 or later, this package does
+nothing because the \pLaTeXe\ itself handles the situation.
+Therefore, you will not need this package at all.
+
 This package is part of \textsf{platex-tools} bundle:
 \begin{verbatim}
   https://github.com/aminophen/platex-tools
@@ -39,6 +43,11 @@ p\LaTeX の縦組クラス（tarticle.clsなど）で使うとエラーが出て
 この\textsf{pxeveryshi}パッケージを読み込むことで、縦組クラスでも
 \textsf{everyshi}パッケージ（およびこれに依存するパッケージ）が
 使えるようになります。
+
+\pLaTeXe~2020-10-01以降では、同等の機能が\pLaTeXe{}カーネルに
+存在するため、\textsf{pxeveryshi}パッケージは何もしません。
+
+\section{使いかた}
 
 使いかたは、\textsf{everyshi}パッケージの代わりに、あるいは
 \textsf{everyshi}パッケージに追加して、\textsf{pxeveryshi}パッケージを
