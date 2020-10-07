@@ -16,11 +16,11 @@ all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 
 .SUFFIXES: .tex .dvi .pdf
 .tex.dvi:
-	$(LTX) $(KANJI) $<
-	$(LTX) $(KANJI) $<
+	$(LTX) $<
+	$(LTX) $<
 	rm *.aux *.log
 .dvi.pdf:
-	$(DPX) $(FONTMAP) $<
+	$(DPX) $<
 
 .PHONY: install clean
 install:
