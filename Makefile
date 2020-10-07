@@ -1,6 +1,10 @@
-KANJI = -kanji=utf8
-FONTMAP = -f ipaex.map -f ptex-ipaex.map
 TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
+
+KANJI = -kanji=utf8
+#FONTMAP = -f ipaex.map -f ptex-ipaex.map
+FONTMAP = -f haranoaji.map -f ptex-haranoaji.map
+LTX = platex $(KANJI)
+DPX = dvipdfmx $(FONTMAP)
 
 all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 	pxatbegshi.pdf \
@@ -12,11 +16,11 @@ all: plarray.pdf plextarray.pdf plextdelarray.pdf \
 
 .SUFFIXES: .tex .dvi .pdf
 .tex.dvi:
-	platex $(KANJI) $<
-	platex $(KANJI) $<
+	$(LTX) $(KANJI) $<
+	$(LTX) $(KANJI) $<
 	rm *.aux *.log
 .dvi.pdf:
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $(FONTMAP) $<
 
 .PHONY: install clean
 install:
