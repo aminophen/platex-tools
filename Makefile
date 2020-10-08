@@ -6,13 +6,17 @@ FONTMAP = -f haranoaji.map -f ptex-haranoaji.map
 LTX = platex $(KANJI)
 DPX = dvipdfmx $(FONTMAP)
 
-all: plarray.pdf plextarray.pdf plextdelarray.pdf \
-	pxatbegshi.pdf \
+all: pldocverb.pdf \
+	plarray.pdf \
+	plextarray.pdf \
+	plextdelarray.pdf \
+	plextcolortbl.pdf \
 	pxftnright.pdf \
 	pxmulticol.pdf \
 	pxxspace.pdf \
 	pxeverysel.pdf \
-	pxeveryshi.pdf
+	pxeveryshi.pdf \
+	pxatbegshi.pdf
 
 .SUFFIXES: .tex .dvi .pdf
 .tex.dvi:
