@@ -1,10 +1,11 @@
-% tugboat:38-2/tb119mitt
+% new column type 'w' and 'W'
 \documentclass[10pt,a4paper]{tarticle}
-\usepackage{plextarray} % これで array.sty にパッチ
+\usepackage{plextarray}
 \begin{document}
 
 \setlength{\overfullrule}{5pt}
 
+%% tugboat:38-2/tb119mitt
 \begin{tabular}{|l|wr{12mm}|Wr{12mm}|r|}
   flexible  & fixed (w) & fixed (W) & flexible  \\
   123       & 123       & 123       & 123       \\
@@ -12,11 +13,32 @@
   a b c d e & a b c d e & a b c d e & a b c d e
 \end{tabular}
 
+%% + addition with plext
 \begin{tabular}<y>{|l|wr{12mm}|Wr{12mm}|r|}
   flexible  & fixed (w) & fixed (W) & flexible  \\
   123       & 123       & 123       & 123       \\
   123456789 & 123456789 & 123456789 & 123456789 \\
   a b c d e & a b c d e & a b c d e & a b c d e
 \end{tabular}
+
+%% modified from latex3/latex2e#297
+\[
+  \left\{
+    \begin{array}{wc{3cm}}
+      f(x)= x^2+x+1 \\
+      g(x)= x-2
+    \end{array}
+  \right.
+\]
+
+%% + addition with plext
+\[
+  \left\{
+    \begin{array}<y>{wc{3cm}}
+      f(x)= x^2+x+1 \\
+      g(x)= x-2
+    \end{array}
+  \right.
+\]
 
 \end{document}
