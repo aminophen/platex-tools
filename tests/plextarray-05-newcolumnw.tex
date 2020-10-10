@@ -1,0 +1,22 @@
+% tugboat:38-2/tb119mitt
+\documentclass[10pt,a4paper]{tarticle}
+\usepackage{plextarray} % これで array.sty にパッチ
+\begin{document}
+
+\setlength{\overfullrule}{5pt}
+
+\begin{tabular}{|l|wr{12mm}|Wr{12mm}|r|}
+  flexible  & fixed (w) & fixed (W) & flexible  \\
+  123       & 123       & 123       & 123       \\
+  123456789 & 123456789 & 123456789 & 123456789 \\
+  a b c d e & a b c d e & a b c d e & a b c d e
+\end{tabular}
+
+\begin{tabular}<y>{|l|wr{12mm}|Wr{12mm}|r|}
+  flexible  & fixed (w) & fixed (W) & flexible  \\
+  123       & 123       & 123       & 123       \\
+  123456789 & 123456789 & 123456789 & 123456789 \\
+  a b c d e & a b c d e & a b c d e & a b c d e
+\end{tabular}
+
+\end{document}
