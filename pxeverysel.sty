@@ -18,22 +18,26 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2021/02/13 v0.9a Patch to everysel for (u)pLaTeX]
+    [2021/02/13 v0.9b Patch to everysel for (u)pLaTeX]
 
 %% Since LaTeX2e 2021-05-01, everysel.sty is merely
 %% an emulation by everysel-ltx.sty from firstaid.
 
+\chardef\pxys@status=\z@
 \ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
   \IfHookExistsTF{selectfont}{%      % >= LaTeX2e 2021-05-01
-    % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
-    \ifx\delayed@k@adjustment\@undefined
-      \PackageError{pxeverysel}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
-    \else
-      \PackageInfo{pxeverysel}{This package is no longer needed}%
-    \fi
-    \RequirePackage{everysel}% input anyway
-    \expandafter\endinput
+    \chardef\pxys@status=\@ne
   }{}
+\fi
+\ifnum\pxys@status=\@ne
+  % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
+  \ifx\delayed@k@adjustment\@undefined
+    \PackageError{pxeverysel}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
+  \else
+    \PackageInfo{pxeverysel}{This package is no longer needed}%
+  \fi
+  \RequirePackage{everysel}% input anyway
+  \expandafter\endinput
 \fi
 
 %% The rest of this package is meant for

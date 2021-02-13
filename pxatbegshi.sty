@@ -30,22 +30,26 @@
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxatbegshi}
-    [2021/02/13 v0.7a Patch to atbegshi for (u)pLaTeX]
+    [2021/02/13 v0.7b Patch to atbegshi for (u)pLaTeX]
 
 %% Since LaTeX2e 2020-10-01, atbegshi.sty is merely
 %% an emulation by atbegshi-ltx.sty from ltshipout.dtx.
 
+\chardef\pxabgs@status=\z@
 \ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
   \IfHookExistsTF{shipout/before}{%  % >= LaTeX2e 2020-10-01
-    % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
-    \@ifl@t@r\pfmtversion{2020/10/01}{%
-      \PackageInfo{pxatbegshi}{This package is no longer needed}%
-    }{%
-      \PackageError{pxatbegshi}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
-    }%
-    \RequirePackage{atbegshi}% input anyway
-    \expandafter\endinput
+    \chardef\pxabgs@status=\@ne
   }{}
+\fi
+\ifnum\pxabgs@status=\@ne
+  % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
+  \@ifl@t@r\pfmtversion{2020/10/01}{%
+    \PackageInfo{pxatbegshi}{This package is no longer needed}%
+  }{%
+    \PackageError{pxatbegshi}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
+  }%
+  \RequirePackage{atbegshi}% input anyway
+  \expandafter\endinput
 \fi
 
 %% The rest of this package is meant for
