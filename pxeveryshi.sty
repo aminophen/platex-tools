@@ -30,7 +30,8 @@
       \PackageInfo{pxeveryshi}{This package is no longer needed}%
     }{%
       \PackageError{pxeveryshi}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
-    }
+    }%
+    \RequirePackageWithOptions{everyshi}% input anyway
     \expandafter\endinput
   }{}
 \fi

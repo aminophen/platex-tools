@@ -42,7 +42,8 @@
       \PackageInfo{pxatbegshi}{This package is no longer needed}%
     }{%
       \PackageError{pxatbegshi}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
-    }
+    }%
+    \RequirePackage{atbegshi}% input anyway
     \expandafter\endinput
   }{}
 \fi
