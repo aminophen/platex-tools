@@ -30,28 +30,36 @@
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxatbegshi}
-    [2020/09/25 v0.7 Patch to atbegshi for (u)pLaTeX]
-
-%% preparations
-\def\pxabgs@pkgname{pxatbegshi}
-\def\pxabgs@warn{\PackageWarningNoLine\pxabgs@pkgname}
-
-%% load it
-\RequirePackage{atbegshi}
+    [2021/02/13 v0.7a Patch to atbegshi for (u)pLaTeX]
 
 %% Since LaTeX2e 2020-10-01, atbegshi.sty is merely
 %% an emulation by atbegshi-ltx.sty from ltshipout.dtx.
-%% The new code does NOT define \AtBegShi@Output,
-%% so we can detect it!
 
-\ifx\AtBegShi@Output\@undefined
-  %% pLaTeX2e 2020-10-01 natively supports the situation
-  \PackageInfo{pxatbegshi}{This package is no longer needed}
-  \expandafter\endinput
+\ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
+  \IfHookExistsTF{shipout/before}{%  % >= LaTeX2e 2020-10-01
+    % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
+    \@ifl@t@r\pfmtversion{2020/10/01}{%
+      \PackageInfo{pxatbegshi}{This package is no longer needed}%
+    }{%
+      \PackageError{pxatbegshi}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
+    }
+    \expandafter\endinput
+  }{}
 \fi
 
 %% The rest of this package is meant for
 %% LaTeX2e 2020-02-02 PL5 or older.
+
+\RequirePackage{atbegshi}
+
+\ifx\AtBegShi@Output\@undefined
+  \PackageError{pxatbegshi}{This should not happen}\@ehc
+  \expandafter\endinput
+\fi
+
+%% preparations
+\def\pxabgs@pkgname{pxatbegshi}
+\def\pxabgs@warn{\PackageWarningNoLine\pxabgs@pkgname}
 
 %% internal macros are locally effective
 \begingroup
