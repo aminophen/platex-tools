@@ -8,14 +8,35 @@
 % by courtesy of the original author.
 % https://github.com/aminophen/platex-tools
 %
+% --------------------------------------------------------------------
+% [Note]
+% Update: version 2021/02/13 v0.9a does nothing, since
+% pLaTeX2e 2021-??-?? will support the situation natively.
+% --------------------------------------------------------------------
+%
 
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2018/10/28 v0.9 Patch to everysel for (u)pLaTeX]
+    [2021/02/13 v0.9a Patch to everysel for (u)pLaTeX]
 
-%% previous code for ctex support has been removed in v0.5,
-%% as ctex has depended on pxeverysel since 2016/12/27 v2.4.7
+%% Since LaTeX2e 2021-05-01, everysel.sty is merely
+%% an emulation by everysel-ltx.sty from ltshipout.dtx.
+
+\ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
+  \IfHookExistsTF{selectfont}{%      % >= LaTeX2e 2021-05-01
+    % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
+    \ifx\delayed@k@adjustment\@undefined
+      \PackageError{pxeverysel}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
+    \else
+      \PackageInfo{pxeverysel}{This package is no longer needed}%
+    \fi
+    \expandafter\endinput
+  }{}
+\fi
+
+%% The rest of this package is meant for
+%% LaTeX2e 2020-10-01 PL4 or older.
 
 %% in case it's too late ...
 \@ifpackageloaded{everysel}{%
