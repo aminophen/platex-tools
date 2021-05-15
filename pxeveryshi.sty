@@ -36,14 +36,14 @@
   }{%
     \PackageError{pxeveryshi}{Inconsistent LaTeX2e/pLaTeX2e combination}\@ehc
   }%
-  \RequirePackageWithOptions{everyshi}% input anyway
+  \RequirePackage{everyshi}% input anyway
   \expandafter\endinput
 \fi
 
 %% The rest of this package is meant for
 %% LaTeX2e 2020-02-02 PL5 or older.
 
-\RequirePackageWithOptions{everyshi}
+\RequirePackage{everyshi}
 
 \ifx\@EveryShipout@Output\@undefined
   \PackageError{pxeveryshi}{This should not happen}\@ehc
