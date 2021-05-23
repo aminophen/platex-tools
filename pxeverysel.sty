@@ -10,8 +10,8 @@
 %
 % --------------------------------------------------------------------
 % [Note]
-% Update: version 2021/02/13 v0.9a does nothing, since
-% pLaTeX2e 2021-??-?? will support the situation natively.
+% Update: since version 2021/02/13 v0.9a, this package does nothing,
+% as pLaTeX2e 2021-06-01 will support the situation natively.
 % --------------------------------------------------------------------
 %
 
@@ -20,12 +20,12 @@
 \ProvidesPackage{pxeverysel}
     [2021/02/13 v0.9b Patch to everysel for (u)pLaTeX]
 
-%% Since LaTeX2e 2021-05-01, everysel.sty is merely
+%% Since LaTeX2e 2021-06-01, everysel.sty is merely
 %% an emulation by everysel-ltx.sty from firstaid.
 
 \chardef\pxys@status=\z@
 \ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
-  \IfHookExistsTF{selectfont}{%      % >= LaTeX2e 2021-05-01
+  \IfHookExistsTF{selectfont}{%      % >= LaTeX2e 2021-06-01
     \chardef\pxys@status=\@ne
   }{}
 \fi
