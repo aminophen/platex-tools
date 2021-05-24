@@ -7,6 +7,8 @@
 %
 % This package `pxftnright' is based on:
 %   * ftnright.sty in latex-tools (2014/10/28 v1.1f)
+%   * plcore.ltx in platex
+%     (2001/09/26 v1.2a -- 2021/03/25 v1.3i)
 %
 % Problems with ftnright to use with pLaTeX:
 %   * \@startcolumn is redefined
@@ -23,7 +25,7 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxftnright}
-  [2017/02/28 v1.1 footnote layout package for pLaTeX]
+  [2021/05/24 v1.1a footnote layout package for pLaTeX]
 
 %% save \@makefntext definition from pLaTeX class
 \@ifpackageloaded{ftnright}{%
@@ -37,7 +39,18 @@
 \RequirePackage{ftnright}
 
 %% patches for ftnright to work fine with pLaTeX
-%% This code is based on pLaTeX2e 2017/04/08 community ed.
+%% This code is based on pLaTeX2e 2021-06-01 community ed.
+
+\ifx\pltx@adjust@wd@outputbox\@undefined
+  % pLaTeX2e <2020-10-01>+2 or older
+  \ifx\pdfprimitive\@undefined % just in case ...
+    \def\pltx@adjust@wd@outputbox{%
+      \ifydir\else\vbox{\hskip\z@}\fi}
+  \else                        % same as plcore.dtx 2021/03/25 v1.3i
+    \def\pltx@adjust@wd@outputbox{%
+      \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
+  \fi
+\fi
 
 \def\@startcolumn{%
  \ifx\@deferlist\@empty
@@ -122,7 +135,7 @@
       \@texttop
       \dimen@ \dp\@outputbox
       \unvbox \@outputbox
-      \iftdir\vbox{\hskip\z@}\fi %%% pLaTeX
+      \pltx@adjust@wd@outputbox %%% pLaTeX
       \vskip -\dimen@
       \@textbottom}%
   \fi
