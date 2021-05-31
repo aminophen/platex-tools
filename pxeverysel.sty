@@ -18,17 +18,13 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2021/02/13 v0.9b Patch to everysel for (u)pLaTeX]
+    [2021/05/31 v0.9c Patch to everysel for (u)pLaTeX]
 
 %% Since LaTeX2e 2021-06-01, everysel.sty is merely
 %% an emulation by everysel-ltx.sty from firstaid.
 
 \chardef\pxys@status=\z@
-\ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
-  \IfHookExistsTF{selectfont}{%      % >= LaTeX2e 2021-06-01
-    \chardef\pxys@status=\@ne
-  }{}
-\fi
+\@ifl@t@r\fmtversion{2021/06/01}{\chardef\pxys@status=\@ne}{}
 \ifnum\pxys@status=\@ne
   % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
   \ifx\delayed@k@adjustment\@undefined

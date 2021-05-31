@@ -18,17 +18,13 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeveryshi}
-    [2021/05/15 v0.2c everyshi package for (u)pLaTeX]
+    [2021/05/31 v0.2d everyshi package for (u)pLaTeX]
 
 %% Since LaTeX2e 2020-10-01, everyshi.sty is merely
 %% an emulation by everyshi-ltx.sty from ltshipout.dtx.
 
 \chardef\pxevsh@status=\z@
-\ifx\IfHookExistsTF\@undefined\else  % >= LaTeX2e 2020-10-01
-  \IfHookExistsTF{shipout/before}{%  % >= LaTeX2e 2020-10-01
-    \chardef\pxevsh@status=\@ne
-  }{}
-\fi
+\@ifl@t@r\fmtversion{2020/10/01}{\chardef\pxevsh@status=\@ne}{}
 \ifnum\pxevsh@status=\@ne
   % if LaTeX2e and pLaTeX2e are inconsistent, raise an error!
   \@ifl@t@r\pfmtversion{2020/10/01}{%
