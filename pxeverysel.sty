@@ -18,7 +18,7 @@
 %% package declaration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pxeverysel}
-    [2021/05/31 v0.9c Patch to everysel for (u)pLaTeX]
+    [2021/07/13 v0.9d Patch to everysel for (u)pLaTeX]
 
 %% Since LaTeX2e 2021-06-01, everysel.sty is merely
 %% an emulation by everysel-ltx.sty from firstaid.
@@ -67,8 +67,9 @@
 
 %% support for (u)pLaTeX font tracing
 \@ifpackageloaded{tracefnt}{%
-  \ifx\kanjiskip\@undefined\else\ifx\ucs\@undefined
-  \RequirePackage{ptrace}\else\RequirePackage{uptrace}\fi\fi}{}
+  \ifx\kanjiskip\@undefined\else
+  \ifnum\jis"2121="3000 \RequirePackage{uptrace}%
+  \else                 \RequirePackage{ptrace}\fi\fi}{}
 
 %--------------------------------------- helpers
 
