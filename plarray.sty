@@ -7,9 +7,9 @@
 %
 % This package is expected to be compatible with
 %   * array.sty in latex-tools
-%     (2016/10/06 v2.4d -- 2020/10/01 v2.5c)
+%     (2016/10/06 v2.4d -- 2021/10/04 v2.5f)
 %   * plcore.ltx in platex
-%     (2001/09/26 v1.2a -- 2021/06/03 v1.3j)
+%     (2001/09/26 v1.2a -- 2021/12/08 v1.3l)
 %
 
 \NeedsTeXFormat{pLaTeX2e}
@@ -27,7 +27,7 @@
   \hbox \bgroup $\col@sep\tabcolsep \let\d@llarbegin\begingroup
                                     \let\d@llarend\endgroup
   \@tabarray}
-\def\endtabular{\endarray $\egroup\null}
+\def\endtabular{\endarray\m@th $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 }% =
 %
