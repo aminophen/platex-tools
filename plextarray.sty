@@ -15,7 +15,7 @@
 
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plextarray}
-  [2018/10/27 v1.1d Tabular extension package for plext and array]
+  [2022/09/13 v1.1e Tabular extension package for plext and array]
 \RequirePackage{plext}
 \RequirePackage{plarray}
 
@@ -100,8 +100,8 @@
   \begingroup
   \@mkpream{#3}%
   % following definition of \@preamble is from plext (\edef -> \xdef),
-  % but it's not the same as the one in array; why?
-  \xdef\@preamble{\ialign \noexpand \@halignto
+  % with \noexpand before \ialign following array's documentation.
+  \xdef\@preamble{\noexpand \ialign \noexpand \@halignto
                   \bgroup \tabskip \z@skip \@arstrut \@preamble
                           \tabskip \z@skip \cr}%
   \endgroup
