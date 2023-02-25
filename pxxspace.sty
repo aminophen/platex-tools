@@ -1,6 +1,7 @@
 %
 % pxxspace.sty
-% written by Takayuki Yato (ZR)
+% originally written by Takayuki Yato (ZR)
+% and modified by Hironobu Yamashita
 %
 % This package is distributed as part of the platex-tools bundle
 % maintained by Hironobu Yamashita
@@ -24,7 +25,7 @@
 %% package declaration
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{pxxspace}
-    [2019/09/23 v0.2a Patch for xspace for pLaTeX/upLaTeX]
+    [2023/02/25 v0.2b Patch for xspace for pLaTeX/upLaTeX]
 \def\pxxs@pkgname{pxxspace}
 
 %--------------------------------------- preparations
@@ -62,6 +63,8 @@
 %% \pxxs@forcecjktoken
 \ifpxxs@uptex
   \let\pxxs@forcecjktoken\forcecjktoken
+  % check internal encoding
+  \unless\ifnum\jis"2121="3000 \pxxs@uptexfalse \fi
 \else
   \let\pxxs@forcecjktoken\relax
 \fi
