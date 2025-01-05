@@ -4,8 +4,7 @@
 \fi
 
 \documentclass[a4paper]{jsarticle}% supports \verb in \footnote
-\usepackage[nohyperref]{doc}% doc v3
-\usepackage{pldocverb}
+\usepackage[nohyperref]{pldocverb}% doc v3
 \GetFileInfo{pldocverb.sty}
 \title{Package \textsf{pldocverb} \fileversion}
 \author{Hironobu Yamashita}
@@ -50,5 +49,8 @@ This package is part of \textsf{platex-tools} bundle:
   これが\verb+test+で\verb+テスト+です。
 \end{minipage}
 \bigskip
+
+なお、この上書き無効化は\LaTeXe~2023-06-01リリース時に削除されたため、
+この場合は\textsf{pldocverb}パッケージは何もしません。
 
 \end{document}
